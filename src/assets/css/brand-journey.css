@@ -1,0 +1,754 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0a0a0f; /* Очень темный фон для космической атмосферы */
+    color: #e0e0e0;
+    overflow-x: hidden; /* Скрываем горизонтальный скроллбар по умолчанию */
+}
+
+.brand-title-journey,
+.brand-tagline-journey {
+    display: none;
+}
+
+/* Styles for the main brands section housing the journey */
+section#brands.brands {
+    padding: 0 !important;
+    margin-top: 0 !important;
+    background: #0a0a0f !important;
+    height: 100vh !important; /* Возвращаем полную высоту */
+    display: flex;
+    align-items: center; /* Центрируем по вертикали */
+    padding-top: 0 !important; /* Убираем лишний отступ */
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-journey-container {
+    display: flex;
+    width: 700vw; /* Обновленная ширина для 7 брендов */
+    height: 100vh;
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); /* Плавный переход */
+    position: relative;
+    margin-top: 0; /* Убираем отрицательный отступ */
+}
+
+.brand-section {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    box-sizing: border-box;
+    gap: 5%;
+}
+
+/* Фон для каждой секции */
+.parallax-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120%;
+    height: 120%;
+    background-size: cover;
+    background-position: center center;
+    opacity: 0.15;
+    transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+    z-index: 1;
+}
+
+/* Уникальные стили для каждой секции бренда */
+#brand-fit {
+    background: radial-gradient(ellipse at bottom right, #004f59 0%, #003038 60%, #0a0a0f 100%);
+}
+
+#brand-cutop {
+    background: radial-gradient(ellipse at bottom right, #2A4998 0%, #1e3370 60%, #0a0a0f 100%);
+}
+
+#brand-mastercolor {
+    background: radial-gradient(ellipse at top left, #0065A8 0%, #004a7d 60%, #0a0a0f 100%);
+}
+
+#brand-kypc {
+    background: radial-gradient(ellipse at bottom left, #d81515 0%, #851515 60%, #0a0a0f 100%);
+}
+
+#brand-mos {
+    background: radial-gradient(ellipse at top right, #00AEEF 0%, #0077a2 60%, #0a0a0f 100%);
+}
+
+#brand-xbat {
+    background: radial-gradient(ellipse at center, #1A1A1A 0%, #111111 60%, #0a0a0f 100%);
+}
+
+#brand-greatflex {
+    background: radial-gradient(ellipse at top left, #00A651 0%, #00753a 60%, #0a0a0f 100%);
+}
+
+/* Основной контент бренда */
+.brand-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(0);
+    transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
+    width: 40%;
+    padding-left: 6%;
+    height: 100vh;
+    margin-top: 0;
+}
+
+.brand-section.active .brand-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Логотип бренда - более изящный дизайн с улучшенной видимостью */
+.brand-logo-journey {
+    width: 220px;
+    height: 220px;
+    margin-bottom: 2.5rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.12); /* Увеличиваем прозрачность фона */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    padding: 25px; /* Увеличиваем padding */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Делаем рамку более видимой */
+    z-index: 2;
+    backdrop-filter: blur(10px); /* Добавляем размытие фона */
+}
+
+/* Радиальный белый градиент под логотипом */
+.brand-logo-journey::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.05) 70%);
+    z-index: -1;
+    opacity: 0.9; /* Увеличиваем opacity */
+    transform: scale(1.3);
+    border-radius: 50%;
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    pointer-events: none;
+}
+
+/* Специальный более яркий градиент для указанных брендов */
+#brand-xbat .brand-logo-journey::before,
+#brand-greatflex .brand-logo-journey::before,
+#brand-cutop .brand-logo-journey::before,
+#brand-mastercolor .brand-logo-journey::before {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0.1) 60%);
+    opacity: 1;
+    transform: scale(1.8);
+    filter: blur(3px);
+}
+
+#brand-xbat.active .brand-logo-journey::before,
+#brand-greatflex.active .brand-logo-journey::before,
+#brand-cutop.active .brand-logo-journey::before,
+#brand-mastercolor.active .brand-logo-journey::before {
+    opacity: 1;
+    transform: scale(2.2);
+    filter: blur(2px);
+}
+
+/* Специфические стили для каждого бренда с использованием их цветов */
+#brand-xbat .brand-logo-journey::before {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(180, 180, 180, 0.4) 40%, rgba(255, 255, 255, 0.1) 70%);
+}
+
+#brand-greatflex .brand-logo-journey::before {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(0, 166, 81, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%);
+}
+
+#brand-cutop .brand-logo-journey::before {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(42, 73, 152, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%);
+}
+
+#brand-mastercolor .brand-logo-journey::before {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(0, 101, 168, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%);
+}
+
+.brand-logo-journey::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    z-index: -1;
+    opacity: 0;
+    transform: scale(0.98);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.brand-section.active .brand-logo-journey::after {
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+.brand-section.active .brand-logo-journey {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.brand-logo-journey img {
+    max-width: 90%; /* Увеличиваем размер логотипа */
+    max-height: 90%;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.8)) brightness(1.1) contrast(1.2); /* Улучшаем контраст */
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1), filter 0.7s ease;
+}
+
+.brand-section.active .brand-logo-journey img {
+    filter: drop-shadow(0 8px 25px rgba(255, 255, 255, 0.2)) brightness(1.2) contrast(1.3);
+    transform: scale(1.05);
+}
+
+/* Специальные стили для логотипов */
+#brand-xbat .brand-logo-journey {
+    background: rgba(60, 60, 70, 0.9); /* Делаем фон более контрастным */
+}
+
+#brand-fit .brand-logo-journey {
+    background: rgba(40, 60, 70, 0.9);
+}
+
+#brand-mastercolor .brand-logo-journey {
+    background: rgba(30, 60, 90, 0.9);
+}
+
+#brand-kypc .brand-logo-journey {
+    background: rgba(80, 30, 30, 0.9);
+}
+
+#brand-mos .brand-logo-journey {
+    background: rgba(30, 80, 120, 0.9);
+}
+
+#brand-greatflex .brand-logo-journey {
+    background: rgba(30, 80, 60, 0.9);
+}
+
+#brand-cutop .brand-logo-journey {
+    background: rgba(40, 60, 120, 0.9);
+}
+
+/* Описание бренда - изящный, минималистичный стиль */
+.brand-description {
+    font-size: 1.35rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    max-width: 85%;
+    margin-top: 0;
+    position: relative;
+    padding: 0 0 0 1.5rem;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(15px);
+    opacity: 0;
+    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1) 0.2s;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+}
+
+.brand-description::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: var(--brand-color, rgba(255, 255, 255, 0.3));
+}
+
+#brand-fit .brand-description::before { --brand-color: rgba(253, 185, 19, 0.6); }
+#brand-kypc .brand-description::before { --brand-color: rgba(216, 21, 21, 0.6); }
+#brand-mos .brand-description::before { --brand-color: rgba(0, 174, 239, 0.6); }
+#brand-xbat .brand-description::before { --brand-color: rgba(26, 26, 26, 0.6); }
+#brand-greatflex .brand-description::before { --brand-color: rgba(0, 166, 81, 0.6); }
+#brand-cutop .brand-description::before { --brand-color: rgba(42, 73, 152, 0.6); }
+#brand-mastercolor .brand-description::before { --brand-color: rgba(0, 101, 168, 0.6); }
+
+.brand-section.active .brand-description {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Навигационные точки - изящный дизайн */
+.navigation-dots {
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    z-index: 100;
+    background: transparent;
+    padding: 15px 10px;
+    border-radius: 0;
+    backdrop-filter: none;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    border: none;
+    box-shadow: none;
+    position: relative;
+}
+
+.dot::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-radius: 50%;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.dot.active {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: scale(1);
+    border: none;
+    box-shadow: none;
+}
+
+.dot.active::after {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Индикатор прокрутки - изящный стиль */
+.scroll-indicator {
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-indicator:hover {
+    opacity: 1;
+}
+
+.scroll-indicator svg {
+    width: 18px;
+    height: 18px;
+    fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Адаптация */
+@media (max-width: 1200px) {
+    .brand-section {
+        gap: 2%;
+    }
+    
+    .brand-content {
+        width: 42%;
+        padding-left: 5%;
+    }
+    
+    .brand-section .journey-brand-products {
+        width: 50%;
+        max-width: 580px;
+        margin-right: 5%;
+    }
+    
+    .brand-title-journey {
+        display: none;
+    }
+}
+
+/* Планшеты */
+@media (max-width: 992px) {
+    .brand-section {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    .brand-content {
+        padding-left: 0;
+    }
+    
+    .brand-title-journey,
+    .brand-tagline-journey {
+        display: none;
+    }
+
+    .brand-section .journey-brand-products {
+        width: 90%;
+        max-width: 600px;
+        margin-right: 0;
+    }
+    
+    .journey-brand-products-scrollable-track {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .journey-product-card {
+        width: 200px;
+    }
+}
+
+/* Мобильные */
+@media (max-width: 768px) {
+
+    .brand-title-journey {
+        font-size: 2.2rem;
+    }
+
+
+    .brand-title-journey,
+    .brand-tagline-journey {
+        display: none;
+    }
+    
+    .brand-logo-journey {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .navigation-dots {
+        right: 1rem;
+        gap: 0.8rem;
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .journey-brand-products-scrollable-track {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .journey-brand-products-title {
+        font-size: 1.3rem;
+    }
+    
+    .journey-product-card {
+        width: 180px;
+    }
+}
+
+/* Малые мобильные */
+@media (max-width: 480px) {
+    .brand-section {
+        padding: 1.5rem 1rem;
+    }
+    
+
+    .brand-title-journey {
+        font-size: 1.8rem;
+    }
+
+
+
+    .brand-title-journey,
+    .brand-tagline-journey {
+        display: none;
+    }
+    
+    .journey-brand-products-title {
+        font-size: 1.2rem;
+    }
+    
+    .journey-product-card {
+        width: 160px;
+    }
+    
+    .journey-product-card .product-image-container {
+        height: 110px;
+    }
+} 
+
+/* Удаляем старые стили для сетки, если они еще есть */
+.journey-brand-products-scrollable-track {
+    /* display: grid; - Удаляем или комментируем */
+    /* grid-template-columns: repeat(2, 1fr); - Удаляем */
+    /* grid-template-rows: repeat(2, minmax(0, auto)); - Удаляем */
+    /* gap: 10px; - Может остаться, если нужно расстояние между карточками в flex-контейнере */
+    /* overflow: visible; - Меняем на flex-специфичные */
+    /* padding: 0.3rem; - Может остаться */
+    display: flex; /* Основное для слайдера */
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1); /* Плавный переход для трека */
+    will-change: transform;
+    align-items: stretch; /* Чтобы карточки были одинаковой высоты, если их содержимое разное */
+}
+
+/* Контейнер для всего блока товаров, включая заголовок и слайдер */
+.brand-section .journey-brand-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    width: 50%;
+    margin-right: 5%;
+    position: relative;
+    height: auto;
+    padding: 1rem 0.5rem;
+}
+
+.journey-brand-products-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    align-self: center;
+    width: calc(100% - 80px); /* Ширина минус место для стрелок, если заголовок над слайдером */
+    text-align: center;
+}
+
+/* Контейнер для стрелок и вьюпорта слайдера */
+.product-slider-controls-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative; /* Для абсолютного позиционирования стрелок, если потребуется */
+    margin-top: 0.5rem; /* Небольшой отступ от заголовка */
+}
+
+/* Вьюпорт слайдера (видимая область) */
+.product-slider-viewport {
+    overflow: hidden;
+    flex-grow: 1; /* Занимает все доступное пространство между стрелками */
+    /* Можно добавить немного padding по бокам, если карточки прилипают к краям вьюпорта */
+    /* padding: 0 10px; */
+}
+
+/* Карточки товаров в слайдере - исправляем размещение текста */
+.journey-product-card.product-card-slider-item {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(28, 30, 38, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                box-shadow 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                border-color 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    height: 380px; /* Фиксированная высота для всех карточек */
+    min-height: 380px;
+}
+
+.journey-product-card.product-card-slider-item:hover {
+    transform: translateY(-8px); /* Более заметный подъем */
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+    /* border-color: var(--brand-primary-color); /* Будет установлено JS */
+}
+
+/* Удаление старых псевдоэлементов, если были */
+.journey-product-card.product-card-slider-item .product-card-inner::after {
+    display: none;
+}
+
+.journey-product-card .journey-product-card-image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Делаем контейнер квадратным */
+    overflow: hidden;
+    padding: 0; /* Убираем внутренний отступ, изображение будет по краям */
+    background-color: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.journey-product-card .journey-product-card-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Заполняем контейнер, обрезая лишнее */
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.journey-product-card.product-card-slider-item:hover .journey-product-card-image-container img {
+    transform: scale(1.06); /* Легкое увеличение изображения при наведении на карточку */
+}
+
+.journey-product-card .product-info-container {
+    padding: 16px 18px 20px 18px; /* Увеличиваем боковые отступы */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: transparent;
+    height: calc(100% - 200px); /* Фиксированная высота для текстовой части */
+    min-height: 160px;
+}
+
+.journey-product-card .product-category {
+    font-size: 0.7rem; /* Уменьшаем размер шрифта */
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    opacity: 0.8;
+    line-height: 1.2;
+}
+
+.journey-product-card .product-name {
+    font-size: 0.95rem; /* Уменьшаем размер шрифта */
+    font-weight: 700;
+    color: #EAEAEA;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    height: 2.6em; /* Фиксированная высота для 2 строк */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Ограничиваем до 2 строк */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+
+.journey-product-card .product-article {
+    font-size: 0.75rem; /* Уменьшаем размер шрифта */
+    color: #888E9B;
+    margin-bottom: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Обрезаем длинные артикулы */
+}
+
+/* Стили для убранного ценника, если он где-то остался (на всякий случай) */
+.journey-product-card .product-price {
+    display: none;
+}
+
+.journey-product-card .product-detail-btn {
+    padding: 8px 14px; /* Уменьшаем padding кнопки */
+    font-size: 0.85rem; /* Уменьшаем размер шрифта кнопки */
+    margin-top: auto;
+    align-self: stretch;
+    border-radius: 8px;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    transition: filter 0.3s ease, transform 0.3s ease;
+    white-space: nowrap; /* Предотвращаем перенос текста */
+    min-height: 36px; /* Минимальная высота кнопки */
+}
+
+.journey-product-card .product-detail-btn:hover {
+    filter: brightness(1.15); /* Кнопка становится ярче */
+    transform: scale(1.02); /* Легкое увеличение */
+}
+
+/* Стрелки навигации слайдера */
+.product-slider-arrow {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: background-color 0.3s, opacity 0.3s;
+    z-index: 10;
+    flex-shrink: 0; /* Чтобы стрелки не сжимались */
+}
+
+.product-slider-arrow:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.product-slider-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.product-slider-arrow.prev {
+    /* Можно немного сместить, если нужно */
+    /* margin-right: 5px; */
+}
+
+.product-slider-arrow.next {
+    /* margin-left: 5px; */
+}
+
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .brand-section .journey-brand-products {
+        width: 90%; /* На мобильных блок товаров шире */
+        max-width: 95vw;
+        padding: 1rem 0;
+    }
+
+    .journey-brand-products-title {
+        font-size: 1.3rem;
+        width: calc(100% - 70px);
+    }
+
+    /* Для мобильных можно сделать так, чтобы отображалась 1 или 2 карточки */
+    /* JavaScript уже задает flex-basis: 30%, что дает ~3 карточки.
+       Если нужно меньше, нужно менять cardWidthPercent в JS или добавлять CSS override здесь, 
+       но это сложнее без изменения логики JS по расчету смещения. 
+       Проще всего будет, если на мобильных карточки станут немного шире за счет уменьшения количества видимых. */
+    
+    /* .journey-product-card.product-card-slider-item { 
+        flex-basis: 45% !important; // Примерно 2 карточки 
+    } */
+
+    .product-slider-arrow {
+        padding: 8px 12px;
+        font-size: 1.2rem;
+    }
+} 
+
+.brand-section.active .brand-logo-journey::before {
+    opacity: 0.8;
+    transform: scale(1.8);
+} 

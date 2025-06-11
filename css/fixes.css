@@ -1,0 +1,110 @@
+/* ========== ИСПРАВЛЕНИЯ ПОСЛЕ ЛЕНИВОЙ ЗАГРУЗКИ ========== */
+
+/* TIMELINE ИСПРАВЛЕНИЯ */
+.timeline-section {
+    position: relative !important;
+}
+
+.timeline-container {
+    position: relative !important;
+}
+
+.timeline-track {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.timeline-item {
+    position: relative !important;
+    flex-shrink: 0 !important;
+}
+
+.timeline-dot {
+    position: absolute !important;
+    z-index: 10 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+.timeline-item.top .timeline-dot {
+    top: 50% !important;
+    margin-top: 120px !important;
+    bottom: auto !important;
+}
+
+.timeline-item.bottom .timeline-dot {
+    top: 50% !important;
+    margin-top: -120px !important;
+    bottom: auto !important;
+}
+
+.center-line {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 1 !important;
+}
+
+/* BRANDS ИСПРАВЛЕНИЯ */
+.brands {
+    height: 100vh !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.brand-journey-container {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin-top: 0 !important;
+    height: 100vh !important;
+}
+
+.brand-section {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.brand-content {
+    height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+/* ОБЩИЕ ИСПРАВЛЕНИЯ */
+.lazy-animate {
+    /* Только для элементов с этим классом применяем анимацию */
+}
+
+/* Убираем конфликты */
+.timeline-item:not(.lazy-animate) {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* Исправляем навигацию для brands */
+.navigation-dots {
+    position: fixed !important;
+    right: 2rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 100 !important;
+}
+
+.dot {
+    width: 12px !important;
+    height: 12px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+}
+
+/* Убеждаемся что ленивая загрузка не ломает позиционирование */
+.brands[data-loaded] .brand-journey-container,
+.timeline-section[data-loaded] .timeline-container {
+    position: relative !important;
+} 

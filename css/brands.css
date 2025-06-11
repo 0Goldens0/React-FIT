@@ -1,0 +1,898 @@
+/* ========== BRANDS SECTION ========== */
+.brands {
+    position: relative;
+    overflow: hidden;
+    padding: 120px 0;
+    background-color: var(--light);
+}
+
+/* Animated Background */
+.brands-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255, 184, 0, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255, 184, 0, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 184, 0, 0.05) 0%, transparent 60%);
+    animation: backgroundPulse 10s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes backgroundPulse {
+    0%, 100% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+.brands .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Modern Brands Carousel */
+.brands-carousel {
+    position: relative;
+    padding: 120px 0 160px;
+    perspective: 1800px;
+    overflow: visible;
+    width: 100%;
+    z-index: 3;
+}
+
+.carousel-container {
+    position: relative;
+    height: 500px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.brand-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 320px;
+    height: 450px;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: all 0.8s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 1;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+/* Активная карточка */
+.brand-card.active {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) translateZ(250px);
+    z-index: 5;
+}
+
+/* Предыдущая карточка */
+.brand-card.prev {
+    opacity: 0.8 !important;
+    transform: translate(-150%, -50%) rotateY(10deg) translateZ(0);
+    z-index: 4;
+}
+
+/* Следующая карточка */
+.brand-card.next {
+    opacity: 0.8 !important;
+    transform: translate(50%, -50%) rotateY(-10deg) translateZ(0);
+    z-index: 4;
+}
+
+/* Дальняя предыдущая карточка */
+.brand-card.far-prev {
+    opacity: 0.6 !important;
+    transform: translate(-200%, -50%) rotateY(20deg) translateZ(-150px);
+    z-index: 3;
+}
+
+/* Дальняя следующая карточка */
+.brand-card.far-next {
+    opacity: 0.6 !important;
+    transform: translate(100%, -50%) rotateY(-20deg) translateZ(-150px);
+    z-index: 3;
+}
+
+.brand-header {
+    height: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0.9;
+    transition: all 0.5s ease;
+}
+
+.brand-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.brand-fit .brand-header::before {
+    background: linear-gradient(135deg, #004f59, #00acc1);
+}
+
+.brand-kypc .brand-header::before {
+    background: linear-gradient(135deg, #b60618, #ef5350);
+}
+
+.brand-mos .brand-header::before {
+    background: linear-gradient(135deg, #18b7eb, #29b6f6);
+}
+
+.brand-xbat .brand-header::before {
+    background: linear-gradient(135deg, #333333, #555555);
+}
+
+.brand-greatflex .brand-header::before {
+    background: linear-gradient(135deg, #00a651, #4caf50);
+}
+
+.brand-cutop .brand-header::before {
+    background: linear-gradient(135deg, #2e418e, #3949ab);
+}
+
+.brand-mastercolor .brand-header::before {
+    background: linear-gradient(135deg, #005e85, #0277bd);
+}
+
+.brand-logo {
+    position: relative;
+    z-index: 10;
+    max-width: 70%;
+    max-height: 70%;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.15));
+    transition: all 0.5s ease;
+    transform: translateY(0);
+}
+
+.brand-card:hover .brand-logo {
+    transform: translateY(-5px) scale(1.05);
+}
+
+.brand-content {
+    height: 55%;
+    padding: 25px;
+    position: relative;
+}
+
+.brand-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    position: relative;
+    letter-spacing: -0.5px;
+}
+
+.brand-name::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.brand-card:hover .brand-name::after {
+    width: 60px;
+}
+
+.brand-year {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.brand-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 5;
+}
+
+.brand-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.brand-tag {
+    padding: 5px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInStagger 0.5s forwards;
+}
+
+.brand-fit .brand-tag {
+    background: linear-gradient(90deg, #004f59, #00acc1);
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.brand-kypc .brand-tag {
+    background: linear-gradient(90deg, #b60618, #ef5350);
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.brand-mos .brand-tag {
+    background: linear-gradient(90deg, #18b7eb, #29b6f6);
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.brand-xbat .brand-tag {
+    background: linear-gradient(90deg, #333333, #555555);
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.brand-greatflex .brand-tag {
+    background: linear-gradient(90deg, #00a651, #4caf50);
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.brand-cutop .brand-tag {
+    background: linear-gradient(90deg, #2e418e, #3949ab);
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.brand-mastercolor .brand-tag {
+    background: linear-gradient(90deg, #005e85, #0277bd);
+    animation-delay: calc(0.1s * var(--i));
+}
+
+.brand-card:hover .brand-tag {
+    transform: translateY(-3px);
+}
+
+.carousel-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 50px; /* Moved down significantly */
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    z-index: 200;
+}
+
+.carousel-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: fadeIn 0.5s forwards;
+    animation-delay: calc(0.1s * var(--i));
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-dot.active {
+    background-color: var(--primary);
+    transform: scale(1.2);
+}
+
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    z-index: 200;
+    transform: translateY(-50%);
+    padding: 0 100px; /* Increased padding for wider control positioning */
+}
+
+.carousel-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(0);
+    animation: fadeInSide 0.5s forwards;
+}
+
+.carousel-btn.prev {
+    animation-delay: 0.2s;
+    transform: translateX(-20px);
+}
+
+.carousel-btn.next {
+    animation-delay: 0.2s;
+    transform: translateX(20px);
+}
+
+.carousel-btn:hover {
+    background-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.carousel-btn:hover svg {
+    fill: white;
+}
+
+.carousel-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: #333;
+    transition: all 0.3s ease;
+}
+
+.explore-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+    color: white;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    margin-top: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 96, 100, 0.2);
+    cursor: pointer;
+    border: none;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s forwards 0.6s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.explore-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    z-index: -1;
+}
+
+.explore-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(0, 96, 100, 0.3);
+}
+
+.explore-btn:hover::before {
+    opacity: 1;
+}
+
+.explore-btn svg {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.explore-btn:hover svg {
+    transform: translateX(4px);
+}
+
+.brands-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Background decorative elements */
+.decor-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 184, 0, 0.1), rgba(0, 96, 100, 0.1));
+    z-index: -1;
+    animation: floatCircle 20s infinite ease-in-out;
+}
+
+@keyframes floatCircle {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(20px, -15px);
+    }
+    50% {
+        transform: translate(5px, 20px);
+    }
+    75% {
+        transform: translate(-15px, 10px);
+    }
+}
+
+.decor-circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    left: -100px;
+    opacity: 0.4;
+    animation-delay: 0s;
+}
+
+.decor-circle-2 {
+    width: 400px;
+    height: 400px;
+    bottom: -200px;
+    right: -150px;
+    opacity: 0.3;
+    animation-delay: -5s;
+}
+
+/* Particles container */
+.particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+/* Styles for product slider */
+.product-slider-container {
+    margin-top: 50px;
+    position: relative;
+    padding: 20px 0;
+    overflow: hidden;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 1;
+    display: block !important; /* Override the hide CSS */
+}
+
+.product-slider-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--dark);
+}
+
+.product-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.product-slider-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    gap: 20px;
+    padding: 20px 10px;
+}
+
+.product-card-3d {
+    flex: 0 0 280px;
+    height: 380px;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(0);
+    cursor: pointer;
+}
+
+.product-card-3d:hover {
+    transform: translateY(-10px);
+}
+
+.product-card-3d:hover .product-card-inner {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.product-card-inner {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+.product-image-container {
+    height: 180px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+.product-card-3d:hover .product-image {
+    transform: scale(1.1);
+}
+
+.product-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(0, 79, 89, 0.2), transparent);
+    transition: opacity 0.4s ease;
+    opacity: 0;
+}
+
+.product-card-3d:hover .product-image-overlay {
+    opacity: 1;
+}
+
+.product-info-container {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-category {
+    font-size: 0.8rem;
+    color: #777;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--dark);
+    line-height: 1.3;
+    max-height: 2.8em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.product-article {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    margin-top: auto;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.product-detail-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 600;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: auto;
+}
+
+.product-detail-btn:hover {
+    opacity: 0.9;
+}
+
+.slider-arrows {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+    padding: 0 15px;
+}
+
+.slider-arrow {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 5;
+}
+
+.slider-arrow.prev {
+    left: 10px;
+}
+
+.slider-arrow.next {
+    right: 10px;
+}
+
+.slider-arrow:hover {
+    background-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.slider-arrow:hover svg {
+    stroke: white;
+}
+
+.slider-arrow svg {
+    stroke: #333;
+    transition: stroke 0.3s ease;
+}
+
+/* Hide old elements */
+.brands-selector,
+.brand-info-container,
+.brand-products-container,
+.brands-selector-3d,
+.brand-content-3d-container {
+    display: none !important;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInStagger {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInSide {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes floatUpDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1200px) {
+    .carousel-container {
+        transform: scale(0.9);
+    }
+    
+    .carousel-controls {
+        padding: 0 60px;
+    }
+    
+    .brand-card.prev {
+        transform: translate(-140%, -50%) rotateY(10deg) translateZ(0);
+    }
+    
+    .brand-card.next {
+        transform: translate(40%, -50%) rotateY(-10deg) translateZ(0);
+    }
+    
+    .brand-card.far-prev {
+        transform: translate(-190%, -50%) rotateY(20deg) translateZ(-150px);
+    }
+    
+    .brand-card.far-next {
+        transform: translate(90%, -50%) rotateY(-20deg) translateZ(-150px);
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .section-title h2 {
+        font-size: 3rem;
+    }
+    
+    .brands-carousel {
+        padding: 80px 0 140px;
+        height: 480px;
+    }
+    
+    .brand-card {
+        width: 280px;
+        height: 380px;
+    }
+    
+    .carousel-controls {
+        padding: 0 40px;
+    }
+    
+    .brand-card.prev {
+        transform: translate(-130%, -50%) rotateY(15deg) translateZ(0);
+    }
+    
+    .brand-card.next {
+        transform: translate(30%, -50%) rotateY(-15deg) translateZ(0);
+    }
+    
+    .brand-card.far-prev {
+        transform: translate(-180%, -50%) rotateY(25deg) translateZ(-100px);
+    }
+    
+    .brand-card.far-next {
+        transform: translate(80%, -50%) rotateY(-25deg) translateZ(-100px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .section-title h2 {
+        font-size: 2.5rem;
+    }
+    
+    .section-title p {
+        font-size: 1rem;
+    }
+    
+    .brands-carousel {
+        padding: 60px 0 120px;
+        height: 440px;
+    }
+    
+    .brand-card {
+        width: 260px;
+        height: 360px;
+    }
+    
+    .brand-name {
+        font-size: 1.5rem;
+    }
+    
+    .carousel-controls {
+        padding: 0 20px;
+    }
+    
+    .carousel-btn {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .brand-card.prev {
+        transform: translate(-120%, -50%) rotateY(15deg) translateZ(0);
+    }
+    
+    .brand-card.next {
+        transform: translate(20%, -50%) rotateY(-15deg) translateZ(0);
+    }
+    
+    .brand-card.far-prev,
+    .brand-card.far-next {
+        opacity: 0.4 !important; /* Reduce opacity on small screens */
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .section-title h2 {
+        font-size: 2rem;
+    }
+    
+    .brands-carousel {
+        padding: 40px 0 100px;
+        height: 400px;
+    }
+    
+    .brand-card {
+        width: 240px;
+        height: 340px;
+    }
+    
+    .brand-content {
+        padding: 20px;
+    }
+    
+    .brand-description {
+        font-size: 0.85rem;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .brand-card.prev {
+        transform: translate(-110%, -50%) rotateY(15deg) translateZ(0);
+    }
+    
+    .brand-card.next {
+        transform: translate(10%, -50%) rotateY(-15deg) translateZ(0);
+    }
+}

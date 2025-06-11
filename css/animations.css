@@ -1,0 +1,491 @@
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Used in Hero & About */
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% { /* Hero specific? */
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-15px) translateX(0) rotate(0deg); /* Hero specific? */
+        opacity: 0.8; /* Hero specific? */
+    }
+    90% { /* Hero specific? */
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg); /* Hero specific? */
+        opacity: 0;
+    }
+}
+
+/* Used in About */
+@keyframes float-slow {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(30px, -30px) rotate(90deg); }
+    50% { transform: translate(0, -60px) rotate(180deg); }
+    75% { transform: translate(-30px, -30px) rotate(270deg); }
+}
+
+/* Used in Hero */
+@keyframes titleReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px) rotateX(45deg);
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+        filter: blur(0);
+    }
+}
+
+/* Used in Hero */
+@keyframes lightSweep {
+    0% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+/* Used in Hero */
+@keyframes glow-pulse {
+    0%, 100% {
+        opacity: 0.8;
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(1.2) rotate(180deg);
+    }
+}
+
+/* Used in Map & Base */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1); /* Base version */
+        /* transform: scale(1.2); */ /* Map version */
+        opacity: 0.8; /* Base version */
+        /* opacity: 0.3; */ /* Map version */
+    }
+    70% { /* Map specific? */
+        /* transform: scale(2); */
+        /* opacity: 0; */
+    }
+    100% {
+        transform: scale(1); /* Base version */
+        /* transform: scale(0.8); */ /* Map version */
+        opacity: 1; /* Base version */
+        /* opacity: 0.7; */ /* Map version */
+    }
+}
+/* Note: The 'pulse' keyframe had variations. Using the simpler base version here.
+   If the map pulse needs to be different, rename it (e.g., map-pulse) and keep it in map.css */
+
+
+/* Used in Timeline */
+@keyframes timelineScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-450px * var(--timeline-items, 15))); } /* Default, might need adjustment */
+}
+
+/* Used in Brands */
+@keyframes backgroundPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Used in Brands */
+@keyframes shimmer {
+    100% { transform: translateX(100%); }
+}
+
+/* Used in Brands */
+@keyframes titleFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Used in Brands */
+@keyframes contentFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Used in Partners */
+@keyframes scrollPartners {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-250px * 9 - 40px * 9)); } /* Default, might need adjustment */
+}
+
+/* Used in Services (New) */
+@keyframes arrow-pulse {
+    0%, 100% { transform: translateX(0); opacity: 0.7; }
+    50% { transform: translateX(10px); opacity: 1; }
+}
+
+/* Used in Contact */
+@keyframes formFocus {
+    0% { width: 0; }
+    100% { width: 100%; }
+}
+
+/* Used in Footer (Wave) */
+@keyframes wave-animation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+}
+
+
+/* ========== ANIMATION UTILITY CLASSES ========== */
+.animate {
+    opacity: 0;
+    /* Base transition for elements that might animate on scroll */
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate.fadeIn {
+    animation: fadeIn 1s forwards;
+}
+
+.animate.fadeInUp {
+    animation: fadeInUp 1s forwards;
+}
+
+.animate.fadeInRight {
+    animation: fadeInRight 1s forwards;
+}
+
+.animate.fadeInLeft {
+    animation: fadeInLeft 1s forwards;
+}
+
+/* Delay classes */
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+.delay-4 { animation-delay: 0.8s; }
+.delay-5 { animation-delay: 1s; }
+.delay-6 { animation-delay: 0.6s; } /* Duplicate from original? Keep consistent */
+.delay-7 { animation-delay: 0.7s; }
+.delay-8 { animation-delay: 0.8s; }
+
+/* Scroll-triggered animation helpers (if using JS intersection observer) */
+.contact-section .animate {
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+.contact-section .fadeInLeft {
+    transform: translateX(-50px);
+}
+
+.contact-section .fadeInRight {
+    transform: translateX(50px);
+}
+
+.contact-section .animate.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.contact-section.in-viewport .animate.fadeInLeft,
+.contact-section.in-viewport .animate.fadeInRight {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ========== GLOBAL ANIMATIONS ========== */
+
+/* Base animation setup */
+.animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Different fade-in directions */
+.animate.fadeIn {
+    transform: scale(0.8);
+}
+
+.animate.fadeInUp {
+    transform: translateY(30px);
+}
+
+.animate.fadeInRight {
+    transform: translateX(30px);
+}
+
+.animate.fadeInLeft {
+    transform: translateX(-30px);
+}
+
+/* Animation delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }
+
+/* Keyframe animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.7);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(255, 184, 0, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 184, 0, 0);
+    }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes backgroundPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes wave-animation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes float-slow {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-30px) rotate(180deg);
+    }
+}
+
+/* Animation assignment classes */
+.fadeIn {
+    animation: fadeIn 0.8s forwards;
+}
+
+.fadeInUp {
+    animation: fadeInUp 0.8s forwards;
+}
+
+.fadeInLeft {
+    animation: fadeInLeft 0.8s forwards;
+}
+
+.fadeInRight {
+    animation: fadeInRight 0.8s forwards;
+}
+
+/* Additional specific animation classes */
+.animate.fadeInUp {
+    transform: translateY(30px);
+}
+
+.animate.fadeInLeft {
+    transform: translateX(-30px);
+}
+
+.animate.fadeInRight {
+    transform: translateX(30px);
+}
+
+.animate.fadeIn {
+    transform: scale(0.8);
+}
+
+/* Show animation when element is visible */
+.animate.show,
+.animate.visible {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Particles animation */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255, 184, 0, 0.6);
+    border-radius: 50%;
+    animation: float 3s infinite ease-in-out;
+}
+
+/* Timeline animation for continuous scroll */
+@keyframes timelineScroll {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+.timeline-track.auto-scroll {
+    animation: timelineScroll 40s linear infinite;
+}
+
+/* Pause animation on hover */
+.timeline-container:hover .timeline-track.auto-scroll {
+    animation-play-state: paused;
+}
+
+.timeline-track {
+    transition: transform 0.5s ease;
+}
+
+.timeline-track.no-transition {
+    transition: none;
+}
+
+/* Specific animations for sections */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Form focus animation */
+@keyframes formFocus {
+    0% {
+        transform: scaleX(0);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+/* Smooth loading animation for components */
+.animate:nth-child(1) { animation-delay: 0.1s; }
+.animate:nth-child(2) { animation-delay: 0.2s; }
+.animate:nth-child(3) { animation-delay: 0.3s; }
+.animate:nth-child(4) { animation-delay: 0.4s; }
+.animate:nth-child(5) { animation-delay: 0.5s; }
+.animate:nth-child(6) { animation-delay: 0.6s; }
+.animate:nth-child(7) { animation-delay: 0.7s; }
+.animate:nth-child(8) { animation-delay: 0.8s; }
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .animate {
+        opacity: 1;
+        transform: none;
+    }
+}

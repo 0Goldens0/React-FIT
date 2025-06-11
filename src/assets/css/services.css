@@ -1,0 +1,99 @@
+/* ========== PARTNERS MARQUEE SECTION ========== */
+.partners-marquee {
+  position: relative;
+  width: 100%;
+  background-color: #FDB913; /* Желтый фон как в требованиях */
+  padding: 30px 0;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.partners-marquee-container {
+  width: 100%;
+  position: relative;
+}
+
+.partners-marquee-track {
+  display: flex;
+  animation: marquee 25s linear infinite;
+  width: fit-content;
+}
+
+.partners-logo-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 80px;
+  padding: 0 60px;
+}
+
+.partner-logo-item {
+  width: 180px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.partner-logo-item img {
+  max-width: 100%;
+  max-height: 100%;
+  filter: grayscale(100%) brightness(0.2); /* Серые логотипы */
+  transition: filter 0.4s ease;
+  object-fit: contain;
+}
+
+.partner-logo-item:hover img {
+  filter: grayscale(0%) brightness(1); /* Цветные логотипы при наведении */
+  transform: scale(1.1);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 991px) {
+  .partner-logo-item {
+    width: 160px;
+    height: 70px;
+  }
+
+  .partners-logo-group {
+    gap: 60px;
+  }
+}
+
+@media (max-width: 767px) {
+  .partners-marquee {
+    padding: 24px 0;
+  }
+
+  .partner-logo-item {
+    width: 140px;
+    height: 60px;
+  }
+
+  .partners-logo-group {
+    gap: 50px;
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  .partner-logo-item {
+    width: 120px;
+    height: 50px;
+  }
+
+  .partners-logo-group {
+    gap: 40px;
+    padding: 0 30px;
+  }
+} 

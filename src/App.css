@@ -1,0 +1,32 @@
+.App {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Скрываем полосу прокрутки, но сохраняем функциональность */
+body::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Для Firefox */
+body {
+  scrollbar-width: none;
+}
+
+/* Для IE и Edge */
+body {
+  -ms-overflow-style: none;
+} 

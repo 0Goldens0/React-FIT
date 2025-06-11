@@ -1,0 +1,17 @@
+.homepage {
+  overflow-x: hidden;
+  position: relative;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Эффект перехода между секциями */
+.homepage > section + section {
+  position: relative;
+}
+
+/* Стили для активной секции */
+.homepage section:target {
+  scroll-margin-top: 80px; /* Отступ для фиксированного хедера */
+} 
