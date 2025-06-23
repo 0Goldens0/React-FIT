@@ -27,7 +27,7 @@ const timelineData: TimelineData[] = [
       "Формирование начального ассортимента из голландских торговых марок",
       "Старт со столярно-слесарных инструментов"
     ],
-    keyPeople: ["А.М. Кадис", "А.Е. Власов", "С.В. Моховик"],
+    keyPeople: [""],
     facts: [
       { number: "3", text: "Основателя компании" },
       { number: "100+", text: "Первых позиций" },
@@ -52,7 +52,7 @@ const timelineData: TimelineData[] = [
     facts: [
       { number: "2", text: "Новых бренда" },
       { number: "10+", text: "Первых клиентов" },
-      { number: "5", text: "Менеджеров" }
+      { number: "", text: "" }
     ]
   },
   {
@@ -71,8 +71,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "1", text: "Торговая марка" },
-      { number: "500+", text: "Позиций FIT" },
-      { number: "100%", text: "Канадская регистрация" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -88,7 +88,7 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "3", text: "Города присутствия" },
-      { number: "1000+", text: "Позиций в продаже" },
+      { number: "", text: "" },
       { number: "3", text: "Распред. центра" }
     ]
   },
@@ -110,7 +110,7 @@ const timelineData: TimelineData[] = [
     facts: [
       { number: "4", text: "Новых филиала" },
       { number: "7", text: "Городов присутствия" },
-      { number: "400%", text: "Рост продаж" }
+      { number: "", text: "" }
     ]
   },
   {
@@ -130,9 +130,9 @@ const timelineData: TimelineData[] = [
       "Удовлетворение потребности в доступных ценах"
     ],
     facts: [
-      { number: "1", text: "Новый бренд" },
-      { number: "200+", text: "Позиций КУРС" },
-      { number: "30%", text: "Ниже цены FIT" }
+      { number: "+1", text: "Новый бренд" },
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -154,7 +154,7 @@ const timelineData: TimelineData[] = [
     facts: [
       { number: "2", text: "Новых бренда" },
       { number: "5", text: "Торговых марок" },
-      { number: "12", text: "Регионов работы" }
+      { number: "", text: "" }
     ]
   },
   {
@@ -174,8 +174,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "2000", text: "SKU в матрице" },
-      { number: "8", text: "Категорий товаров" },
-      { number: "200%", text: "Рост оснастки" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -198,7 +198,7 @@ const timelineData: TimelineData[] = [
     facts: [
       { number: "4", text: "Новых бренда" },
       { number: "9", text: "Торговых марок" },
-      { number: "4", text: "Рыночные ниши" }
+      { number: "", text: "" }
     ]
   },
   {
@@ -218,8 +218,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "8000", text: "SKU в каталоге" },
-      { number: "15", text: "Товарных групп" },
-      { number: "100%", text: "Автоматизация" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -238,9 +238,9 @@ const timelineData: TimelineData[] = [
       "Улучшение качества складской логистики"
     ],
     facts: [
-      { number: "1", text: "WMS система" },
-      { number: "50%", text: "Рост эффективности" },
-      { number: "24/7", text: "Автоматизация" }
+      { number: "", text: "" },
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -261,8 +261,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "1", text: "Новый РЦ" },
-      { number: "10+", text: "Маркетплейсов" },
-      { number: "500%", text: "Рост онлайн" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -278,8 +278,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "14000", text: "Уникальных клиентов" },
-      { number: "5", text: "Программ лояльности" },
-      { number: "85%", text: "Удержание клиентов" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -299,8 +299,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "1", text: "Федеральный РЦ" },
-      { number: "100%", text: "Покрытие РФ" },
-      { number: "2", text: "Страны СНГ" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -320,8 +320,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "12000", text: "SKU в каталоге" },
-      { number: "20", text: "Регионов России" },
-      { number: "300%", text: "Рост за 5 лет" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -341,8 +341,8 @@ const timelineData: TimelineData[] = [
     ],
     facts: [
       { number: "2", text: "Офиса в Москве" },
-      { number: "100%", text: "Покрытие региона" },
-      { number: "1", text: "Новый склад" }
+      { number: "", text: "" },
+      { number: "", text: "" }
     ]
   },
   {
@@ -363,8 +363,8 @@ const timelineData: TimelineData[] = [
       "Белоруссия с 2022 года"
     ],
     facts: [
-      { number: "5+", text: "Новых рынков" },
-      { number: "100%", text: "ИИ автоматизация" },
+      { number: "", text: "" },
+      { number: "", text: "" },
       { number: "∞", text: "Возможности роста" }
     ]
   }
