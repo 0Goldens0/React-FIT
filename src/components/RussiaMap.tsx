@@ -10,7 +10,7 @@ interface RegionalCenter {
 }
 
 const regionalCenters: RegionalCenter[] = [
-  { id: "moscow", name: "Москва", cx: 130.24729, cy: 259.26463, code: "RU-MOW" },
+  { id: "moscow", name: "Москва", cx: 330.24729, cy: 259.26463, code: "RU-MOW" },
   { id: "spb", name: "Санкт-Петербург", cx: 136.30673, cy: 181.67516, code: "RU-SPE" },
   { id: "yaroslavl", name: "Ярославль", cx: 164.91913, cy: 238.89299, code: "RU-YAR" },
   { id: "chelyabinsk", name: "Челябинск", cx: 273.58206, cy: 352.34213, code: "RU-CHE" },
