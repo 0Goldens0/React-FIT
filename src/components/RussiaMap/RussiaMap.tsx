@@ -122,7 +122,6 @@ const RussiaMap: React.FC = () => {
       
       paths.forEach(path => {
         const regionCode = path.getAttribute('data-code');
-        const regionTitle = path.getAttribute('data-title');
         
         if (regionCode) {
           // Обновляем стили на основе состояния
