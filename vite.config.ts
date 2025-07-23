@@ -29,7 +29,7 @@ export default defineConfig(({ command }) => {
 
   // Настройка base URL для GitHub Pages
   if (command !== 'serve') {
-    config.base = '/REPOSITORY_NAME/'
+    config.base = '/React-FIT/'
   }
 
   return config
