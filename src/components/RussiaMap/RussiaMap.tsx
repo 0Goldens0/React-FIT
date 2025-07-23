@@ -105,7 +105,7 @@ const RussiaMap: React.FC = () => {
 
   useEffect(() => {
     // Загружаем SVG файл
-    fetch('/img/svg.svg')
+    fetch(`${import.meta.env.BASE_URL}img/svg.svg`)
       .then(response => response.text())
       .then(data => {
         setSvgContent(data);
