@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { getAssetPath } from '../../utils/paths'
 import './Hero.css'
 
 const Hero = () => {
@@ -31,7 +32,7 @@ const Hero = () => {
 
   return (
     <section className="hero" id="home">
-      <div className="hero-background" style={{ backgroundImage: "url('img/hero-background.jpg')" }}></div>
+              <div className="hero-background" style={{ backgroundImage: `url('${getAssetPath("img/hero-background.jpg")}')` }}></div>
       <div className="hero-particles" id="hero-particles"></div>
       
       <div className="container">
@@ -52,7 +53,7 @@ const Hero = () => {
             </div>
           </div>
           <div className="hero-image animate fadeInRight">
-            <img src="img/c98be543-3cca-4e81-b5be-98b263057ff3.png" alt="Инструменты FIT" className="hero-img" loading="eager" />
+            <img src={getAssetPath("img/c98be543-3cca-4e81-b5be-98b263057ff3.png")} alt="Инструменты FIT" className="hero-img" loading="eager" />
             <div className="hero-glow-overlay"></div>
           </div>
         </div>

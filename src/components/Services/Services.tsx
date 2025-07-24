@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { getAssetPath } from '../../utils/paths'
 import './Services.css'
 import '../../assets/css/services.css'
 
@@ -283,68 +284,68 @@ const Services = () => {
             {/* Первый набор логотипов */}
             <div className="partners-logo-group">
               <div className="partner-logo-item">
-                <img src="/logo/partners/Технониколь.svg" alt="Технониколь" />
+                <img src={getAssetPath("logo/partners/Технониколь.svg")} alt="Технониколь" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/строительный двор.svg" alt="Строительный двор" />
+                <img src={getAssetPath("logo/partners/строительный двор.svg")} alt="Строительный двор" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/ИнфраКом.svg" alt="ИнфраКом" />
+                <img src={getAssetPath("logo/partners/ИнфраКом.svg")} alt="ИнфраКом" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/Все инструменты.ру.svg" alt="Все инструменты.ру" />
+                <img src={getAssetPath("logo/partners/Все инструменты.ру.svg")} alt="Все инструменты.ру" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/вш ремстройснаб.svg" alt="ВШ Ремстройснаб" />
+                <img src={getAssetPath("logo/partners/вш ремстройснаб.svg")} alt="ВШ Ремстройснаб" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/Саморезик.svg" alt="Саморезик" />
+                <img src={getAssetPath("logo/partners/Саморезик.svg")} alt="Саморезик" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/Русский свет.svg" alt="Русский свет" />
+                <img src={getAssetPath("logo/partners/Русский свет.svg")} alt="Русский свет" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/ozon png.svg" alt="Ozon" />
+                <img src={getAssetPath("logo/partners/ozon png.svg")} alt="Ozon" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/ЭТМ.svg" alt="ЭТМ" />
+                <img src={getAssetPath("logo/partners/ЭТМ.svg")} alt="ЭТМ" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/autodoc.svg" alt="Autodoc" />
+                <img src={getAssetPath("logo/partners/autodoc.svg")} alt="Autodoc" />
               </div>
             </div>
             
             {/* Дублирующий набор для непрерывного движения */}
             <div className="partners-logo-group">
               <div className="partner-logo-item">
-                <img src="/logo/partners/Технониколь.svg" alt="Технониколь" />
+                <img src={getAssetPath("logo/partners/Технониколь.svg")} alt="Технониколь" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/строительный двор.svg" alt="Строительный двор" />
+                <img src={getAssetPath("logo/partners/строительный двор.svg")} alt="Строительный двор" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/ИнфраКом.svg" alt="ИнфраКом" />
+                <img src={getAssetPath("logo/partners/ИнфраКом.svg")} alt="ИнфраКом" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/Все инструменты.ру.svg" alt="Все инструменты.ру" />
+                <img src={getAssetPath("logo/partners/Все инструменты.ру.svg")} alt="Все инструменты.ру" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/вш ремстройснаб.svg" alt="ВШ Ремстройснаб" />
+                <img src={getAssetPath("logo/partners/вш ремстройснаб.svg")} alt="ВШ Ремстройснаб" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/Саморезик.svg" alt="Саморезик" />
+                <img src={getAssetPath("logo/partners/Саморезик.svg")} alt="Саморезик" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/Русский свет.svg" alt="Русский свет" />
+                <img src={getAssetPath("logo/partners/Русский свет.svg")} alt="Русский свет" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/ozon png.svg" alt="Ozon" />
+                <img src={getAssetPath("logo/partners/ozon png.svg")} alt="Ozon" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/ЭТМ.svg" alt="ЭТМ" />
+                <img src={getAssetPath("logo/partners/ЭТМ.svg")} alt="ЭТМ" />
               </div>
               <div className="partner-logo-item">
-                <img src="/logo/partners/autodoc.svg" alt="Autodoc" />
+                <img src={getAssetPath("logo/partners/autodoc.svg")} alt="Autodoc" />
               </div>
             </div>
           </div>

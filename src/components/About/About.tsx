@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { getAssetPath } from '../../utils/paths'
 import './About.css'
 
 const About = () => {
@@ -51,7 +52,7 @@ const About = () => {
                       <div className="logo-glow"></div>
                       <div className="logo-3d">
                         <img 
-                          src="/logo/fit-logo-clean.svg" 
+                          src={getAssetPath("logo/fit-logo-clean.svg")} 
                           alt="FIT Logo" 
                           className="fit-logo-svg" 
                         />
