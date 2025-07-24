@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Menu, X } from 'lucide-react'
+import { getAssetPath } from '../../utils/paths'
 import './Header.css'
 
 const Header = () => {
@@ -148,7 +149,7 @@ const Header = () => {
         <div className="header-content">
           {/* Логотип */}
           <div className="logo">
-            <img src="/logo/fit-logo-clean.svg" alt="FIT" className="logo-img" />
+            <img src={getAssetPath("logo/fit-logo-clean.svg")} alt="FIT" className="logo-img" />
           </div>
 
           {/* Навигация для десктопа */}
