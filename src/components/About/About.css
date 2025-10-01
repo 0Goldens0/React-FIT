@@ -1,7 +1,11 @@
 /* ========== ABOUT SECTION ========== */
 .about {
     position: relative;
-    padding: 80px 0;
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #0F0F11;
     background-image: linear-gradient(135deg, #0F0F11 0%, #1F1F22 100%);
     overflow: hidden;
@@ -52,8 +56,9 @@
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     border-radius: 32px;
-    padding: 60px;
-    max-width: 1400px;
+    padding: 35px 70px;
+    max-width: 1450px;
+    width: 100%;
     margin: 0 auto;
     box-shadow: 
         0 0 0 1px rgba(255, 255, 255, 0.3),
@@ -85,18 +90,18 @@
 /* Заголовок секции */
 .about .section-header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 25px;
     position: relative;
 }
 
 .about .section-title {
-    font-size: 4rem;
+    font-size: 3.5rem;
     font-weight: 900;
     background: linear-gradient(135deg, #1e293b, #475569, #004f59);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     position: relative;
     letter-spacing: -0.02em;
     text-shadow: 0 0 30px rgba(0, 79, 89, 0.3);
@@ -124,7 +129,7 @@
 .about .content-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 45px;
     align-items: center;
 }
 
@@ -142,6 +147,7 @@
     width: 350px;
     height: 350px;
     animation: levitate 4s ease-in-out infinite;
+    margin: 0 auto;
 }
 
 @keyframes levitate {
@@ -231,7 +237,7 @@
 
 /* Новые стили для SVG-логотипа */
 .about .fit-logo-svg {
-    width: 180px;
+    width: 200px;
     height: auto;
     filter: drop-shadow(0 0 10px rgba(0, 79, 89, 0.8))
            drop-shadow(0 0 20px rgba(0, 79, 89, 0.6))
@@ -276,20 +282,20 @@
 }
 
 .about .energy-ring:nth-child(1) {
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 240px;
     animation-delay: 0s;
 }
 
 .about .energy-ring:nth-child(2) {
-    width: 250px;
-    height: 250px;
+    width: 290px;
+    height: 290px;
     animation-delay: 1s;
 }
 
 .about .energy-ring:nth-child(3) {
-    width: 300px;
-    height: 300px;
+    width: 340px;
+    height: 340px;
     animation-delay: 2s;
 }
 
@@ -316,9 +322,9 @@
 
 .about .company-description {
     font-size: 1.1rem;
-    line-height: 1.8;
+    line-height: 1.7;
     color: #475569;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .about .mission-block {
@@ -326,8 +332,8 @@
         rgba(0, 79, 89, 0.05) 0%, 
         rgba(255, 215, 0, 0.05) 100%);
     border-radius: 16px;
-    padding: 30px;
-    margin: 30px 0;
+    padding: 22px;
+    margin: 20px 0;
     border: 1px solid rgba(0, 79, 89, 0.1);
     position: relative;
     overflow: hidden;
@@ -356,7 +362,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: #004f59;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .about .mission-text {

@@ -133,153 +133,39 @@ const brandProducts: BrandProductsMap = {
 
 const Brands = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const currentIndexRef = useRef(currentIndex)
   const containerRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useRef(false)
-  const firstEnter = useRef(true)
-  const lastScrollTime = useRef(Date.now())
-  const scrollThrottleTime = 300 // ms
 
-  // Проверка, находится ли секция брендов в поле зрения
+  // Слушаем события от ScrollController
   useEffect(() => {
-    const currentSectionEl = sectionRef.current; 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        const wasInView = isInView.current
-        isInView.current = entry.isIntersecting
-        
-        if (entry.isIntersecting) {
-          if (firstEnter.current) {
-            currentSectionEl?.scrollIntoView({ behavior: 'auto', block: 'center' })
-            firstEnter.current = false
-          } else if (!wasInView) {
-            currentSectionEl?.scrollIntoView({ behavior: 'auto', block: 'center' })
-          }
-        }
-      },
-      {
-        threshold: 0.5 
-      }
-    )
+    const handleBrandScrollUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<{ index: number }>;
+      setCurrentIndex(customEvent.detail.index);
+    };
 
-    if (currentSectionEl) { 
-      observer.observe(currentSectionEl)
-    }
+    window.addEventListener('brandScrollUpdate', handleBrandScrollUpdate);
 
     return () => {
-      if (currentSectionEl) { 
-        observer.unobserve(currentSectionEl)
-      }
-    }
+      window.removeEventListener('brandScrollUpdate', handleBrandScrollUpdate);
+    };
   }, [])
-
-  // Keep a ref updated with the latest currentIndex for wheel handler
-  useEffect(() => {
-    currentIndexRef.current = currentIndex
-  }, [currentIndex])
-
-  // Управление колесиком мыши для прокрутки брендов
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      console.log('[Brands.tsx] handleWheel triggered', { deltaY: e.deltaY });
-
-      e.preventDefault()
-
-      const sectionEl = sectionRef.current
-      if (!sectionEl) return
-
-      const now = Date.now()
-      if (now - lastScrollTime.current < scrollThrottleTime) return
-      lastScrollTime.current = now
-
-      const scrollDown = e.deltaY > 0
-
-      if (scrollDown) {
-        if (currentIndexRef.current < brandsData.length - 1) {
-          setCurrentIndex(prev => prev + 1)
-        } else {
-          const nextSection = sectionEl.nextElementSibling
-          if (nextSection) nextSection.scrollIntoView({ behavior: 'smooth' })
-        }
-      } else {
-        if (currentIndexRef.current > 0) {
-          setCurrentIndex(prev => prev - 1)
-        } else {
-          const prevSection = sectionEl.previousElementSibling
-          if (prevSection) prevSection.scrollIntoView({ behavior: 'smooth' })
-        }
-      }
-    }
-
-    const sectionEl = sectionRef.current
-    if (sectionEl) {
-      sectionEl.addEventListener('wheel', handleWheel, { passive: false })
-    }
-    return () => {
-      if (sectionEl) {
-        sectionEl.removeEventListener('wheel', handleWheel)
-      }
-    }
-  }, []) // run once on mount
 
   const handleDotClick = (index: number) => {
     if (index === currentIndex) return
     setCurrentIndex(index)
-    lastScrollTime.current = Date.now();
-  }
-
-  const handleKeyDownGlobal = (e: KeyboardEvent) => {
-    if (!isInView.current) return
     
-    const currentTime = Date.now();
-    if (currentTime - lastScrollTime.current < scrollThrottleTime) {
-      return;
-    }
-
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-      e.preventDefault();
-      if (currentIndex < brandsData.length - 1) {
-        setCurrentIndex(prev => prev + 1);
-        lastScrollTime.current = Date.now();
-      } else {
-        const nextSection = sectionRef.current?.nextElementSibling;
-        if (nextSection) {
-          nextSection.scrollIntoView({ behavior: 'smooth' });
-          lastScrollTime.current = Date.now();
-        }
-      }
-    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-      e.preventDefault();
-      if (currentIndex > 0) {
-        setCurrentIndex(prev => prev - 1);
-        lastScrollTime.current = Date.now();
-      } else {
-        const prevSection = sectionRef.current?.previousElementSibling;
-        if (prevSection) {
-          prevSection.scrollIntoView({ behavior: 'smooth' });
-          lastScrollTime.current = Date.now();
-        }
-      }
-    }
+    // Отправляем событие для синхронизации с ScrollController
+    const event = new CustomEvent('brandScrollUpdate', {
+      detail: { index }
+    });
+    window.dispatchEvent(event);
   }
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDownGlobal)
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDownGlobal)
-    }
-  }, [currentIndex, brandsData.length, isInView, scrollThrottleTime])
 
   return (
     <section 
       className="brands" 
-      id="brands" 
-      tabIndex={-1}
+      id="brands"
       ref={sectionRef}
-      style={{ outline: 'none' }}
     >
       <div 
         className="brand-journey-container" 

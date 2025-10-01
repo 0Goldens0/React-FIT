@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
+import { scrollController } from '../../utils/scrollController'
 import './Timeline.css'
 
 interface TimelineData {
@@ -379,8 +380,11 @@ const Timeline = () => {
   const animationRef = useRef<number | null>(null)
   const positionRef = useRef<number>(0)
   const lastTimeRef = useRef<number>(0)
+  const isAnimationActiveRef = useRef<boolean>(true) // Флаг активности анимации
+  const isModalOpenRef = useRef<boolean>(false) // Ref для isModalOpen для доступа в анимации
+  const scrollPositionRef = useRef<number>(0) // Сохраняем позицию скролла при открытии модального окна
 
-  const startAnimation = () => {
+  const startAnimation = useCallback(() => {
     const track = trackRef.current
     if (!track) return
 
@@ -390,6 +394,15 @@ const Timeline = () => {
     const speed = 300 // пикселей в секунду
 
     const animate = (currentTime: number) => {
+      // КРИТИЧЕСКИ ВАЖНО: проверяем оба флага
+      if (!isAnimationActiveRef.current || isModalOpenRef.current) {
+        console.log('⏸️ Animation frame skipped:', { 
+          isActive: isAnimationActiveRef.current, 
+          isModalOpen: isModalOpenRef.current 
+        })
+        return
+      }
+      
       if (lastTimeRef.current === 0) lastTimeRef.current = currentTime
       
       const deltaTime = currentTime - lastTimeRef.current
@@ -402,8 +415,9 @@ const Timeline = () => {
       animationRef.current = requestAnimationFrame(animate)
     }
 
+    isAnimationActiveRef.current = true // Устанавливаем флаг активности
     animationRef.current = requestAnimationFrame(animate)
-  }
+  }, [])
 
   useEffect(() => {
     startAnimation()
@@ -414,6 +428,83 @@ const Timeline = () => {
       }
     }
   }, [])
+
+  // Управление модальным окном - остановка анимации и блокировка скролла
+  useEffect(() => {
+    const track = trackRef.current
+    
+    // КРИТИЧЕСКИ ВАЖНО: синхронизируем ref с state
+    isModalOpenRef.current = isModalOpen
+    
+    if (isModalOpen) {
+      // Останавливаем анимацию Timeline
+      isAnimationActiveRef.current = false // Отключаем флаг анимации
+      
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+      
+      // Добавляем CSS класс для паузы
+      if (track) {
+        track.style.willChange = 'auto'
+      }
+      
+      // СОХРАНЯЕМ текущую позицию скролла в ref
+      scrollPositionRef.current = window.scrollY
+      
+      // БЛОКИРУЕМ СКРОЛЛ СТРАНИЦЫ - надежный метод
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollPositionRef.current}px`
+      document.body.style.width = '100%'
+      
+      // Отключаем scrollController
+      scrollController.disable()
+      
+      console.log('🛑 Timeline STOPPED - Modal Open. ScrollY saved:', scrollPositionRef.current)
+      
+    } else {
+      // Возвращаем will-change для анимации
+      if (track) {
+        track.style.willChange = 'transform'
+      }
+      
+      // РАЗБЛОКИРУЕМ СКРОЛЛ СТРАНИЦЫ - ВАЖЕН ПОРЯДОК!
+      // 1. Сначала убираем position: fixed и связанные стили
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+      
+      // 2. ЗАТЕМ восстанавливаем позицию скролла из ref
+      window.scrollTo(0, scrollPositionRef.current)
+      
+      // Включаем scrollController обратно
+      scrollController.enable()
+      
+      // Возобновляем анимацию Timeline с сохраненной позиции
+      startAnimation()
+      
+      console.log('▶️ Timeline RESUMED - Modal Closed. ScrollY restored:', scrollPositionRef.current)
+    }
+    
+    // Cleanup при размонтировании компонента
+    return () => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      scrollController.enable()
+      isAnimationActiveRef.current = false
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+    }
+  }, [isModalOpen, startAnimation])
 
   // Защита от непроизвольного наведения с задержкой
   const handleItemHover = useCallback((item: TimelineData) => {

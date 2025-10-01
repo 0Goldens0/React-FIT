@@ -252,7 +252,6 @@ const Services = () => {
                 <div className="service-card-back">
                   <h3 className="service-title">Онлайн-присутствие</h3>
                   <p className="service-description">Присоединяйтесь к нашим социальным сетям, чтобы всегда быть в курсе последних новостей, новинок, видеообзоров инструмента и просто интересных постов про строительство, ремонт и DIY.</p>
-                  <a href="https://instrument-fit.ru" className="btn btn-primary" style={{marginTop: '15px'}}>Посетить сайт</a>
                 </div>
               </div>
             </div>

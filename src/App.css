@@ -2,18 +2,18 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  scroll-behavior: smooth;
 }
 
 html {
-  scroll-behavior: smooth;
   overflow-x: hidden;
+  scroll-behavior: smooth; /* Плавный скролл для секций после Timeline */
 }
 
 body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  overflow-y: scroll; /* Разрешаем вертикальный скролл */
 }
 
 /* Скрываем полосу прокрутки, но сохраняем функциональность */
@@ -29,4 +29,23 @@ body {
 /* Для IE и Edge */
 body {
   -ms-overflow-style: none;
+}
+
+/* Секции для плавного скролла */
+section {
+  scroll-snap-align: start;
+  position: relative;
+  will-change: transform;
+}
+
+/* Плавные переходы для всех секций */
+section:not(.brands) {
+  transition: opacity 0.6s ease-in-out, transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Специальные стили для brands с горизонтальным скроллом */
+section.brands {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 } 
+
