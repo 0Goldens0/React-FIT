@@ -314,6 +314,9 @@
 
 /* Call to Action Section */
 .services-cta {
+    display: flex    ;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     margin-top: 60px;
     position: relative;
@@ -326,7 +329,9 @@
 }
 
 .services-arrow {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-left: 20px;
     animation: bounce-right 2s infinite;
 }

@@ -175,7 +175,7 @@ const RussiaMap: React.FC = () => {
   };
 
   return (
-    <div className="russia-map-container">
+    <div className="russia-map-container" id="map">
       <div className="map-header">
         <h2>Интерактивная карта России</h2>
         <p>85 регионов с региональными центрами</p>

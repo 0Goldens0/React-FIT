@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Menu, X } from 'lucide-react'
 import { getAssetPath } from '../../utils/paths'
+import { scrollController } from '../../utils/scrollController'
 import './Header.css'
 
 const Header = () => {
@@ -75,7 +76,7 @@ const Header = () => {
     }
   }, [updateActiveSection])
 
-  // Улучшенная плавная прокрутка к секции
+  // Улучшенная плавная прокрутка к секции с использованием scrollController
   const handleNavClick = useCallback((href: string) => {
     const targetId = href.replace('#', '')
     const targetElement = document.getElementById(targetId)
@@ -85,52 +86,27 @@ const Header = () => {
       return
     }
     
-    // Останавливаем любые текущие анимации скролла
-    window.stop?.()
-    
-    const headerHeight = 80
-    let targetPosition = targetElement.offsetTop - headerHeight
-    
-    // Специальная обработка для секции брендов
-    if (targetId === 'brands') {
-      // Для брендов прокручиваем к началу секции
-      targetPosition = targetElement.offsetTop - headerHeight - 20
-    }
-    
-    // Убеждаемся что позиция не отрицательная
-    targetPosition = Math.max(0, targetPosition)
-    
     // Закрываем мобильное меню сразу
     setIsMenuOpen(false)
     
-    // Используем более надежный метод прокрутки
-    const startPosition = window.scrollY
-    const distance = targetPosition - startPosition
-    const duration = Math.min(Math.abs(distance) / 2, 1000) // Максимум 1 секунда
-    let startTime: number | null = null
+    // Контролируемые секции (управляются через scrollController)
+    const controlledSections = ['home', 'about', 'brands', 'timeline']
+    const sectionIndex = controlledSections.indexOf(targetId)
     
-    const animation = (currentTime: number) => {
-      if (startTime === null) startTime = currentTime
-      const timeElapsed = currentTime - startTime
-      const progress = Math.min(timeElapsed / duration, 1)
-      
-      // Используем easing функцию для плавности
-      const ease = progress < 0.5 
-        ? 2 * progress * progress 
-        : 1 - Math.pow(-2 * progress + 2, 3) / 2
-      
-      const currentPosition = startPosition + distance * ease
-      window.scrollTo(0, currentPosition)
-      
-      if (progress < 1) {
-        requestAnimationFrame(animation)
-      } else {
-        // После завершения анимации принудительно обновляем активную секцию
-        setTimeout(updateActiveSection, 100)
-      }
+    if (sectionIndex >= 0) {
+      // Используем scrollController для контролируемых секций
+      scrollController.scrollToSection(sectionIndex, true)
+    } else {
+      // Для остальных секций используем стандартный scrollIntoView с центрированием
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest'
+      })
     }
     
-    requestAnimationFrame(animation)
+    // После завершания анимации обновляем активную секцию
+    setTimeout(updateActiveSection, 1000)
   }, [updateActiveSection])
 
   const menuItems = [
