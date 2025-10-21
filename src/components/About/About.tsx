@@ -12,14 +12,29 @@ const About = () => {
     const particlesContainer = document.getElementById('about-particles')
     if (!particlesContainer) return
 
-    for (let i = 0; i < 20; i++) {
-      const particle = document.createElement('div')
-      particle.className = 'particle'
-      particle.style.left = Math.random() * 100 + '%'
-      particle.style.top = Math.random() * 100 + '%'
-      particle.style.animationDelay = Math.random() * 3 + 's'
-      particle.style.animationDuration = (Math.random() * 3 + 3) + 's'
-      particlesContainer.appendChild(particle)
+    // Создаем больше гексагонов для полного покрытия фона
+    for (let i = 0; i < 40; i++) {
+      const hexagon = document.createElement('div')
+      hexagon.className = 'hexagon-particle'
+      
+      // Случайное позиционирование
+      hexagon.style.left = Math.random() * 100 + '%'
+      hexagon.style.top = Math.random() * 100 + '%'
+      
+      // Случайная задержка и длительность анимации
+      hexagon.style.animationDelay = Math.random() * 5 + 's'
+      hexagon.style.animationDuration = (Math.random() * 10 + 15) + 's'
+      
+      // Случайный размер (от 15px до 40px)
+      const size = Math.random() * 25 + 15
+      hexagon.style.width = size + 'px'
+      hexagon.style.height = size + 'px'
+      
+      // Случайная непрозрачность
+      const opacity = Math.random() * 0.4 + 0.1
+      hexagon.style.opacity = opacity.toString()
+      
+      particlesContainer.appendChild(hexagon)
     }
   }
 
@@ -35,7 +50,7 @@ const About = () => {
         <div className="content-container">
           <div className="section-header">
             <h2 className="section-title">О КОМПАНИИ FIT</h2>
-            <p className="section-subtitle">Ваш надежный партнер в мире профессионального инструмента</p>
+            <p className="section-subtitle">Ваш надежный партнер в мире <strong>технологичных решений</strong> в России и странах СНГ.</p>
           </div>
 
           <div className="content-grid">
@@ -65,19 +80,21 @@ const About = () => {
 
             <div className="text-section">
               <p className="company-description">
-                Компания FIT занимается производством и продажей ручного и электроинструмента промышленного и бытового назначения на территории Российской Федерации и стран таможенного союза.
+              Мы обеспечиваем эффективность и безупречное качество работ  на строительной площадке, на производстве или в домашней мастерской. Наша продукция доступна по всей территории РФ и стран Таможенного союза.
               </p>
 
               <div className="mission-block">
                 <div className="mission-title">Наша миссия</div>
                 <div className="mission-text">
-                  Обеспечивать профессионалов и домашних мастеров качественным инструментом по доступной цене. Мы ценим качество, инновации и выстраиваем долгосрочные отношения с партнерами.
+                Наша миссия — создавать технологичные решения, которые <strong>экономят время и ресурсы</strong>.
+                <br />
+                <br />
+                Мы <strong>ценим качество, инновации</strong> и выстраиваем долгосрочные отношения с партнерами. 
+                <br />
+                <br />
+                Наша цель — гарантировать<strong>уверенность в результате</strong>  для любых профессиональных и бытовых задач.
                 </div>
               </div>
-
-              <p className="company-description">
-                С 1996 года мы привозим и реализуем на Российском рынке канадский инструмент FIT. За это время мы прошли долгий путь от маленького представительства до компании, работающей почти во всех регионах РФ.
-              </p>
 
               <button className="cta-button" onClick={scrollToBrands}>
                 <span>Наши бренды</span>

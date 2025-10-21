@@ -8,6 +8,25 @@
   z-index: 10;
 }
 
+/* Обертка для кнопки "Стать партнером" */
+.services-cta-wrapper {
+  background-color: #171719;
+  padding: 60px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.services-cta-wrapper .services-cta {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .services-cta-wrapper {
+    padding: 40px 0;
+  }
+}
+
 .partners-marquee-container {
   width: 100%;
   position: relative;
@@ -17,6 +36,12 @@
   display: flex;
   animation: marquee 25s linear infinite;
   width: fit-content;
+  transition: all 0.3s ease;
+}
+
+/* Остановка анимации при наведении */
+.partners-marquee:hover .partners-marquee-track {
+  animation-play-state: paused;
 }
 
 .partners-logo-group {

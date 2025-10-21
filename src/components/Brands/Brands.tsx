@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { getAssetPath } from '../../utils/paths'
+import { scrollController } from '../../utils/scrollController'
 import '../../assets/css/brand-journey.css'
 
 interface Brand {
   id: string
+  displayName: string
   description: string
   logo: string
   primaryColor: string
@@ -29,15 +31,17 @@ interface BrandProductsMap {
 const brandsData: Brand[] = [
   {
     id: 'fit',
-    description: 'Появление торговой марки в 2003 году дало мощный импульс развитию компании и обеспечило устойчивый рост продаж. FIT – это оптимальное сочетание качества и цены.',
-    logo: getAssetPath('logo/brands/FIT_logo.png'),
+    displayName: 'FIT',
+    description: 'Появление торговой марки в 2003 году дало мощный импульс развитию компании и обеспечило устойчивый рост продаж. FIT – это оптимальное сочетание цены и качества. Наш ассортимент — это единая экосистема решений: от ручного и электроинструмента до оснастки, крепежа и систем хранения. Такой подход позволяет решать любые задачи — от масштабного строительства до точечного ремонта.',
+    logo: getAssetPath('logo/fit-logo-clean.svg'),
     primaryColor: '#FDB913',
     parallaxBgColor: '#004A4E',
     parallaxFgColor: '#002F3A'
   },
   {
     id: 'kypc',
-    description: 'Разработан для занятия ниши среднего ценового сегмента. Выбор правильного курса — важная задача. Наш «Курс» — правильный и сбалансированный выбор!',
+    displayName: 'КУРС',
+    description: 'Разработан для занятия ниши среднего ценового сегмента.КУРС — практичные решения для повседневных задач. Ручные инструменты, оснастка и хозяйственные товары сочетают доступность и надежность, помогая справляться с ремонтом и обслуживанием дома.',
     logo: getAssetPath('logo/brands/Kurs-CMYK.svg'),
     primaryColor: '#D81515',
     parallaxBgColor: '#D81515',
@@ -45,7 +49,8 @@ const brandsData: Brand[] = [
   },
   {
     id: 'mos',
-    description: 'Бренд закрывает потребности бизнеса в удовлетворении спроса на продукцию в низком ценовом сегменте. MOS - доступный инструмент для решения базовых задач.',
+    displayName: 'MOS',
+    description: 'Бренд закрывает потребности бизнеса в удовлетворении спроса на продукцию в низком ценовом сегменте. MOS — разумный выбор для дома и мастерской. Доступные ручные инструменты и хозяйственные товары решают базовые задачи, сохраняя достойное качество без переплат.',
     logo: getAssetPath('logo/brands/MOS-CMYK.svg'),
     primaryColor: '#00AEEF',
     parallaxBgColor: '#00AEEF',
@@ -53,7 +58,8 @@ const brandsData: Brand[] = [
   },
   {
     id: 'xbat',
-    description: 'Бренд с говорящим названием! ХВАТ - специализированный бренд, который фокусируется на узком сегменте рынка и предлагает лучшие решения в своей категории.',
+    displayName: 'ХВАТ',
+    description: 'Бренд с говорящим названием! ХВАТ - специализированный бренд, который фокусируется на узком сегменте рынка - крепёж и сопутствующие товары для бытового и профессионального применения. Прочные, устойчивые к нагрузкам и долговечные решения для надежной фиксации, крепления и энергоснабжения.',
     logo: getAssetPath('logo/brands/Xbat-CMYK.svg'),
     primaryColor: '#1A1A1A',
     parallaxBgColor: '#1A1A1A',
@@ -61,15 +67,17 @@ const brandsData: Brand[] = [
   },
   {
     id: 'greatflex',
-    description: 'GREATFLEX – это инновационные решения для вашего сада. Мы стремимся сделать садоводство и огородничество простым и эффективным.',
-    logo: getAssetPath('logo/brands/greatflex.png'),
+    displayName: 'GREATFLEX',
+    description: 'GREATFLEX — доступная и надежная оснастка для электроинструмента. Бренд предлагает готовые решения для домашних мастеров и профессионалов, обеспечивая оптимальное соотношение цены и качества. Продукция GREATFLEX гарантирует стабильную работу и безупречный результат при ежедневном использовании.',
+    logo: getAssetPath('logo/brands/GreatFlex_logo-1.svg'),
     primaryColor: '#E40C0C',
     parallaxBgColor: '#E40C0C',
     parallaxFgColor: '#FFFFFF'
   },
   {
     id: 'cutop',
-    description: 'Продукция бренда — профессиональная и промышленная оснастка для электроинструментов. Внимание к инновациям гарантирует постоянное появление новой продукции.',
+    displayName: 'CUTOP',
+    description: 'Продукция бренда — профессиональная и промышленная оснастка для электроинструмента. Бренд использует самые передовые технологии производства и  предлагает готовые решения для работы с высокими нагрузками и сверхтвердыми материалами. Продукция CUTOP обеспечивает максимальную точность, увеличенный ресурс и безопасность при выполнении ответственных задач.',
     logo: getAssetPath('logo/brands/Cutop-CMYK.svg'),
     primaryColor: '#2A4998',
     parallaxBgColor: '#2A4998',
@@ -77,7 +85,8 @@ const brandsData: Brand[] = [
   },
   {
     id: 'mastercolor',
-    description: 'Бренд товарной категории «малярно-штукатурный инструмент». Master Color - это яркие краски вашего ремонта.',
+    displayName: 'MASTER COLOR',
+    description: 'Master Color - профессиональный бренд товарной категории «малярно-штукатурный инструмент». Предлагает комплексные решения для профессиональной и бытовой отделки: от подготовки поверхностей до нанесения покрытий и защиты рабочей зоны. Каждый инструмент Master Color обеспечивает безупречный результат на всех этапах работ.',
     logo: getAssetPath('logo/brands/Master_Color_logo-1.svg'),
     primaryColor: '#0065A8',
     parallaxBgColor: '#0065A8',
@@ -161,6 +170,16 @@ const Brands = () => {
     window.dispatchEvent(event);
   }
 
+  // Навигация к секции "О компании"
+  const navigateToAbout = () => {
+    scrollController.scrollToSection(1, true) // About - индекс 1
+  }
+
+  // Навигация к секции "История"
+  const navigateToTimeline = () => {
+    scrollController.scrollToSection(3, true) // Timeline - индекс 3
+  }
+
   return (
     <section 
       className="brands" 
@@ -179,20 +198,11 @@ const Brands = () => {
             id={`brand-${brand.id}`}
           >
             <div className="parallax-bg" style={{ 
-              backgroundImage: `url('https://placehold.co/1920x1080/${brand.parallaxBgColor.substring(1)}/${brand.parallaxFgColor.substring(1)}?text=${brand.id.toUpperCase()}&font=Inter')` 
+              backgroundImage: `url('https://placehold.co/1920x1080/${brand.parallaxBgColor.substring(1)}/${brand.parallaxFgColor.substring(1)}?text=${brand.displayName}&font=Inter')` 
             }}></div>
             
             <div className="brand-content">
-              <div 
-                className="brand-logo-journey"
-                style={{ 
-                  boxShadow: `0 0 20px ${brand.primaryColor}40, 0 0 40px ${brand.primaryColor}20`,
-                  background: brand.id === 'xbat' || brand.id === 'greatflex' || brand.id === 'cutop' || brand.id === 'mastercolor' 
-                    ? `radial-gradient(circle at center, rgba(10, 10, 15, 0.4) 0%, rgba(10, 10, 15, 0.7) 70%)`
-                    : `rgba(10, 10, 15, 0.7)`,
-                  border: `1px solid ${brand.primaryColor}30`
-                }}
-              >
+              <div className="brand-logo-journey">
                 <img src={brand.logo} alt={`Логотип ${brand.id}`} />
               </div>
               <p className="brand-description">{brand.description}</p>
@@ -240,6 +250,27 @@ const Brands = () => {
         </svg>
         <span>или используйте навигацию</span>
       </div>
+
+      {/* Стрелки навигации между секциями */}
+      <button 
+        className="section-nav-arrow arrow-up"
+        onClick={navigateToAbout}
+        aria-label="К разделу О компании"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+      
+      <button 
+        className="section-nav-arrow arrow-down"
+        onClick={navigateToTimeline}
+        aria-label="К разделу История"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M5 9l7 7 7-7" />
+        </svg>
+      </button>
     </section>
   )
 }

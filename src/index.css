@@ -23,6 +23,11 @@ html {
     scroll-behavior: auto;
 }
 
+/* Плавный скролл для свободной области после Timeline */
+html.smooth-scroll {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
@@ -176,31 +181,7 @@ section#home {
 .animate.delay-8 { transition-delay: 0.8s; }
 
 /* ========== ЧАСТИЦЫ ========== */
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background-color: rgba(255, 184, 0, 0.6);
-    border-radius: 50%;
-    animation: float 3s infinite ease-in-out;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0) translateX(0);
-        opacity: 0;
-    }
-    25% {
-        opacity: 1;
-    }
-    50% {
-        transform: translateY(-20px) translateX(10px);
-        opacity: 0.8;
-    }
-    75% {
-        opacity: 0.5;
-    }
-}
+/* Глобальные частицы отключены - используются специфичные для секций */
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 1200px) {
