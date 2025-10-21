@@ -25,6 +25,8 @@ export class ScrollController {
   private touchStartX: number = 0; // Начальная позиция касания по X
   private handleBrandScrollUpdate: ((e: Event) => void) | null = null; // Обработчик синхронизации с Brands
   private isEnabled: boolean = true; // Флаг активности контроллера
+  private wheelThrottle: number = 0; // Throttle для wheel событий
+  private wheelThrottleDelay: number = 50; // Задержка throttle в мс
   
   // Колбэки
   private onSectionChange?: (index: number, section: ScrollSection) => void;
@@ -164,6 +166,13 @@ export class ScrollController {
       return;
     }
     
+    // Throttle для wheel событий - оптимизация производительности
+    const now = Date.now();
+    if (now - this.wheelThrottle < this.wheelThrottleDelay) {
+      return;
+    }
+    this.wheelThrottle = now;
+    
     const scrollDown = e.deltaY > 0;
     
     // Если мы на последней контролируемой секции (Timeline) и скроллим вниз
@@ -190,8 +199,7 @@ export class ScrollController {
 
     e.preventDefault();
 
-    // Проверка на cooldown для уменьшения чувствительности
-    const now = Date.now();
+    // Проверка на cooldown для уменьшения чувствительности (используем now из throttle)
     if (now - this.lastScrollTime < this.scrollCooldown) {
       return;
     }

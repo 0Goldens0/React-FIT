@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, memo } from 'react'
 import { scrollController } from '../../utils/scrollController'
 import './Timeline.css'
 
@@ -372,7 +372,7 @@ const timelineData: TimelineData[] = [
   }
 ]
 
-const Timeline = () => {
+const Timeline = memo(() => {
   const [currentItem, setCurrentItem] = useState<TimelineData | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isAutoPlay, setIsAutoPlay] = useState(true) // Состояние автопроигрывания
@@ -398,10 +398,6 @@ const Timeline = () => {
     const animate = (currentTime: number) => {
       // КРИТИЧЕСКИ ВАЖНО: проверяем оба флага
       if (!isAnimationActiveRef.current || isModalOpenRef.current) {
-        console.log('⏸️ Animation frame skipped:', { 
-          isActive: isAnimationActiveRef.current, 
-          isModalOpen: isModalOpenRef.current 
-        })
         return
       }
       
@@ -412,7 +408,8 @@ const Timeline = () => {
       
       positionRef.current = (positionRef.current + (deltaTime * speed / 1000)) % totalWidth
       
-      track.style.transform = `translateX(-${positionRef.current}px)`
+      // Используем translate3d для GPU-ускорения
+      track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
       
       animationRef.current = requestAnimationFrame(animate)
     }
@@ -451,7 +448,7 @@ const Timeline = () => {
 
     const itemWidth = 450
     positionRef.current = Math.max(0, positionRef.current - itemWidth)
-    track.style.transform = `translateX(-${positionRef.current}px)`
+    track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
   }, [])
 
   // Функция для перемещения ленты вправо (вперед)
@@ -464,7 +461,7 @@ const Timeline = () => {
     const totalWidth = itemWidth * totalItems
     
     positionRef.current = (positionRef.current + itemWidth) % totalWidth
-    track.style.transform = `translateX(-${positionRef.current}px)`
+    track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
   }, [])
 
   useEffect(() => {
@@ -513,8 +510,6 @@ const Timeline = () => {
       // Отключаем scrollController
       scrollController.disable()
       
-      console.log('🛑 Timeline STOPPED - Modal Open. ScrollY saved:', scrollPositionRef.current)
-      
     } else {
       // Возвращаем will-change для анимации
       if (track) {
@@ -537,8 +532,6 @@ const Timeline = () => {
       
       // Возобновляем анимацию Timeline с сохраненной позиции
       startAnimation()
-      
-      console.log('▶️ Timeline RESUMED - Modal Closed. ScrollY restored:', scrollPositionRef.current)
     }
     
     // Cleanup при размонтировании компонента
@@ -783,6 +776,8 @@ const Timeline = () => {
       </div>
     </section>
   )
-}
+})
+
+Timeline.displayName = 'Timeline'
 
 export default Timeline 

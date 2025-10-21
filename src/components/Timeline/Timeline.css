@@ -5,6 +5,7 @@
     color: var(--light);
     overflow: hidden;
     padding: 100px 0;
+    contain: layout style paint;
 }
 
 /* Optional Background Image */
@@ -76,6 +77,8 @@
     align-items: center;
     height: 100%;
     padding-left: 50px;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .timeline-item {

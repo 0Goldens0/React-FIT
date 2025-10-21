@@ -6,6 +6,7 @@
   color: white;
   overflow: hidden;
   min-height: 100vh;
+  contain: layout style paint;
 }
 
 /* Анимированный космический фон */

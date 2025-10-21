@@ -23,6 +23,7 @@ section#brands.brands {
     padding-top: 0 !important; /* Убираем лишний отступ */
     position: relative;
     overflow: hidden;
+    contain: layout style paint;
 }
 
 .brand-journey-container {
@@ -32,6 +33,9 @@ section#brands.brands {
     transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); /* Плавный переход */
     position: relative;
     margin-top: 0; /* Убираем отрицательный отступ */
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .brand-section {
