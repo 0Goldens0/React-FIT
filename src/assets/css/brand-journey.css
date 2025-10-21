@@ -99,12 +99,13 @@ section#brands.brands {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
     opacity: 0;
     transform: translateY(0);
     transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
     width: 40%;
     padding-left: 6%;
+    padding-top: calc(50vh - 220px);
     height: 100vh;
     margin-top: 0;
 }
@@ -124,13 +125,7 @@ section#brands.brands {
     justify-content: center;
     align-items: center;
     transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.12); /* Увеличиваем прозрачность фона */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    padding: 25px; /* Увеличиваем padding */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Делаем рамку более видимой */
     z-index: 2;
-    backdrop-filter: blur(10px); /* Добавляем размытие фона */
 }
 
 /* Радиальный белый градиент под логотипом */
@@ -143,116 +138,90 @@ section#brands.brands {
     height: 100%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.05) 70%);
     z-index: -1;
-    opacity: 0.9; /* Увеличиваем opacity */
-    transform: scale(1.3);
+    opacity: 0.9;
+    transform: scale(0.91);
     border-radius: 50%;
+    filter: blur(15px);
     transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
     pointer-events: none;
 }
 
-/* Специальный более яркий градиент для указанных брендов */
-#brand-xbat .brand-logo-journey::before,
-#brand-greatflex .brand-logo-journey::before,
-#brand-cutop .brand-logo-journey::before,
-#brand-mastercolor .brand-logo-journey::before {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0.1) 60%);
-    opacity: 1;
-    transform: scale(1.8);
-    filter: blur(3px);
+/* Специфические стили для брендов убраны - все используют базовую подсветку */
+
+/* Увеличение логотипа FIT */
+#brand-fit .brand-logo-journey img {
+    transform: scale(2);
 }
 
-#brand-xbat.active .brand-logo-journey::before,
-#brand-greatflex.active .brand-logo-journey::before,
-#brand-cutop.active .brand-logo-journey::before,
-#brand-mastercolor.active .brand-logo-journey::before {
-    opacity: 1;
-    transform: scale(2.2);
-    filter: blur(2px);
+/* Белый цвет логотипов для КУРС и ХВАТ */
+#brand-kypc .brand-logo-journey img,
+#brand-xbat .brand-logo-journey img {
+    filter: brightness(0) invert(1);
 }
 
-/* Специфические стили для каждого бренда с использованием их цветов */
-#brand-xbat .brand-logo-journey::before {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(180, 180, 180, 0.4) 40%, rgba(255, 255, 255, 0.1) 70%);
+/* Неон только для ХВАТ */
+#brand-xbat.active .brand-logo-journey img {
+    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
 }
 
-#brand-greatflex .brand-logo-journey::before {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(0, 166, 81, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%);
+/* КУРС остается без неона */
+#brand-kypc.active .brand-logo-journey img {
+    filter: brightness(0) invert(1);
 }
 
-#brand-cutop .brand-logo-journey::before {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(42, 73, 152, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%);
+/* Обводка по контуру для CUTOP, GREATFLEX и MASTER COLOR */
+#brand-cutop .brand-logo-journey img,
+#brand-greatflex .brand-logo-journey img,
+#brand-mastercolor .brand-logo-journey img {
+    filter: 
+        drop-shadow(0.3px 0 0 #fff)
+        drop-shadow(-0.3px 0 0 #fff)
+        drop-shadow(0 0.3px 0 #fff)
+        drop-shadow(0 -0.3px 0 #fff)
+        drop-shadow(0.21px 0.21px 0 #fff)
+        drop-shadow(-0.21px -0.21px 0 #fff)
+        drop-shadow(0.21px -0.21px 0 #fff)
+        drop-shadow(-0.21px 0.21px 0 #fff);
 }
 
-#brand-mastercolor .brand-logo-journey::before {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(0, 101, 168, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%);
+#brand-cutop.active .brand-logo-journey img,
+#brand-greatflex.active .brand-logo-journey img,
+#brand-mastercolor.active .brand-logo-journey img {
+    filter: 
+        drop-shadow(0.3px 0 0 #fff)
+        drop-shadow(-0.3px 0 0 #fff)
+        drop-shadow(0 0.3px 0 #fff)
+        drop-shadow(0 -0.3px 0 #fff)
+        drop-shadow(0.21px 0.21px 0 #fff)
+        drop-shadow(-0.21px -0.21px 0 #fff)
+        drop-shadow(0.21px -0.21px 0 #fff)
+        drop-shadow(-0.21px 0.21px 0 #fff)
+        drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
 }
 
-.brand-logo-journey::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    z-index: -1;
-    opacity: 0;
-    transform: scale(0.98);
-    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.brand-section.active .brand-logo-journey::after {
-    opacity: 1;
-    transform: scale(1.02);
-}
+/* ::after убран - квадратная подложка не нужна */
 
 .brand-section.active .brand-logo-journey {
     transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
 }
 
 .brand-logo-journey img {
-    max-width: 90%; /* Увеличиваем размер логотипа */
+    max-width: 90%;
     max-height: 90%;
     object-fit: contain;
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.8)) brightness(1.1) contrast(1.2); /* Улучшаем контраст */
-    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1), filter 0.7s ease;
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .brand-section.active .brand-logo-journey img {
-    filter: drop-shadow(0 8px 25px rgba(255, 255, 255, 0.2)) brightness(1.2) contrast(1.3);
     transform: scale(1.05);
 }
 
-/* Специальные стили для логотипов */
-#brand-xbat .brand-logo-journey {
-    background: rgba(60, 60, 70, 0.9); /* Делаем фон более контрастным */
+/* Переопределение для FIT при активном состоянии */
+#brand-fit.brand-section.active .brand-logo-journey img {
+    transform: scale(2.1);
 }
 
-#brand-fit .brand-logo-journey {
-    background: rgba(40, 60, 70, 0.9);
-}
-
-#brand-mastercolor .brand-logo-journey {
-    background: rgba(30, 60, 90, 0.9);
-}
-
-#brand-kypc .brand-logo-journey {
-    background: rgba(80, 30, 30, 0.9);
-}
-
-#brand-mos .brand-logo-journey {
-    background: rgba(30, 80, 120, 0.9);
-}
-
-#brand-greatflex .brand-logo-journey {
-    background: rgba(30, 80, 60, 0.9);
-}
-
-#brand-cutop .brand-logo-journey {
-    background: rgba(40, 60, 120, 0.9);
-}
+/* Специальные фоны для брендов убраны - оставлена только подсветка */
 
 /* Описание бренда - изящный, минималистичный стиль */
 .brand-description {
@@ -355,7 +324,7 @@ section#brands.brands {
     bottom: 2.5rem;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 100;
+    z-index: 110;
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.9rem;
     display: flex;
@@ -381,6 +350,21 @@ section#brands.brands {
     width: 18px;
     height: 18px;
     fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Адаптация scroll-indicator для мобильных */
+@media (max-width: 768px) {
+    .scroll-indicator {
+        bottom: 6rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .scroll-indicator {
+        bottom: 6.5rem;
+        font-size: 0.8rem;
+    }
 }
 
 /* Адаптация */
@@ -417,6 +401,7 @@ section#brands.brands {
 
     .brand-content {
         padding-left: 0;
+        padding-top: calc(50vh - 110px);
     }
     
     .brand-title-journey,
@@ -451,6 +436,10 @@ section#brands.brands {
     .brand-title-journey,
     .brand-tagline-journey {
         display: none;
+    }
+    
+    .brand-content {
+        padding-top: calc(50vh - 60px);
     }
     
     .brand-logo-journey {
@@ -500,6 +489,10 @@ section#brands.brands {
         display: none;
     }
     
+    .brand-content {
+        padding-top: calc(50vh - 50px);
+    }
+    
     .journey-brand-products-title {
         font-size: 1.2rem;
     }
@@ -537,6 +530,7 @@ section#brands.brands {
     position: relative;
     height: auto;
     padding: 1rem 0.5rem;
+    padding-top: calc(1rem + 60px);
 }
 
 .journey-brand-products-title {
@@ -645,6 +639,7 @@ section#brands.brands {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Ограничиваем до 2 строк */
+    line-clamp: 2; /* Стандартное свойство */
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
 }
@@ -709,20 +704,121 @@ section#brands.brands {
     cursor: not-allowed;
 }
 
-.product-slider-arrow.prev {
-    /* Можно немного сместить, если нужно */
-    /* margin-right: 5px; */
+
+/* ========== RESPONSIVE DESIGN - BRANDS ========== */
+
+/* Планшеты и маленькие ноутбуки */
+@media (max-width: 1200px) {
+    .brand-section {
+        gap: 3%;
+    }
+    
+    .brand-info-journey {
+        padding: 1.5rem;
+    }
+    
+    .brand-logo-journey {
+        max-width: 220px;
+    }
+    
+    .brand-text-journey {
+        font-size: 0.95rem;
+        max-width: 500px;
+    }
+    
+    .journey-brand-products {
+        width: 42%;
+        max-width: 600px;
+    }
+    
+    .journey-brand-products-title {
+        font-size: 1.5rem;
+    }
 }
 
-.product-slider-arrow.next {
-    /* margin-left: 5px; */
+/* Планшеты */
+@media (max-width: 992px) {
+    .brand-section {
+        flex-direction: column;
+        gap: 30px;
+        padding: 40px 20px;
+    }
+    
+    .brand-info-journey {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .brand-logo-journey {
+        max-width: 200px;
+        margin: 0 auto 1rem;
+    }
+    
+    .brand-text-journey {
+        font-size: 0.95rem;
+        max-width: 100%;
+    }
+    
+    .brand-tagline-journey {
+        font-size: 0.95rem;
+        text-align: center;
+    }
+    
+    .journey-brand-products {
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .journey-brand-products-title {
+        font-size: 1.4rem;
+    }
+    
+    .navigation-dots {
+        bottom: 40px;
+    }
 }
 
-
-/* Адаптация для мобильных */
+/* Мобильные устройства */
 @media (max-width: 768px) {
+    section#brands.brands {
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .brand-journey-container {
+        width: 700vw;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .brand-section {
+        padding: 30px 15px;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .brand-info-journey {
+        padding: 1.2rem;
+    }
+    
+    .brand-logo-journey {
+        max-width: 180px;
+    }
+    
+    .brand-text-journey {
+        font-size: 0.9rem;
+    }
+    
+    .brand-tagline-journey {
+        font-size: 0.9rem;
+    }
+    
     .brand-section .journey-brand-products {
-        width: 90%; /* На мобильных блок товаров шире */
+        width: 100%;
         max-width: 95vw;
         padding: 1rem 0;
     }
@@ -732,23 +828,184 @@ section#brands.brands {
         width: calc(100% - 70px);
     }
 
-    /* Для мобильных можно сделать так, чтобы отображалась 1 или 2 карточки */
-    /* JavaScript уже задает flex-basis: 30%, что дает ~3 карточки.
-       Если нужно меньше, нужно менять cardWidthPercent в JS или добавлять CSS override здесь, 
-       но это сложнее без изменения логики JS по расчету смещения. 
-       Проще всего будет, если на мобильных карточки станут немного шире за счет уменьшения количества видимых. */
-    
-    /* .journey-product-card.product-card-slider-item { 
-        flex-basis: 45% !important; // Примерно 2 карточки 
-    } */
-
     .product-slider-arrow {
         padding: 8px 12px;
         font-size: 1.2rem;
+    }
+    
+    .navigation-dots {
+        bottom: 30px;
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* Маленькие мобильные */
+@media (max-width: 480px) {
+    .brand-section {
+        padding: 25px 10px;
+    }
+    
+    .brand-info-journey {
+        padding: 1rem;
+    }
+    
+    .brand-logo-journey {
+        max-width: 150px;
+    }
+    
+    .brand-text-journey {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+    
+    .brand-tagline-journey {
+        font-size: 0.85rem;
+    }
+    
+    .journey-brand-products-title {
+        font-size: 1.1rem;
+        width: calc(100% - 60px);
+    }
+    
+    .product-slider-arrow {
+        padding: 6px 10px;
+        font-size: 1.1rem;
+    }
+    
+    .navigation-dots {
+        bottom: 20px;
+    }
+    
+    .dot {
+        width: 8px;
+        height: 8px;
+        margin: 0 4px;
+    }
+    
+    /* На очень маленьких экранах можно сделать карточки товаров немного крупнее */
+    .journey-product-card.product-card-slider-item {
+        flex-basis: 50% !important;
+        min-width: 140px;
     }
 } 
 
 .brand-section.active .brand-logo-journey::before {
     opacity: 0.8;
-    transform: scale(1.8);
+    transform: scale(1.26);
+}
+
+/* Стрелки навигации между секциями */
+.section-nav-arrow {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(255, 184, 0, 0.15), rgba(255, 184, 0, 0.25));
+    border: 2px solid rgba(255, 184, 0, 0.6);
+    border-radius: 50%;
+    color: #FFB800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(255, 184, 0, 0.2);
+    animation: fadeInArrow 0.5s ease-out, pulseArrow 2s ease-in-out infinite 1s;
+}
+
+@keyframes fadeInArrow {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes pulseArrow {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(255, 184, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(255, 184, 0, 0.5);
+    }
+}
+
+.section-nav-arrow svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.section-nav-arrow:hover {
+    background: linear-gradient(135deg, rgba(255, 184, 0, 0.3), rgba(255, 184, 0, 0.4));
+    border-color: #FFB800;
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 6px 25px rgba(255, 184, 0, 0.4);
+}
+
+.section-nav-arrow.arrow-up {
+    top: 100px;
+}
+
+.section-nav-arrow.arrow-up:hover svg {
+    transform: translateY(-3px);
+}
+
+.section-nav-arrow.arrow-down {
+    bottom: 90px;
+}
+
+.section-nav-arrow.arrow-down:hover svg {
+    transform: translateY(3px);
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .section-nav-arrow {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .section-nav-arrow svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .section-nav-arrow.arrow-up {
+        top: 90px;
+    }
+    
+    .section-nav-arrow.arrow-down {
+        bottom: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-nav-arrow {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .section-nav-arrow svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .section-nav-arrow.arrow-up {
+        top: 85px;
+    }
+    
+    .section-nav-arrow.arrow-down {
+        bottom: 75px;
+    }
 } 

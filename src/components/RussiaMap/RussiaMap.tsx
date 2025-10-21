@@ -98,8 +98,7 @@ const regionalCenters: RegionalCenter[] = [
 const RussiaMap: React.FC = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
-  const [showLabels, setShowLabels] = useState<boolean>(true);
-  const [showCenters, setShowCenters] = useState<boolean>(true);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [svgContent, setSvgContent] = useState<string>('');
   const svgRef = useRef<HTMLDivElement>(null);
 
@@ -108,7 +107,9 @@ const RussiaMap: React.FC = () => {
     fetch(`${import.meta.env.BASE_URL}img/svg.svg`)
       .then(response => response.text())
       .then(data => {
-        setSvgContent(data);
+        // Удаляем все title элементы из SVG
+        const cleanedData = data.replace(/<title>.*?<\/title>/gi, '');
+        setSvgContent(cleanedData);
       })
       .catch(error => {
         console.error('Ошибка загрузки SVG:', error);
@@ -117,6 +118,16 @@ const RussiaMap: React.FC = () => {
 
   useEffect(() => {
     if (svgContent && svgRef.current) {
+      // Удаляем все title элементы и атрибуты из SVG
+      const allElements = svgRef.current.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.removeAttribute('title');
+      });
+      
+      // Удаляем все <title> элементы
+      const titleElements = svgRef.current.querySelectorAll('title');
+      titleElements.forEach(title => title.remove());
+      
       // Добавляем интерактивность к SVG элементам
       const paths = svgRef.current.querySelectorAll('path[data-code]');
       
@@ -124,6 +135,9 @@ const RussiaMap: React.FC = () => {
         const regionCode = path.getAttribute('data-code');
         
         if (regionCode) {
+          // Находим город для этого региона
+          const center = regionalCenters.find(c => c.region === regionCode);
+          
           // Обновляем стили на основе состояния
           const pathEl = path as SVGPathElement;
           if (selectedRegion === regionCode) {
@@ -139,7 +153,10 @@ const RussiaMap: React.FC = () => {
 
           // Добавляем обработчики событий
           const handleClick = () => {
-            setSelectedRegion(regionCode === selectedRegion ? null : regionCode);
+            if (center) {
+              setSelectedRegion(regionCode === selectedRegion ? null : regionCode);
+              setSelectedCity(selectedCity === center.id ? null : center.id);
+            }
           };
 
           const handleMouseEnter = () => {
@@ -163,15 +180,11 @@ const RussiaMap: React.FC = () => {
         }
       });
     }
-  }, [svgContent, selectedRegion, hoveredRegion]);
+  }, [svgContent, selectedRegion, hoveredRegion, selectedCity]);
 
   const handleCenterClick = (center: RegionalCenter) => {
     setSelectedRegion(center.region === selectedRegion ? null : center.region);
-  };
-
-  const getRegionName = (code: string): string => {
-    const center = regionalCenters.find(c => c.region === code);
-    return center ? center.name : code;
+    setSelectedCity(selectedCity === center.id ? null : center.id);
   };
 
   return (
@@ -181,21 +194,6 @@ const RussiaMap: React.FC = () => {
         <p>85 регионов с региональными центрами</p>
       </div>
 
-      <div className="map-controls">
-        <button 
-          className={`control-btn ${showLabels ? 'active' : ''}`}
-          onClick={() => setShowLabels(!showLabels)}
-        >
-          {showLabels ? '🏷️ Скрыть названия' : '🏷️ Показать названия'}
-        </button>
-        <button 
-          className={`control-btn ${showCenters ? 'active' : ''}`}
-          onClick={() => setShowCenters(!showCenters)}
-        >
-          {showCenters ? '📍 Скрыть центры' : '📍 Показать центры'}
-        </button>
-      </div>
-
       <div className="map-wrapper">
         <div 
           ref={svgRef}
@@ -203,36 +201,49 @@ const RussiaMap: React.FC = () => {
           dangerouslySetInnerHTML={{ __html: svgContent }}
         />
         
-        {showCenters && svgContent && (
+        {svgContent && (
           <div className="centers-overlay">
-            {regionalCenters.map(center => (
-              <div
-                key={center.id}
-                className={`regional-center ${selectedRegion === center.region ? 'selected' : ''}`}
-                style={{
-                  left: `${(center.x / 1000) * 100}%`,
-                  top: `${(center.y / 600) * 100}%`,
-                  transform: 'translate(-50%, -50%)'
-                }}
-                onClick={() => handleCenterClick(center)}
-                title={center.name}
-              >
-                <div className="center-dot" />
-                {showLabels && (
-                  <div className="center-label">
-                    {center.name}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {selectedRegion && (
-          <div className="region-info">
-            <h3>Выбранный регион:</h3>
-            <p>{getRegionName(selectedRegion)}</p>
-            <p>Код региона: {selectedRegion}</p>
+            {regionalCenters.map(center => {
+              const isHovered = hoveredRegion === center.region;
+              const isSelected = selectedCity === center.id;
+              const shouldShowLabel = isHovered || isSelected;
+              
+              // Определяем позицию метки относительно краев
+              const percentX = (center.x / 1000) * 100;
+              const percentY = (center.y / 600) * 100;
+              
+              // Определяем класс для позиционирования
+              let labelPositionClass = '';
+              if (percentX < 15) {
+                labelPositionClass = 'label-right';
+              } else if (percentX > 85) {
+                labelPositionClass = 'label-left';
+              } else if (percentY < 15) {
+                labelPositionClass = 'label-bottom';
+              } else {
+                labelPositionClass = 'label-top';
+              }
+              
+              return (
+                <div
+                  key={center.id}
+                  className={`regional-center ${selectedRegion === center.region ? 'selected' : ''}`}
+                  style={{
+                    left: `${percentX}%`,
+                    top: `${percentY}%`,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                  onClick={() => handleCenterClick(center)}
+                >
+                  <div className="center-dot" />
+                  {shouldShowLabel && (
+                    <div className={`center-label ${labelPositionClass}`}>
+                      {center.name}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

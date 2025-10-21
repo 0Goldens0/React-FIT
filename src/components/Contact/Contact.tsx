@@ -14,6 +14,7 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false)
   
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -25,6 +26,11 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!isPrivacyAccepted) {
+      return
+    }
+    
     setIsSubmitting(true)
     
     // Имитация отправки формы
@@ -37,7 +43,20 @@ const Contact = () => {
     setTimeout(() => {
       setFormData({ name: '', email: '', company: '', message: '' })
       setIsSubmitted(false)
+      setIsPrivacyAccepted(false)
     }, 4000)
+  }
+
+  const handlePrivacyPolicyClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    // TODO: Открыть модальное окно с политикой конфиденциальности
+    console.log('Открыть политику конфиденциальности')
+  }
+
+  const handlePersonalDataClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    // TODO: Открыть модальное окно с согласием на обработку персональных данных
+    console.log('Открыть согласие на обработку персональных данных')
   }
 
   const contactMethods = [
@@ -265,12 +284,34 @@ const Contact = () => {
                     <div className="input-border"></div>
                   </div>
 
+                  <div className="privacy-consent">
+                    <label className="privacy-checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={isPrivacyAccepted}
+                        onChange={(e) => setIsPrivacyAccepted(e.target.checked)}
+                        className="privacy-checkbox"
+                      />
+                      <span className="checkbox-custom"></span>
+                      <span className="privacy-text">
+                        Я ознакомлен с{'\u00A0'}
+                        <button type="button" onClick={handlePrivacyPolicyClick} className="privacy-link">
+                          «Политикой в{'\u00A0'}отношении обработки персональных данных»
+                        </button>
+                        {'\u00A0'}и предоставляю{'\u00A0'}
+                        <button type="button" onClick={handlePersonalDataClick} className="privacy-link">
+                          «Согласие на{'\u00A0'}обработку персональных данных»
+                        </button>
+                      </span>
+                    </label>
+                  </div>
+
                   <motion.button 
                     type="submit" 
                     className="submit-modern-btn"
-                    disabled={isSubmitting}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    disabled={isSubmitting || !isPrivacyAccepted}
+                    whileHover={{ scale: isPrivacyAccepted ? 1.02 : 1 }}
+                    whileTap={{ scale: isPrivacyAccepted ? 0.98 : 1 }}
                   >
                     <span className="btn-content">
                       {isSubmitting ? (

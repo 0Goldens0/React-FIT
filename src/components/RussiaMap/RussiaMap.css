@@ -138,9 +138,6 @@
 
 .center-label {
   position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
   background: rgba(23, 23, 25, 0.95);
   color: #FFFFFF;
   padding: 4px 8px;
@@ -154,6 +151,35 @@
   pointer-events: none;
   opacity: 0.9;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Позиционирование сверху (по умолчанию) */
+.center-label.label-top {
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Позиционирование снизу */
+.center-label.label-bottom {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Позиционирование слева */
+.center-label.label-left {
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
+/* Позиционирование справа */
+.center-label.label-right {
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
 }
 
 .region-info {

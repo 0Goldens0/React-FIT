@@ -256,16 +256,6 @@ const Services = () => {
               </div>
             </div>
           </div>
-          
-          <div className="services-cta animate fadeInUp">
-            <a href="#contact" className="btn btn-primary btn-lg">Стать партнером</a>
-            <span className="services-arrow">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </span>
-          </div>
         </div>
         
         {/* Анимированные фоновые элементы */}
@@ -350,6 +340,13 @@ const Services = () => {
           </div>
         </div>
       </section>
+
+      {/* Кнопка стать партнером */}
+      <div className="services-cta-wrapper">
+        <div className="services-cta">
+          <a href="#contact" className="btn btn-primary btn-lg">Стать партнером</a>
+        </div>
+      </div>
     </>
   )
 }

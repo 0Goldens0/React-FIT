@@ -79,7 +79,7 @@
 .contact-main-content {
   display: flex;
   gap: 60px;
-  align-items: flex-start;
+  align-items: stretch;
   position: relative;
   z-index: 2;
 }
@@ -88,6 +88,7 @@
 .contact-methods-sidebar {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 24px;
   width: 400px;
   flex-shrink: 0;
@@ -187,6 +188,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
+  align-items: stretch;
 }
 
 .form-container {
@@ -199,6 +201,8 @@
   backdrop-filter: blur(30px);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-container::before {
@@ -242,6 +246,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  flex: 1;
 }
 
 .form-row {
@@ -389,6 +394,106 @@
   border-radius: 50%;
 }
 
+/* Согласие на обработку персональных данных */
+.privacy-consent {
+  margin: 24px 0 16px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.privacy-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.privacy-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-custom {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border: 2px solid rgba(255, 184, 0, 0.4);
+  border-radius: 6px;
+  background: rgba(15, 15, 17, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.checkbox-custom::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 10px;
+  border: solid #0F0F11;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.2s ease;
+}
+
+.privacy-checkbox:checked + .checkbox-custom {
+  background: linear-gradient(135deg, #FFB800 0%, #FFA500 100%);
+  border-color: #FFB800;
+}
+
+.privacy-checkbox:checked + .checkbox-custom::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.privacy-checkbox-label:hover .checkbox-custom {
+  border-color: #FFB800;
+  box-shadow: 0 0 10px rgba(255, 184, 0, 0.3);
+}
+
+.privacy-text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  flex: 1;
+  text-align: left;
+  hyphens: none;
+}
+
+.privacy-link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #FFB800;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  transition: all 0.3s ease;
+  display: inline;
+  line-height: inherit;
+  vertical-align: baseline;
+  text-align: left;
+}
+
+.privacy-link:hover {
+  color: #FFA500;
+  text-decoration: none;
+  text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+}
+
+.privacy-link:active {
+  color: #FF8C00;
+}
+
 /* Сообщение об успехе */
 .success-message {
   text-align: center;
@@ -462,6 +567,7 @@
   .contact-main-content {
     flex-direction: column;
     gap: 40px;
+    align-items: initial;
   }
   
   .contact-methods-sidebar {
@@ -469,6 +575,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
+    justify-content: initial;
   }
   
   .form-container {
@@ -488,6 +595,16 @@
   
   .form-header h3 {
     font-size: 1.6rem;
+  }
+  
+  .privacy-text {
+    font-size: 0.9rem;
+  }
+  
+  .checkbox-custom {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
   }
 }
 
@@ -533,5 +650,25 @@
   .submit-modern-btn {
     padding: 18px 30px;
     font-size: 1rem;
+  }
+  
+  .privacy-text {
+    font-size: 0.85rem;
+  }
+  
+  .checkbox-custom {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+  }
+  
+  .checkbox-custom::after {
+    width: 5px;
+    height: 8px;
+    border-width: 0 2px 2px 0;
+  }
+  
+  .privacy-consent {
+    margin: 20px 0;
   }
 } 

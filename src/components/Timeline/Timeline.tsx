@@ -21,8 +21,8 @@ const timelineData: TimelineData[] = [
   {
     year: "1996",
     title: "Основание компании",
-    description: "Компания Finch Industrial Tools основана тремя учредителями: А.М. Кадисом, А.Е. Власовым и С.В. Моховиком.",
-    fullDescription: "Компания Finch Industrial Tools была основана тремя учредителями: А.М. Кадисом, А.Е. Власовым и С.В. Моховиком. Начальный ассортимент формировался из столярно-слесарных инструментов нескольких голландских торговых марок.",
+    description: "Компания Finch Industrial Tools основана тремя учредителями: А. М. Кадисом и А. Е. Власовым",
+    fullDescription: "Компания Finch Industrial Tools была основана тремя учредителями: А. М. Кадисом и А. Е. Власовым Начальный ассортимент формировался из столярно-слесарных инструментов нескольких голландских торговых марок.",
     keyEvents: [
       "Основание компании тремя учредителями",
       "Формирование начального ассортимента из голландских торговых марок",
@@ -97,7 +97,7 @@ const timelineData: TimelineData[] = [
     year: "2006",
     title: "Расширение филиальной сети",
     description: "Открытие новых филиалов в Екатеринбурге, Казани, Воронеже и Пятигорске. Значительный рост продаж.",
-    fullDescription: "Расширение на города-миллионники: Екатеринбург, Казань, Воронеж, Пятигорск. Выбор городов определялся наличием клиентов и необходимостью улучшения сервиса - от быстрой доставки до персонального местного менеджера.",
+    fullDescription: "Расширение на города-миллионники: Екатеринбург, Казань, Воронеж, Пятигорск. Выбор городов определялся наличием клиентов и необходимостью улучшения сервиса — от быстрой доставки до персонального местного менеджера.",
     keyEvents: [
       "Открытие филиалов в 4 новых городах-миллионниках",
       "Улучшение качества сервиса для существующих клиентов",
@@ -162,7 +162,7 @@ const timelineData: TimelineData[] = [
     year: "2015",
     title: "Ассортимент 2000 SKU",
     description: "Товарная матрица компании превысила две тысячи позиций. Диверсификация ассортимента.",
-    fullDescription: "Ассортимент разрастался с добавлением новых товарных групп (малярный инструмент, измерительный инструмент). Наибольший рост показала оснастка для электроинструмента. Стратегии расширения: диверсификация по товарным группам и увеличение ширины наиболее востребованных категорий.",
+    fullDescription: "Ассортимент разрастался с добавлением новых товарных групп (малярный инструмент, измерительный инструмент). Наибольший рост показала доля оснастки для электроинструмента. Стратегии расширения: диверсификация по товарным группам и увеличение ширины наиболее востребованных категорий.",
     keyEvents: [
       "Достижение 2000 SKU в товарной матрице",
       "Добавление малярного и измерительного инструмента",
@@ -191,10 +191,10 @@ const timelineData: TimelineData[] = [
       "Отработка процесса разработки и запуска новых брендов"
     ],
     achievements: [
-      "МОС - инструмент ценовой борьбы (товар первой цены)",
-      "ХВАТ - специализация на крепеже",
-      "Master Color - комплексное предложение для профессионалов МШИ",
-      "Max Pro - качественный эргономичный электроинструмент"
+      "МОС — инструмент ценовой борьбы (товар первой цены)",
+      "ХВАТ — специализация на крепеже",
+      "Master Color — комплексное предложение для профессионалов МШИ",
+      "Max Pro — качественный эргономичный электроинструмент"
     ],
     facts: [
       { number: "4", text: "Новых бренда" },
@@ -295,7 +295,7 @@ const timelineData: TimelineData[] = [
       "Улучшение обслуживания по всей стране"
     ],
     achievements: [
-      "Выход в Белоруссию (2022 год)",
+      "Выход на рынок Белоруссии",
       "Укрепление позиций на федеральном уровне"
     ],
     facts: [
@@ -350,7 +350,7 @@ const timelineData: TimelineData[] = [
     year: "2025",
     title: "Стратегические планы и международная экспансия",
     description: "Ключевые направления: качество работы, клиентский сервис, освоение зарубежных рынков, внедрение ИИ.",
-    fullDescription: "Ключевых направлений развития несколько: качество работы, клиентский сервис, скорость и удобство. Компания начинает подходить к освоению зарубежных рынков - от мощной работы над брендом до автоматизации процессов с применением ИИ. Планы по расширению в новые регионы России (Донецк, Луганск).",
+    fullDescription: "Ключевых направлений развития несколько: качество работы, клиентский сервис, скорость и удобство. Компания начинает подходить к освоению зарубежных рынков — от стратегической работы с брендами до автоматизации процессов с применением ИИ. Планы по расширению в новые регионы России.",
     keyEvents: [
       "Фокус на качество работы и клиентский сервис",
       "Подготовка к освоению зарубежных рынков",
@@ -359,9 +359,10 @@ const timelineData: TimelineData[] = [
       "Планы расширения в новые регионы России"
     ],
     achievements: [
-      "Уже есть клиенты в Луганске и Донецке",
-      "Казахстан с 2013-2014 годов",
-      "Белоруссия с 2022 года"
+      "Выход на рынки новых регионов России",
+      "Новый офис и склад в Краснодаре",
+      "Объединение региональных филиалов Ростов-на-Дону и Краснодар с единым офисом в городе Краснодар"
+
     ],
     facts: [
       { number: "5+", text: "Новых рынков" },
@@ -374,6 +375,7 @@ const timelineData: TimelineData[] = [
 const Timeline = () => {
   const [currentItem, setCurrentItem] = useState<TimelineData | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isAutoPlay, setIsAutoPlay] = useState(true) // Состояние автопроигрывания
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const trackRef = useRef<HTMLDivElement | null>(null)
@@ -391,7 +393,7 @@ const Timeline = () => {
     const itemWidth = 450 // 350px width + 100px margin
     const totalItems = timelineData.length
     const totalWidth = itemWidth * totalItems
-    const speed = 300 // пикселей в секунду
+    const speed = 200 // пикселей в секунду
 
     const animate = (currentTime: number) => {
       // КРИТИЧЕСКИ ВАЖНО: проверяем оба флага
@@ -419,15 +421,63 @@ const Timeline = () => {
     animationRef.current = requestAnimationFrame(animate)
   }, [])
 
+  // Функция для остановки анимации
+  const stopAnimation = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current)
+      animationRef.current = null
+    }
+    isAnimationActiveRef.current = false
+  }, [])
+
+  // Функция для переключения автопроигрывания
+  const toggleAutoPlay = useCallback(() => {
+    setIsAutoPlay(prev => {
+      const newValue = !prev
+      if (newValue) {
+        lastTimeRef.current = 0
+        startAnimation()
+      } else {
+        stopAnimation()
+      }
+      return newValue
+    })
+  }, [startAnimation, stopAnimation])
+
+  // Функция для перемещения ленты влево (назад)
+  const movePrev = useCallback(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    const itemWidth = 450
+    positionRef.current = Math.max(0, positionRef.current - itemWidth)
+    track.style.transform = `translateX(-${positionRef.current}px)`
+  }, [])
+
+  // Функция для перемещения ленты вправо (вперед)
+  const moveNext = useCallback(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    const itemWidth = 450
+    const totalItems = timelineData.length
+    const totalWidth = itemWidth * totalItems
+    
+    positionRef.current = (positionRef.current + itemWidth) % totalWidth
+    track.style.transform = `translateX(-${positionRef.current}px)`
+  }, [])
+
   useEffect(() => {
-    startAnimation()
+    if (isAutoPlay) {
+      startAnimation()
+    }
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [])
+  }, [isAutoPlay, startAnimation])
 
   // Управление модальным окном - остановка анимации и блокировка скролла
   useEffect(() => {
@@ -519,11 +569,11 @@ const Timeline = () => {
       clearTimeout(hoverTimeoutRef.current)
     }
 
-    // Устанавливаем задержку перед открытием (300ms)
+    // Устанавливаем задержку перед открытием (5000ms = 5 секунд)
     hoverTimeoutRef.current = setTimeout(() => {
       setCurrentItem(item)
       setIsModalOpen(true)
-    }, 300)
+    }, 700)
   }, [])
 
   // Защита от непроизвольного закрытия с задержкой
@@ -597,14 +647,16 @@ const Timeline = () => {
       <div 
         className="timeline-container"
         onMouseEnter={() => {
-          if (animationRef.current) {
+          if (isAutoPlay && animationRef.current) {
             cancelAnimationFrame(animationRef.current)
             animationRef.current = null
           }
         }}
         onMouseLeave={() => {
-          lastTimeRef.current = 0
-          startAnimation()
+          if (isAutoPlay) {
+            lastTimeRef.current = 0
+            startAnimation()
+          }
         }}
       >
         <div className="center-line"></div>
@@ -625,12 +677,30 @@ const Timeline = () => {
             </div>
           ))}
         </div>
-        
-        <div className="timeline-controls">
-          <button className="timeline-control prev">◀</button>
-          <button className="timeline-control auto">⏸</button>
-          <button className="timeline-control next">▶</button>
-        </div>
+      </div>
+      
+      <div className="timeline-controls">
+        <button 
+          className="timeline-control prev" 
+          onClick={movePrev}
+          aria-label="Предыдущий период"
+        >
+          ◀
+        </button>
+        <button 
+          className="timeline-control auto" 
+          onClick={toggleAutoPlay}
+          aria-label={isAutoPlay ? "Остановить" : "Запустить"}
+        >
+          {isAutoPlay ? '⏸' : '▶'}
+        </button>
+        <button 
+          className="timeline-control next" 
+          onClick={moveNext}
+          aria-label="Следующий период"
+        >
+          ▶
+        </button>
       </div>
 
       {/* Полноэкранное модальное окно */}
@@ -638,6 +708,9 @@ const Timeline = () => {
         className={`timeline-fullscreen ${isModalOpen ? 'active' : ''}`}
         onMouseEnter={handleModalHover}
         onMouseLeave={handleModalLeave}
+        onClick={() => {
+          if (isModalOpen) closeModal()
+        }}
       >
         <div className="timeline-fullscreen-content" onClick={(e) => e.stopPropagation()}>
           {currentItem && (

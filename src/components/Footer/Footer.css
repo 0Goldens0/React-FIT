@@ -16,6 +16,13 @@
   color: #ccc;
 }
 
+.footer-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 0 10px rgba(255, 184, 0, 0.3));
+}
+
 .footer-title {
   color: #FFB800;
   font-size: 24px;
@@ -35,9 +42,186 @@
   line-height: 1.5;
 }
 
+/* Social media */
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.footer-social-row {
+  justify-content: center;
+  margin: 10px auto 25px;
+}
+
+.social-item {
+  position: relative;
+}
+
+.social-link {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 184, 0, 0.6); /* жёлтая рамка */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.social-link img {
+  width: 22px;
+  height: 22px;
+  filter: none; /* оригинальные цвета */
+}
+
+.social-link:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.15), rgba(255, 184, 0, 0.25));
+  border-color: rgba(255, 184, 0, 0.9);
+  box-shadow: 0 10px 30px rgba(255, 184, 0, 0.25), 0 0 20px rgba(255, 184, 0, 0.35) inset;
+}
+
+.social-link:hover img {
+  filter: none;
+}
+
+/* QR popup */
+.qr-popup {
+  position: absolute;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
+  background: #0f0f11;
+  border: 1px solid rgba(255, 184, 0, 0.6);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 20;
+}
+
+.qr-popup img {
+  width: 160px;
+  height: auto;
+  display: block;
+}
+
+.social-item:hover .qr-popup {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
 .footer-bottom {
   text-align: center;
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: #999;
+}
+
+/* ========== RESPONSIVE DESIGN - FOOTER ========== */
+
+/* Планшеты */
+@media (max-width: 992px) {
+  .footer {
+    padding: 50px 0 25px;
+  }
+  
+  .footer-content {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
+    margin-bottom: 35px;
+  }
+  
+  .footer-title {
+    font-size: 22px;
+  }
+  
+  .footer-subtitle {
+    font-size: 17px;
+  }
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 20px 20px;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .footer-logo {
+    width: 100px;
+    margin: 0 auto 12px;
+    display: block;
+  }
+  
+  .footer-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  .footer-subtitle {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .footer-text {
+    font-size: 14px;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
+  
+  .footer-bottom {
+    padding-top: 25px;
+    font-size: 13px;
+  }
+}
+
+/* Маленькие мобильные */
+@media (max-width: 480px) {
+  .footer {
+    padding: 35px 15px 20px;
+  }
+  
+  .footer-content {
+    gap: 25px;
+  }
+  
+  .footer-logo {
+    width: 80px;
+  }
+  
+  .footer-title {
+    font-size: 18px;
+  }
+  
+  .footer-subtitle {
+    font-size: 15px;
+  }
+  
+  .footer-text {
+    font-size: 13px;
+  }
+
+  .footer-social {
+    gap: 12px;
+  }
+  
+  .footer-bottom {
+    font-size: 12px;
+  }
 } 

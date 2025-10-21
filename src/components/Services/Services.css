@@ -380,29 +380,34 @@
 }
 
 /* Button styles */
-.btn {
+.services-cta .btn {
     display: inline-block;
     padding: 12px 30px;
     background: var(--primary);
     color: var(--dark);
     text-decoration: none;
-    border-radius: 50px;
+    border-radius: 8px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     border: none;
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    will-change: transform;
 }
 
-.btn:hover {
+.services-cta .btn:hover {
     background: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(255, 184, 0, 0.3);
 }
 
-.btn-primary {
+.services-cta .btn-primary {
     background: linear-gradient(135deg, var(--primary) 0%, #FFD700 100%);
+}
+
+.services-cta .btn-primary:hover {
+    background: linear-gradient(135deg, #FFD700 0%, var(--primary) 100%);
 }
 
 /* Responsive Design */

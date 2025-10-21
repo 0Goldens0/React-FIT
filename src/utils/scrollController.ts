@@ -89,12 +89,16 @@ export class ScrollController {
     if (lastSection && this.hasLeftControlledArea) {
       const rect = lastSection.element.getBoundingClientRect();
       const sectionTop = window.scrollY + rect.top;
-      const currentScroll = window.scrollY + window.innerHeight / 2;
+      const sectionHeight = rect.height;
+      const viewportTop = window.scrollY;
       
-      // Сбрасываем флаг только если явно вернулись В Timeline или выше
-      // (центр viewport находится В пределах Timeline или выше)
-      if (currentScroll <= sectionTop + rect.height) {
+      // Сбрасываем флаг только когда ВЕРХ viewport зашёл как минимум на половину высоты Timeline
+      // Это предотвращает раннее включение контроллера, пока пользователь ещё в футере/ниже
+      if (viewportTop <= sectionTop + sectionHeight / 2) {
         this.hasLeftControlledArea = false;
+        document.documentElement.classList.remove('smooth-scroll');
+        // Устанавливаем текущую секцию явно на Timeline (последнюю контролируемую)
+        this.currentSectionIndex = this.sections.length - 1;
       }
     }
     
@@ -118,6 +122,9 @@ export class ScrollController {
     if (this.scrollTimeout) {
       clearTimeout(this.scrollTimeout);
     }
+    
+    // Очищаем класс плавного скролла
+    document.documentElement.classList.remove('smooth-scroll');
   }
 
   /**
@@ -163,11 +170,12 @@ export class ScrollController {
     // Устанавливаем флаг и разрешаем обычный браузерный скролл
     if (this.currentSectionIndex === this.sections.length - 1 && scrollDown) {
       this.hasLeftControlledArea = true;
+      document.documentElement.classList.add('smooth-scroll');
       return;
     }
     
     // Если мы вышли за пределы контролируемой области, разрешаем обычный скролл
-    // и НЕ возвращаемся в контролируемые секции при скролле вверх
+    // handleScroll() автоматически сбросит флаг, когда мы вернемся в Timeline
     if (this.hasLeftControlledArea) {
       return;
     }
@@ -216,7 +224,23 @@ export class ScrollController {
       }
     } else {
       // Скролл вверх
-      if (this.currentSectionIndex > 0) {
+      const currentSection = this.sections[this.currentSectionIndex];
+      if (currentSection) {
+        // Проверяем, находимся ли мы в центре текущей секции
+        const rect = currentSection.element.getBoundingClientRect();
+        const sectionTop = window.scrollY + rect.top;
+        const sectionCenter = sectionTop + rect.height / 2;
+        const viewportCenter = window.scrollY + window.innerHeight / 2;
+        
+        // Если мы не в центре текущей секции (отклонение больше 100px)
+        // сначала возвращаемся к центру текущей секции
+        if (Math.abs(viewportCenter - sectionCenter) > 100) {
+          this.scrollToSection(this.currentSectionIndex);
+        } else if (this.currentSectionIndex > 0) {
+          // Если мы в центре, переходим к предыдущей секции
+          this.scrollToSection(this.currentSectionIndex - 1);
+        }
+      } else if (this.currentSectionIndex > 0) {
         this.scrollToSection(this.currentSectionIndex - 1);
       }
     }
@@ -362,6 +386,11 @@ export class ScrollController {
       return;
     }
     
+    // Проверяем, вышли ли мы за пределы контролируемых секций
+    if (this.hasLeftControlledArea) {
+      return; // Позволяем нативный скролл
+    }
+    
     if (this.isScrolling) {
       e.preventDefault();
       return;
@@ -375,8 +404,11 @@ export class ScrollController {
     const currentSection = this.sections[this.currentSectionIndex];
     if (!currentSection) return;
 
+    // Увеличиваем порог чувствительности для мобильных (более строгое определение намерения)
+    const swipeThreshold = 60;
+
     // Определяем направление свайпа
-    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 50) {
+    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > swipeThreshold) {
       // Вертикальный свайп
       e.preventDefault();
       if (currentSection.type === 'horizontal') {
@@ -385,12 +417,65 @@ export class ScrollController {
         this.handleVerticalScroll(diffY > 0);
       }
       this.touchStartY = touchEndY;
-    } else if (currentSection.type === 'horizontal' && Math.abs(diffX) > 50) {
+    } else if (currentSection.type === 'horizontal' && Math.abs(diffX) > swipeThreshold) {
       // Горизонтальный свайп для горизонтальной секции
       e.preventDefault();
       this.handleHorizontalScroll(diffX > 0);
       this.touchStartX = touchEndX;
     }
+  }
+
+  /**
+   * Плавная анимация скролла с использованием кривой cubic-bezier
+   * Аналогично тому, как работает слайдер брендов
+   */
+  private animateScroll(targetPosition: number, duration: number = 800) {
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+    let startTime: number | null = null;
+
+    // Cubic bezier easing function (0.65, 0, 0.35, 1) - как в слайдере брендов
+    // Это улучшенная версия для более точного соответствия CSS cubic-bezier
+    const easeOutQuart = (t: number): number => {
+      // Приближение для cubic-bezier(0.65, 0, 0.35, 1)
+      // Создает плавное ускорение в начале и замедление в конце
+      return 1 - Math.pow(1 - t, 4);
+    };
+
+    const animation = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+
+      // Применяем easing
+      const easedProgress = easeOutQuart(progress);
+      
+      // Вычисляем текущую позицию
+      const currentPosition = startPosition + distance * easedProgress;
+      
+      window.scrollTo(0, currentPosition);
+
+      if (progress < 1) {
+        requestAnimationFrame(animation);
+      } else {
+        // Анимация завершена
+        this.isScrolling = false;
+        
+        // Если переходим К горизонтальной секции (brands)
+        const section = this.sections[this.currentSectionIndex];
+        if (section && section.type === 'horizontal') {
+          // Восстанавливаем сохраненную позицию
+          this.horizontalScrollProgress = this.savedBrandsPosition;
+          this.updateHorizontalScroll();
+          
+          if (this.onHorizontalProgress) {
+            this.onHorizontalProgress(this.horizontalScrollProgress, this.horizontalScrollMax);
+          }
+        }
+      }
+    };
+
+    requestAnimationFrame(animation);
   }
 
   /**
@@ -422,12 +507,11 @@ export class ScrollController {
       this.onSectionChange(index, section);
     }
 
+    let targetPosition: number;
+
     // Если переходим к Hero (первая секция), скроллим до самого верха страницы
     if (section.id === 'home') {
-      window.scrollTo({
-        top: 0,
-        behavior: smooth ? 'smooth' : 'auto'
-      });
+      targetPosition = 0;
     } else {
       // Для контролируемых секций используем точное позиционирование
       const rect = section.element.getBoundingClientRect();
@@ -438,31 +522,24 @@ export class ScrollController {
       
       if (isFullscreen) {
         // Для полноэкранных секций - к началу
-        window.scrollTo({
-          top: absoluteTop,
-          behavior: smooth ? 'smooth' : 'auto'
-        });
+        targetPosition = absoluteTop;
       } else {
         // Для неполноэкранных секций - центрирование
         const offset = (window.innerHeight - rect.height) / 2;
-        window.scrollTo({
-          top: absoluteTop - offset,
-          behavior: smooth ? 'smooth' : 'auto'
-        });
+        targetPosition = absoluteTop - offset;
       }
     }
 
-    // Сброс состояния после анимации
-    if (this.scrollTimeout) {
-      clearTimeout(this.scrollTimeout);
-    }
-
-    this.scrollTimeout = setTimeout(() => {
+    if (smooth) {
+      // Используем плавную анимацию с той же кривой, что в слайдере брендов
+      this.animateScroll(targetPosition, 800);
+    } else {
+      // Мгновенный переход
+      window.scrollTo(0, targetPosition);
       this.isScrolling = false;
       
       // Если переходим К горизонтальной секции (brands)
       if (section.type === 'horizontal') {
-        // Восстанавливаем сохраненную позицию
         this.horizontalScrollProgress = this.savedBrandsPosition;
         this.updateHorizontalScroll();
         
@@ -470,7 +547,7 @@ export class ScrollController {
           this.onHorizontalProgress(this.horizontalScrollProgress, this.horizontalScrollMax);
         }
       }
-    }, smooth ? 1000 : 100);
+    }
   }
 
   /**
@@ -513,4 +590,5 @@ export class ScrollController {
 }
 
 export const scrollController = new ScrollController();
+
 
