@@ -116,6 +116,8 @@ section {
     padding: 100px 0;
     position: relative;
     scroll-margin-top: 80px; /* Компенсация для фиксированного хедера при якорных ссылках */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 100vh;
 }
 
 /* Специальная секция для главной страницы - убираем верхний отступ */

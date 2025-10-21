@@ -9,6 +9,7 @@
     background-color: #0F0F11;
     background-image: linear-gradient(135deg, #0F0F11 0%, #1F1F22 100%);
     overflow: hidden;
+    contain: layout style paint;
 }
 
 /* Анимированные гексагоны */

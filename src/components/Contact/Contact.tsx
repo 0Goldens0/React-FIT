@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Mail, Phone, Send, User, Building, MapPin, MessageSquare, Sparkles } from 'lucide-react'
 import './Contact.css'
 
@@ -15,9 +15,6 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false)
-  
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -87,33 +84,7 @@ const Contact = () => {
   ]
 
   return (
-    <section id="contact" className="contact-section" ref={ref}>
-      {/* Анимированный космический фон */}
-      <div className="contact-cosmic-bg">
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="cosmic-orb"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={isInView ? { 
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50]
-            } : {}}
-            transition={{
-              duration: 4 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
+    <section id="contact" className="contact-section">
       <div className="container">
         {/* Заголовок секции */}
         <motion.div 

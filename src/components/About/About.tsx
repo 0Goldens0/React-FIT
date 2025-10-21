@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 import { getAssetPath } from '../../utils/paths'
 import './About.css'
 
-const About = () => {
+const About = memo(() => {
   useEffect(() => {
     // Инициализация частиц
     createAboutParticles()
@@ -12,25 +12,24 @@ const About = () => {
     const particlesContainer = document.getElementById('about-particles')
     if (!particlesContainer) return
 
-    // Создаем больше гексагонов для полного покрытия фона
-    for (let i = 0; i < 40; i++) {
+    // Определяем количество частиц в зависимости от производительности устройства
+    const isMobile = window.innerWidth < 768
+    const isLowPerformance = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false
+    const particleCount = isMobile || isLowPerformance ? 15 : 25
+
+    for (let i = 0; i < particleCount; i++) {
       const hexagon = document.createElement('div')
       hexagon.className = 'hexagon-particle'
       
-      // Случайное позиционирование
       hexagon.style.left = Math.random() * 100 + '%'
       hexagon.style.top = Math.random() * 100 + '%'
-      
-      // Случайная задержка и длительность анимации
       hexagon.style.animationDelay = Math.random() * 5 + 's'
       hexagon.style.animationDuration = (Math.random() * 10 + 15) + 's'
       
-      // Случайный размер (от 15px до 40px)
       const size = Math.random() * 25 + 15
       hexagon.style.width = size + 'px'
       hexagon.style.height = size + 'px'
       
-      // Случайная непрозрачность
       const opacity = Math.random() * 0.4 + 0.1
       hexagon.style.opacity = opacity.toString()
       
@@ -105,6 +104,8 @@ const About = () => {
       </div>
     </section>
   )
-}
+})
+
+About.displayName = 'About'
 
 export default About 
