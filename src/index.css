@@ -13,14 +13,22 @@
     --bg-gradient: linear-gradient(135deg, #0F0F11 0%, #1F1F22 100%);
 }
 
-* {
+/* Улучшенная нормализация для кроссбраузерности */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 html {
     scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 /* Плавный скролл для свободной области после Timeline */
@@ -29,12 +37,22 @@ html.smooth-scroll {
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
     color: var(--light);
     background-color: var(--dark);
     overflow-x: hidden;
     padding-top: 80px;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Улучшенная поддержка изображений */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    -ms-interpolation-mode: bicubic;
 }
 
 /* ========== ТИПОГРАФИЯ ========== */
@@ -67,8 +85,14 @@ p {
 
 /* ========== КНОПКИ ========== */
 .btn {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     gap: 8px;
     padding: 12px 24px;
@@ -78,10 +102,21 @@ p {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
     background: none;
     color: inherit;
     font-family: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .btn-primary {
@@ -91,7 +126,10 @@ p {
 }
 
 .btn-primary:hover {
+    -webkit-transform: translateY(-2px);
+    -ms-transform: translateY(-2px);
     transform: translateY(-2px);
+    -webkit-box-shadow: 0 8px 30px rgba(255, 184, 0, 0.4);
     box-shadow: 0 8px 30px rgba(255, 184, 0, 0.4);
 }
 
@@ -137,10 +175,13 @@ section#home {
     font-size: 3rem;
     font-weight: 800;
     margin-bottom: 20px;
+    background: -webkit-linear-gradient(135deg, var(--primary) 0%, #FFD700 100%);
+    background: -o-linear-gradient(135deg, var(--primary) 0%, #FFD700 100%);
     background: linear-gradient(135deg, var(--primary) 0%, #FFD700 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--primary); /* Fallback для старых браузеров */
 }
 
 .section-title p {
@@ -153,12 +194,19 @@ section#home {
 /* ========== АНИМАЦИИ ========== */
 .animate {
     opacity: 0;
+    -webkit-transform: translateY(30px);
+    -ms-transform: translateY(30px);
     transform: translateY(30px);
+    -webkit-transition: opacity 0.8s ease, -webkit-transform 0.8s ease;
+    -o-transition: opacity 0.8s ease, transform 0.8s ease;
     transition: opacity 0.8s ease, transform 0.8s ease;
+    transition: opacity 0.8s ease, transform 0.8s ease, -webkit-transform 0.8s ease;
 }
 
 .animate.visible {
     opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
     transform: translateY(0);
 }
 
@@ -291,6 +339,87 @@ section#home {
 .gap-3 { gap: 1.5rem; }
 .gap-4 { gap: 2rem; }
 .gap-5 { gap: 3rem; }
+
+/* ========== КРОССБРАУЗЕРНАЯ ПОДДЕРЖКА ========== */
+/* Flex поддержка для старых браузеров */
+.d-flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+/* Grid поддержка */
+.d-grid {
+    display: -ms-grid;
+    display: grid;
+}
+
+/* Глобальная поддержка для flexbox */
+[style*="display: flex"],
+[style*="display:flex"] {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+}
+
+/* Поддержка user-select */
+[style*="user-select"],
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Поддержка backdrop-filter */
+[style*="backdrop-filter"],
+.backdrop-blur {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+/* Поддержка clip-path */
+[style*="clip-path"] {
+    -webkit-clip-path: inherit;
+    clip-path: inherit;
+}
+
+/* Fallback для CSS переменных в старых браузерах */
+@supports not (--css: variables) {
+    :root {
+        color: #FFFFFF;
+        background-color: #0F0F11;
+    }
+    
+    .btn-primary {
+        background: #FFB800;
+        color: #0F0F11;
+    }
+    
+    .section-title h2 {
+        background: #FFB800;
+        color: #FFB800;
+    }
+}
+
+/* Поддержка для старых версий iOS Safari */
+@supports (-webkit-overflow-scrolling: touch) {
+    body {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Поддержка smooth scroll для Safari */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    html.smooth-scroll {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+}
 
 .w-full { width: 100%; }
 .h-full { height: 100%; }

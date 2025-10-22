@@ -838,8 +838,8 @@ section#brands.brands {
     
     .brand-section .journey-product-card.product-card-slider-item {
         height: 26.5vw !important;
-        min-height: 280px !important;
-        max-height: 320px !important;
+        min-height: 260px !important;
+        max-height: 260px !important;
         flex: 0 0 auto;
         width: 23%;
         min-width: 165px;
@@ -884,14 +884,17 @@ section#brands.brands {
 /* Планшеты */
 @media (max-width: 992px) {
     section#brands.brands {
-        height: 80vh !important;
-        min-height: 90vh;
+        height: auto !important;
+        min-height: min(90vh, 700px);
     }
     
     .brand-section {
-        gap: 20px;
-        padding: 50px 15px 25px;
-        min-height: 90vh;
+        gap: clamp(15px, 3vh, 20px);
+        padding: clamp(45px, 10vh, 60px) 15px clamp(20px, 4vh, 30px);
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
     
     .brand-content {
@@ -1028,46 +1031,50 @@ section#brands.brands {
 
 /* Мобильные устройства */
 @media (max-width: 768px) {
-    section#brands.brands {
-        height: 80vh !important;
-        min-height: 90vh;
-    }
+    /* section#brands.brands {
+        height: auto !important;
+        min-height: auto;
+    } */
     
     .brand-journey-container {
         width: 700vw;
         height: auto;
-        min-height: 100vh;
+        min-height: auto;
     }
     
     .brand-section {
-        gap: 20px;
-        padding: clamp(35px, 8vh, 50px) clamp(10px, 3vw, 15px) clamp(20px, 5vh, 25px);
-        min-height: 90vh;
+        gap: clamp(12px, 3vh, 18px);
+        padding: clamp(30px, 7vh, 45px) clamp(10px, 3vw, 15px) clamp(15px, 4vh, 20px);
+        min-height: 110vh;
+        max-height: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
     }
     
     .brand-info-journey {
-        padding: 1.2rem;
+        padding: clamp(0.8rem, 2vh, 1.2rem);
     }
     
     .brand-logo-journey {
-        max-width: clamp(140px, 25vw, 180px);
+        max-width: clamp(100px, 20vw, 140px);
     }
     
     .brand-text-journey {
-        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-        line-height: 1.5;
+        font-size: clamp(0.72rem, 2.2vw, 0.85rem);
+        line-height: 1.4;
     }
     
     .brand-tagline-journey {
-        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        font-size: clamp(0.72rem, 2.2vw, 0.85rem);
     }
     
     .brand-section .journey-brand-products {
-        max-width: 452px; /* Жёсткая ширина для 2 карточек: 2 * 205px + 15px gap */
-        width: 452px;
+        max-width: min(425px, 90vw);
+        width: min(425px, 90vw);
         overflow: hidden;
         position: relative;
-        margin: 0 auto; /* Центрируем контейнер */
+        margin: 0 auto;
     }
     
     .product-carousel-track {
@@ -1142,8 +1149,9 @@ section#brands.brands {
     }
 
     .journey-brand-products-title {
-        font-size: clamp(1rem, 3vw, 1.3rem);
+        font-size: clamp(0.9rem, 2.8vw, 1.1rem);
         width: calc(100% - 70px);
+        margin-bottom: clamp(8px, 2vh, 12px);
     }
 
     .product-slider-arrow {
@@ -1422,6 +1430,46 @@ section#brands.brands {
 
     .scroll-indicator {
         display: none;
+    }
+}
+
+/* Очень низкие экраны (landscape на мобильных) */
+@media (max-width: 768px) and (max-height: 600px) {
+    section#brands.brands {
+        min-height: auto;
+    }
+    
+    .brand-section {
+        padding: clamp(25px, 5vh, 35px) 15px clamp(12px, 3vh, 18px);
+        gap: clamp(8px, 2vh, 12px);
+    }
+    
+    .brand-logo-journey {
+        max-width: clamp(80px, 15vw, 100px);
+    }
+    
+    .brand-text-journey {
+        font-size: clamp(0.68rem, 2vw, 0.75rem);
+        line-height: 1.3;
+    }
+    
+    .journey-brand-products-title {
+        font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+        margin-bottom: clamp(6px, 1.5vh, 10px);
+    }
+    
+    .journey-product-card.product-card-slider-item {
+        min-width: 120px;
+    }
+    
+    .section-nav-arrow {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .section-nav-arrow svg {
+        width: 18px;
+        height: 18px;
     }
 }
 
