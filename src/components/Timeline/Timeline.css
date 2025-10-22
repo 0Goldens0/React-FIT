@@ -775,7 +775,7 @@
     
     .timeline-fullscreen-content {
         width: clamp(95%, 100% - 20px, 98%);
-        height: clamp(90vh, 95vh, 96vh);
+        height: 75vh;
         padding: clamp(18px, 5vw, 30px);
     }
     
