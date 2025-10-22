@@ -411,6 +411,15 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1399px) {
+
+
+    .service-card-back .service-description {
+        font-size: 0.9rem;
+    }
+}
+
+
 @media (max-width: 1200px) {
     .services-grid-3d {
         grid-template-columns: repeat(3, 1fr);

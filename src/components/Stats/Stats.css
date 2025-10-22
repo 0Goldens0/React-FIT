@@ -140,6 +140,33 @@
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+    .stats-section {
+        padding: 70px 0;
+    }
+
+    .stats-section h2 {
+        font-size: 2.3rem;
+        margin-bottom: 50px;
+    }
+
+    .stats-grid {
+        gap: 35px;
+    }
+
+    .stat-card {
+        padding: 35px 25px;
+    }
+
+    .stat-number {
+        font-size: 3rem;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+    }
+}
+
 @media (max-width: 992px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);

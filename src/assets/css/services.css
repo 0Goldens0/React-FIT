@@ -84,6 +84,26 @@
 }
 
 /* Адаптивность */
+@media (max-width: 1200px) {
+  .partners-marquee {
+    padding: 28px 0;
+  }
+
+  .services-cta-wrapper {
+    padding: 55px 0;
+  }
+
+  .partner-logo-item {
+    width: 170px;
+    height: 75px;
+  }
+
+  .partners-logo-group {
+    gap: 70px;
+    padding: 0 50px;
+  }
+}
+
 @media (max-width: 991px) {
   .partner-logo-item {
     width: 160px;

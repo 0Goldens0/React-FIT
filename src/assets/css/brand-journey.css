@@ -229,7 +229,7 @@ section#brands.brands {
 
 /* Описание бренда - изящный, минималистичный стиль */
 .brand-description {
-    font-size: 1.35rem;
+    font-size: 1rem;
     font-weight: 300;
     color: rgba(255, 255, 255, 0.85);
     line-height: 1.7;
@@ -325,7 +325,7 @@ section#brands.brands {
 /* Индикатор прокрутки - изящный стиль */
 .scroll-indicator {
     position: fixed;
-    bottom: 2.5rem;
+    bottom: 5.5rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 110;
@@ -356,7 +356,34 @@ section#brands.brands {
     fill: rgba(255, 255, 255, 0.6);
 }
 
-/* Адаптация scroll-indicator для мобильных */
+/* Контейнер для всего блока товаров, включая заголовок и слайдер */
+.brand-section .journey-brand-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    width: 80%;
+    margin-right: 5%;
+    position: relative;
+    height: auto;
+    padding: 1rem 0.5rem;
+    padding-top: calc(1rem + 60px);
+}
+
+/* Адаптация scroll-indicator для различных разрешений */
+@media (max-width: 1399px) {
+    .scroll-indicator {
+        bottom: 5.2rem;
+        font-size: 0.88rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .scroll-indicator {
+        bottom: 5.5rem;
+        font-size: 0.87rem;
+    }
+}
+
 @media (max-width: 768px) {
     .scroll-indicator {
         bottom: 6rem;
@@ -372,20 +399,67 @@ section#brands.brands {
 }
 
 /* Адаптация */
-@media (max-width: 1200px) {
+@media (max-width: 1399px) {
     .brand-section {
-        gap: 2%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 80px 20px 15px;
     }
     
     .brand-content {
-        width: 42%;
-        padding-left: 5%;
+        width: 80%;
+        max-width: 1300px;
+        padding-left: 0;
+        padding-top: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+        height: auto;
+        margin: 50px 0 0 0;
+    }
+    
+    .brand-logo-journey {
+        margin: 0;
+        flex-shrink: 0;
+    }
+    
+    .brand-info-journey {
+        text-align: left;
+        max-width: 100%;
+        flex: 1;
+    }
+    
+    .brand-text-journey {
+        text-align: left;
+        margin: 0;
+        overflow: visible;
     }
     
     .brand-section .journey-brand-products {
-        width: 50%;
-        max-width: 580px;
-        margin-right: 5%;
+        max-width: 1300px;
+        margin-right: 0;
+        padding: 0;
+        padding-top: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 15px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    
+    .brand-section .journey-brand-products::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Opera */
+    }
+
+    #brand-fit.brand-section.active .brand-logo-journey img {
+        transform: scale(1.5);
     }
     
     .brand-title-journey {
@@ -393,39 +467,30 @@ section#brands.brands {
     }
 }
 
-/* Планшеты */
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
     .brand-section {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem;
-        gap: 2rem;
+        padding: 70px 20px 20px;
+        gap: 18px;
     }
-
+    
     .brand-content {
-        padding-left: 0;
-        padding-top: calc(50vh - 110px);
+        max-width: 850px;
     }
     
-    .brand-title-journey,
-    .brand-tagline-journey {
-        display: none;
+    .brand-logo-journey {
+        max-width: 200px;
     }
+    
+    .brand-text-journey {
+        font-size: 0.92rem;
+        max-width: 650px;
+    }
+    
 
-    .brand-section .journey-brand-products {
-        width: 90%;
-        max-width: 600px;
-        margin-right: 0;
-    }
     
-    .journey-brand-products-scrollable-track {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    .journey-product-card {
-        width: 200px;
+    .journey-brand-products-title {
+        font-size: 1.45rem;
+        margin-bottom: 18px;
     }
 }
 
@@ -522,19 +587,6 @@ section#brands.brands {
     transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1); /* Плавный переход для трека */
     will-change: transform;
     align-items: stretch; /* Чтобы карточки были одинаковой высоты, если их содержимое разное */
-}
-
-/* Контейнер для всего блока товаров, включая заголовок и слайдер */
-.brand-section .journey-brand-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    width: 50%;
-    margin-right: 5%;
-    position: relative;
-    height: auto;
-    padding: 1rem 0.5rem;
-    padding-top: calc(1rem + 60px);
 }
 
 .journey-brand-products-title {
@@ -712,85 +764,273 @@ section#brands.brands {
 /* ========== RESPONSIVE DESIGN - BRANDS ========== */
 
 /* Планшеты и маленькие ноутбуки */
-@media (max-width: 1200px) {
-    .brand-section {
-        gap: 3%;
-    }
-    
+@media (max-width: 1399px) {
     .brand-info-journey {
-        padding: 1.5rem;
+        padding: 0.5rem;
     }
     
     .brand-logo-journey {
-        max-width: 220px;
+        max-width: 160px;
     }
     
     .brand-text-journey {
-        font-size: 0.95rem;
-        max-width: 500px;
-    }
-    
-    .journey-brand-products {
-        width: 42%;
-        max-width: 600px;
+        font-size: 0.72rem;
+        max-width: 100%;
+        line-height: 1.35;
     }
     
     .journey-brand-products-title {
-        font-size: 1.5rem;
+        font-size: 1.15rem;
+        margin-bottom: 8px;
+    }
+    
+    .journey-product-card.product-card-slider-item {
+        height: 300px;
+        min-height: 280px;
+        flex: 0 0 auto;
+        width: 23%;
+        min-width: 220px;
+    }
+    
+    .journey-product-card .journey-product-card-image-container {
+        aspect-ratio: 1 / 1;
+    }
+    
+    .journey-product-card .product-info-container {
+        padding: 8px 10px 12px 10px;
+        height: calc(100% - 140px);
+        min-height: 100px;
+    }
+    
+    .journey-product-card .product-category {
+        font-size: 0.58rem;
+        margin-bottom: 2px;
+        letter-spacing: 0.3px;
+    }
+    
+    .journey-product-card .product-name {
+        font-size: 0.78rem;
+        margin-bottom: 4px;
+        height: 2.1em;
+        line-height: 1.15;
+    }
+    
+    .journey-product-card .product-article {
+        font-size: 0.62rem;
+        margin-bottom: 6px;
+    }
+    
+    .journey-product-card .product-detail-btn {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .brand-section .journey-brand-products {
+        width: 75% !important;
+        gap: 1.5vw !important;
+    }
+    
+    .brand-info-journey {
+        padding: 1.3rem;
+    }
+    
+    .brand-section .journey-product-card.product-card-slider-item {
+        height: 26.5vw !important;
+        min-height: 280px !important;
+        max-height: 320px !important;
+        flex: 0 0 auto;
+        width: 23%;
+        min-width: 165px;
+    }
+    
+    .brand-section .journey-product-card .journey-product-card-image-container {
+        aspect-ratio: 1 / 1;
+        height: 50% !important;
+    }
+    
+    .brand-section .journey-product-card .product-info-container {
+        padding: 0.9vw 1.1vw 1.3vw 1.1vw !important;
+        height: 50% !important;
+        min-height: 120px !important;
+    }
+    
+    .brand-section .journey-product-card .product-category {
+        font-size: clamp(0.55rem, 0.5vw, 0.6rem) !important;
+        margin-bottom: 3px;
+        letter-spacing: 0.4px;
+    }
+    
+    .brand-section .journey-product-card .product-name {
+        font-size: clamp(0.75rem, 0.7vw, 0.82rem) !important;
+        margin-bottom: 5px;
+        height: 2.2em;
+        line-height: 1.2;
+    }
+    
+    .brand-section .journey-product-card .product-article {
+        font-size: clamp(0.6rem, 0.55vw, 0.66rem) !important;
+        margin-bottom: clamp(5px, 0.6vw, 7px) !important;
+    }
+    
+    .brand-section .journey-product-card .product-detail-btn {
+        padding: 0.4vw 0.8vw !important;
+        font-size: clamp(0.68rem, 0.65vw, 0.75rem) !important;
+        min-height: 28px !important;
     }
 }
 
 /* Планшеты */
 @media (max-width: 992px) {
+    section#brands.brands {
+        height: 80vh !important;
+        min-height: 90vh;
+    }
+    
     .brand-section {
-        flex-direction: column;
-        gap: 30px;
-        padding: 40px 20px;
+        gap: 20px;
+        padding: 50px 15px 25px;
+        min-height: 90vh;
+    }
+    
+    .brand-content {
+        max-width: 650px;
     }
     
     .brand-info-journey {
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 1.5rem;
-        text-align: center;
+        padding: 0.8rem;
     }
     
     .brand-logo-journey {
-        max-width: 200px;
-        margin: 0 auto 1rem;
+        max-width: 140px;
     }
     
     .brand-text-journey {
-        font-size: 0.95rem;
-        max-width: 100%;
+        font-size: 0.8rem;
+        max-width: 550px;
+        line-height: 1.5;
     }
     
     .brand-tagline-journey {
-        font-size: 0.95rem;
-        text-align: center;
+        font-size: 0.85rem;
     }
     
-    .journey-brand-products {
-        width: 100%;
-        max-width: 700px;
-        margin: 0 auto;
+    .brand-section .journey-brand-products {
+        max-width: 452px; /* Жёсткая ширина для 2 карточек: 2 * 205px + 15px gap */
+        width: 452px;
+        overflow: hidden;
+        position: relative;
+        margin: 0 auto; /* Центрируем контейнер */
+    }
+    
+    .product-carousel-track {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 15px;
+        /* Ширина для 8 карточек (4 оригинала + 4 дубля) */
+        /* Каждая карточка = 100% контейнера, между ними gap 15px */
+        width: fit-content;
     }
     
     .journey-brand-products-title {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+    
+    .journey-product-card.product-card-slider-item {
+        height: auto;
+        min-height: auto;
+        min-width: 140px;
+        /* Ширина устанавливается динамически через inline style в JS */
+        /* min-width и width применяются через style={{ width: cardWidth }} */
+        /* Ширина рассчитывается для показа 2 карточек одновременно */
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .journey-product-card .journey-product-card-image-container {
+        width: 100%; /* Полная ширина карточки */
+        padding-top: 100%; /* Создаёт квадрат 1:1 */
+        position: relative;
+        background: #f5f5f5;
+        overflow: hidden;
+    }
+    
+    .journey-product-card .journey-product-card-image-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Изображение вмещается полностью без обрезки */
+        object-position: center;
+    }
+    
+    .journey-product-card .product-info-container {
+        padding: 6px 8px 8px 8px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+    
+    .journey-product-card .product-category {
+        font-size: 0.5rem;
+        margin-bottom: 0;
+    }
+    
+    .journey-product-card .product-name {
+        font-size: 0.68rem;
+        line-height: 1.3;
+        height: 2.6em;
+        margin-bottom: 0;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .journey-product-card .product-article {
+        font-size: 0.56rem;
+        margin-bottom: 0;
+    }
+    
+    .journey-product-card .product-detail-btn {
+        padding: 4px 6px;
+        font-size: 0.62rem;
+        min-height: 22px;
+        margin-top: auto;
     }
     
     .navigation-dots {
-        bottom: 40px;
+        bottom: 30px;
+        gap: 10px;
+    }
+    
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .scroll-indicator {
+        bottom: 70px;
+        font-size: 0.8rem;
+    }
+    
+    .scroll-indicator svg {
+        width: 16px;
+        height: 16px;
     }
 }
 
 /* Мобильные устройства */
 @media (max-width: 768px) {
     section#brands.brands {
-        height: auto;
-        min-height: 100vh;
+        height: 80vh !important;
+        min-height: 90vh;
     }
     
     .brand-journey-container {
@@ -800,9 +1040,9 @@ section#brands.brands {
     }
     
     .brand-section {
-        padding: 30px 15px;
-        height: auto;
-        min-height: 100vh;
+        gap: 20px;
+        padding: clamp(35px, 8vh, 50px) clamp(10px, 3vw, 15px) clamp(20px, 5vh, 25px);
+        min-height: 90vh;
     }
     
     .brand-info-journey {
@@ -810,25 +1050,99 @@ section#brands.brands {
     }
     
     .brand-logo-journey {
-        max-width: 180px;
+        max-width: clamp(140px, 25vw, 180px);
     }
     
     .brand-text-journey {
-        font-size: 0.9rem;
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        line-height: 1.5;
     }
     
     .brand-tagline-journey {
-        font-size: 0.9rem;
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
     }
     
     .brand-section .journey-brand-products {
+        max-width: 452px; /* Жёсткая ширина для 2 карточек: 2 * 205px + 15px gap */
+        width: 452px;
+        overflow: hidden;
+        position: relative;
+        margin: 0 auto; /* Центрируем контейнер */
+    }
+    
+    .product-carousel-track {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 15px;
+        width: fit-content;
+    }
+    
+    .journey-product-card.product-card-slider-item {
+        height: auto;
+        min-height: auto;
+        min-width: 140px;
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .journey-product-card .journey-product-card-image-container {
         width: 100%;
-        max-width: 95vw;
-        padding: 1rem 0;
+        padding-top: 100%;
+        position: relative;
+        background: #f5f5f5;
+        overflow: hidden;
+    }
+    
+    .journey-product-card .journey-product-card-image-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+    
+    .journey-product-card .product-info-container {
+        padding: 6px 8px 8px 8px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+    
+    .journey-product-card .product-category {
+        font-size: clamp(0.45rem, 1.2vw, 0.5rem);
+        margin-bottom: 0;
+    }
+    
+    .journey-product-card .product-name {
+        font-size: clamp(0.62rem, 1.6vw, 0.68rem);
+        line-height: 1.3;
+        height: 2.6em;
+        margin-bottom: 0;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .journey-product-card .product-article {
+        font-size: clamp(0.52rem, 1.4vw, 0.56rem);
+        margin-bottom: 0;
+    }
+    
+    .journey-product-card .product-detail-btn {
+        padding: 4px 6px;
+        font-size: clamp(0.58rem, 1.5vw, 0.62rem);
+        min-height: 22px;
+        margin-top: auto;
     }
 
     .journey-brand-products-title {
-        font-size: 1.3rem;
+        font-size: clamp(1rem, 3vw, 1.3rem);
         width: calc(100% - 70px);
     }
 
@@ -839,16 +1153,27 @@ section#brands.brands {
     
     .navigation-dots {
         bottom: 30px;
+        gap: 10px;
     }
     
     .dot {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
+    }
+    
+    .scroll-indicator {
+        bottom: 70px;
+        font-size: 0.8rem;
+    }
+    
+    .scroll-indicator svg {
+        width: 16px;
+        height: 16px;
     }
 }
 
-/* Маленькие мобильные */
-@media (max-width: 480px) {
+/* Маленькие мобильные - используют те же стили что и 768px */
+/* @media (max-width: 480px) {
     .brand-section {
         padding: 25px 10px;
     }
@@ -890,12 +1215,11 @@ section#brands.brands {
         margin: 0 4px;
     }
     
-    /* На очень маленьких экранах можно сделать карточки товаров немного крупнее */
     .journey-product-card.product-card-slider-item {
         flex-basis: 50% !important;
         min-width: 140px;
     }
-} 
+} */ 
 
 .brand-section.active .brand-logo-journey::before {
     opacity: 0.8;
@@ -973,7 +1297,79 @@ section#brands.brands {
     transform: translateY(3px);
 }
 
-/* Адаптация для мобильных устройств */
+/* Адаптация для стрелок навигации */
+@media (max-width: 1399px) {
+    .section-nav-arrow {
+        width: 52px;
+        height: 52px;
+    }
+    
+    .section-nav-arrow svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .section-nav-arrow.arrow-up {
+        top: 95px;
+    }
+    
+    .section-nav-arrow.arrow-down {
+        bottom: 85px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .section-nav-arrow {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .section-nav-arrow svg {
+        width: 23px;
+        height: 23px;
+    }
+    
+    .section-nav-arrow.arrow-up {
+        top: 92px;
+    }
+    
+    .section-nav-arrow.arrow-down {
+        bottom: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    /* На мобильных стрелки по бокам для переключения брендов */
+    .section-nav-arrow.arrow-left {
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .section-nav-arrow.arrow-left:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    .section-nav-arrow.arrow-right {
+        right: 20px;
+        left: auto;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .section-nav-arrow.arrow-right:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    .section-nav-arrow.arrow-left:hover svg {
+        transform: translateX(-3px);
+    }
+    
+    .section-nav-arrow.arrow-right:hover svg {
+        transform: translateX(3px);
+    }
+}
+
 @media (max-width: 768px) {
     .section-nav-arrow {
         width: 45px;
@@ -992,9 +1388,45 @@ section#brands.brands {
     .section-nav-arrow.arrow-down {
         bottom: 80px;
     }
+    
+    .section-nav-arrow.arrow-left {
+        left: 15px;
+    }
+    
+    .section-nav-arrow.arrow-right {
+        right: 15px;
+    }
+
+    .brand-content {
+        flex-direction: column;
+        gap: 10px;
+        margin: 15px 0 0 0;
+        padding-top: 10px;
+    }
+
+    .brand-logo-journey {
+        margin-bottom: 0;
+    }
+
+    .brand-description {
+        font-size: 0.7rem;
+    }
+
+    #brand-fit.brand-section.active .brand-logo-journey img {
+        transform: scale(1);
+    }
+
+    .brand-section .journey-brand-products {
+        width: 298px !important;
+    }
+
+    .scroll-indicator {
+        display: none;
+    }
 }
 
-@media (max-width: 480px) {
+/* Используют стили от 768px */
+/* @media (max-width: 480px) {
     .section-nav-arrow {
         width: 40px;
         height: 40px;
@@ -1012,4 +1444,12 @@ section#brands.brands {
     .section-nav-arrow.arrow-down {
         bottom: 75px;
     }
-} 
+    
+    .section-nav-arrow.arrow-left {
+        left: 10px;
+    }
+    
+    .section-nav-arrow.arrow-right {
+        right: 10px;
+    }
+} */ 
