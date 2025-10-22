@@ -177,6 +177,7 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 
@@ -492,6 +493,164 @@
 
 /* ========== RESPONSIVE DESIGN - TIMELINE ========== */
 
+/* Средние экраны - оптимизация для 100vh */
+@media (max-width: 1399px) {
+    .timeline-section {
+        padding: 80px 0 40px;
+    }
+    
+    .timeline-section .section-title {
+        margin-bottom: 40px;
+    }
+    
+    .timeline-section .section-title h2 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .timeline-section .section-title p {
+        font-size: 1.05rem;
+        max-width: 700px;
+    }
+    
+    .timeline-container {
+        height: 55vh;
+        margin: 0;
+        padding: 15px 0;
+    }
+    
+    .timeline-item {
+        flex: 0 0 320px;
+        height: 200px;
+        margin-right: 80px;
+    }
+    
+    .timeline-year {
+        font-size: 22px;
+        padding: 6px 14px;
+        margin-bottom: 10px;
+    }
+    
+    .timeline-heading {
+        font-size: 17px;
+        margin-bottom: 8px;
+    }
+    
+    .timeline-text {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    
+    .timeline-dot {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .timeline-item.top .timeline-dot {
+        bottom: -30px;
+    }
+    
+    .timeline-item.bottom .timeline-dot {
+        top: -30px;
+    }
+    
+    .timeline-controls {
+        margin: 30px auto 0;
+        gap: 18px;
+    }
+    
+    .timeline-control {
+        width: 48px;
+        height: 48px;
+        font-size: 19px;
+    }
+    
+    .timeline-control.auto {
+        width: 52px;
+        height: 52px;
+        font-size: 21px;
+    }
+}
+
+/* Средние планшеты */
+@media (max-width: 1200px) {
+    .timeline-section {
+        padding: 70px 0 35px;
+    }
+    
+    .timeline-section .section-title {
+        margin-bottom: 35px;
+    }
+    
+    .timeline-section .section-title h2 {
+        font-size: 2.3rem;
+    }
+    
+    .timeline-section .section-title p {
+        font-size: 1rem;
+        max-width: 650px;
+    }
+    
+    .timeline-container {
+        height: 50vh;
+        padding: 12px 0;
+    }
+    
+    .timeline-item {
+        flex: 0 0 300px;
+        height: 190px;
+        margin-right: 70px;
+    }
+    
+    .timeline-year {
+        font-size: 20px;
+        padding: 5px 12px;
+    }
+    
+    .timeline-heading {
+        font-size: 16px;
+        margin-bottom: 7px;
+    }
+    
+    .timeline-text {
+        font-size: 12.5px;
+    }
+    
+    .timeline-dot {
+        width: 13px;
+        height: 13px;
+    }
+    
+    .timeline-item.top .timeline-dot {
+        bottom: -21px;
+    }
+    
+    .timeline-item.bottom .timeline-dot {
+        top: -22px;
+    }
+    
+    .timeline-controls {
+        margin: 28px auto 0;
+        gap: 16px;
+    }
+    
+    .timeline-control {
+        width: 46px;
+        height: 46px;
+        font-size: 18px;
+    }
+    
+    .timeline-control.auto {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .timeline-fullscreen-content {
+        height: 80vh;
+    }
+}
+
 /* Планшеты */
 @media (max-width: 992px) {
     .timeline-section {
@@ -522,111 +681,148 @@
     .timeline-fullscreen-title {
         font-size: 28px;
     }
+
+    .timeline-item.top .timeline-dot {
+        bottom: -54px;
+    }
+    
+    .timeline-item.bottom .timeline-dot {
+        top: -54px;
+    }
 }
 
 /* Мобильные устройства */
 @media (max-width: 768px) {
     .timeline-section {
-        padding: 60px 0;
+        padding: clamp(45px, 10vh, 60px) clamp(10px, 3vw, 20px);
     }
     
     .timeline-section .section-title h2 {
-        font-size: 2rem;
+        font-size: clamp(1.7rem, 4vw, 2rem);
     }
     
     .timeline-section .section-title p {
-        font-size: 1rem;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
     
     .timeline-container {
-        height: 400px;
+        height: clamp(320px, 50vh, 400px);
     }
     
     .timeline-item {
-        flex: 0 0 280px;
-        height: 180px;
-        margin-right: 60px;
+        flex: 0 0 clamp(240px, 60vw, 280px);
+        height: clamp(150px, 30vh, 180px);
+        margin-right: clamp(40px, 10vw, 60px);
+    }
+
+    .timeline-content { 
+        padding: 15px;
     }
     
     .timeline-year {
-        font-size: 20px;
+        font-size: clamp(18px, 4vw, 20px);
+        padding: 0 12px;
     }
     
     .timeline-heading {
-        font-size: 16px;
+        font-size: clamp(14px, 3.5vw, 16px);
     }
     
     .timeline-text {
-        font-size: 12px;
+        font-size: clamp(11px, 2.5vw, 12px);
+    }
+    
+    .timeline-dot {
+        width: clamp(10px, 3vw, 12px);
+        height: clamp(10px, 3vw, 12px);
+    }
+    
+    .timeline-item.top .timeline-dot {
+        bottom: clamp(-14px, -5vh, -25px);
+    }
+    
+    .timeline-item.bottom .timeline-dot {
+        top: clamp(-14px, -5vh, -25px);
     }
     
     .timeline-controls {
-        gap: 15px;
-        margin-top: 30px;
+        gap: clamp(12px, 3vw, 15px);
+        margin-top: clamp(20px, 5vh, 30px);
     }
     
     .timeline-control {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
+        width: clamp(40px, 10vw, 45px);
+        height: clamp(40px, 10vw, 45px);
+        font-size: clamp(16px, 4vw, 18px);
     }
     
     .timeline-control.auto {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
+        width: clamp(45px, 11vw, 50px);
+        height: clamp(45px, 11vw, 50px);
+        font-size: clamp(18px, 4.5vw, 20px);
     }
     
     .timeline-fullscreen-content {
-        width: 95%;
-        height: 95vh;
-        padding: 30px;
+        width: clamp(95%, 100% - 20px, 98%);
+        height: clamp(90vh, 95vh, 96vh);
+        padding: clamp(18px, 5vw, 30px);
+    }
+    
+    .timeline-fullscreen-header {
+        margin-bottom: clamp(12px, 3vh, 20px);
     }
     
     .timeline-fullscreen-year {
-        font-size: 48px;
+        font-size: clamp(36px, 10vw, 48px);
     }
     
     .timeline-fullscreen-title {
-        font-size: 24px;
+        font-size: clamp(18px, 5vw, 24px);
     }
     
     .timeline-fullscreen-description {
-        font-size: 16px;
+        font-size: clamp(14px, 3.5vw, 16px);
+        margin-bottom: clamp(12px, 3vh, 20px);
     }
     
     .timeline-key-events,
     .timeline-key-people,
     .timeline-achievements {
-        padding: 15px;
-        margin-bottom: 20px;
+        padding: clamp(10px, 3vw, 15px);
+        margin-bottom: clamp(12px, 3vh, 20px);
     }
     
     .timeline-key-events h4,
     .timeline-key-people h4,
     .timeline-achievements h4 {
-        font-size: 16px;
-        margin-bottom: 12px;
+        font-size: clamp(14px, 3.5vw, 16px);
+        margin-bottom: clamp(8px, 2vh, 12px);
     }
     
     .timeline-key-events li,
     .timeline-achievements li {
-        font-size: 14px;
-        margin-bottom: 10px;
+        font-size: clamp(12px, 3vw, 14px);
+        margin-bottom: clamp(6px, 2vh, 10px);
+        padding-left: clamp(16px, 4vw, 20px);
     }
     
     .person-tag {
-        font-size: 12px;
-        padding: 4px 10px;
+        font-size: clamp(10px, 2.5vw, 12px);
+        padding: clamp(3px, 1vw, 4px) clamp(6px, 2vw, 10px);
     }
     
     .people-list {
-        gap: 8px;
+        gap: clamp(6px, 2vw, 8px);
+    }
+    
+    .timeline-fullscreen-close {
+        padding: clamp(6px, 2vw, 10px);
+        font-size: clamp(1.2rem, 4vw, 1.5rem);
     }
 }
 
-/* Маленькие мобильные */
-@media (max-width: 480px) {
+/* Маленькие мобильные - используют те же стили что и 768px */
+/* @media (max-width: 480px) {
     .timeline-section {
         padding: 50px 15px;
     }
@@ -718,4 +914,4 @@
         padding: 8px;
         font-size: 1.3rem;
     }
-} 
+} */ 

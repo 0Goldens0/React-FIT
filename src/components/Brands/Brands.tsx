@@ -144,6 +144,120 @@ const Brands = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [productCarouselIndices, setProductCarouselIndices] = useState<{ [key: string]: number }>({})
+  const productCarouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const carouselIntervals = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
+  const [cardWidth, setCardWidth] = useState<number>(140) // Ширина карточки (минимум 140px)
+  const cardGap = 15 // Gap между карточками
+
+  // Проверка на мобильное устройство
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 992)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Автоматическая карусель товаров на мобильных
+  useEffect(() => {
+    if (!isMobile) {
+      // Очищаем все интервалы на десктопе
+      Object.values(carouselIntervals.current).forEach(interval => {
+        if (interval) clearInterval(interval)
+      })
+      carouselIntervals.current = {}
+      return
+    }
+
+    // Инициализируем индексы для всех брендов
+    const initialIndices: { [key: string]: number } = {}
+    brandsData.forEach(brand => {
+      initialIndices[brand.id] = 0
+    })
+    setProductCarouselIndices(initialIndices)
+
+    // Создаем интервал для каждого бренда
+    brandsData.forEach(brand => {
+      carouselIntervals.current[brand.id] = setInterval(() => {
+        setProductCarouselIndices(prev => {
+          const currentIdx = prev[brand.id] || 0
+          const nextIdx = currentIdx + 1
+
+          // Переключаемся на следующую карточку
+          return { ...prev, [brand.id]: nextIdx }
+        })
+      }, 3000) // Переключение каждые 3 секунды
+    })
+
+    return () => {
+      // Очищаем все интервалы при размонтировании
+      Object.values(carouselIntervals.current).forEach(interval => {
+        if (interval) clearInterval(interval)
+      })
+      carouselIntervals.current = {}
+    }
+  }, [isMobile])
+
+  // Отдельный эффект для сброса индекса на начало (бесконечная карусель)
+  useEffect(() => {
+    if (!isMobile) return
+
+    brandsData.forEach(brand => {
+      const currentIdx = productCarouselIndices[brand.id]
+      const productsCount = brandProducts[brand.id]?.length || 4
+
+      // Если достигли конца оригинальных карточек (показываем первый дубль)
+      if (currentIdx === productsCount) {
+        const carousel = productCarouselRefs.current[brand.id]
+        if (carousel) {
+          // Ждем завершения анимации
+          setTimeout(() => {
+            // Отключаем transition для мгновенного перехода
+            carousel.style.transition = 'none'
+            
+            // Сбрасываем на начало
+            setProductCarouselIndices(prev => ({ ...prev, [brand.id]: 0 }))
+            
+            // Включаем transition обратно
+            setTimeout(() => {
+              carousel.style.transition = 'transform 0.5s ease-in-out'
+            }, 50)
+          }, 500) // После завершения анимации (0.5s)
+        }
+      }
+    })
+  }, [productCarouselIndices, isMobile])
+
+  // Вычисляем ширину карточки на основе контейнера
+  useEffect(() => {
+    if (!isMobile) return
+
+    const updateCardWidth = () => {
+      // Находим любой контейнер .journey-brand-products
+      const container = document.querySelector('.journey-brand-products') as HTMLElement
+      if (container) {
+        const containerWidth = container.offsetWidth
+        // Рассчитываем ширину для 2 карточек: (ширина контейнера - gap) / 2
+        // Уменьшаем до 60% для узких карточек (по размеру изображения)
+        const calculatedWidth = ((containerWidth - cardGap) / 2) * 0.6
+        // Гарантируем минимальную ширину 140px
+        const finalWidth = Math.max(calculatedWidth, 140)
+        setCardWidth(finalWidth)
+      }
+    }
+
+    updateCardWidth()
+    window.addEventListener('resize', updateCardWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateCardWidth)
+    }
+  }, [isMobile])
 
   // Слушаем события от ScrollController
   useEffect(() => {
@@ -168,6 +282,18 @@ const Brands = () => {
       detail: { index }
     });
     window.dispatchEvent(event);
+  }
+
+  // Навигация к предыдущему бренду
+  const goToPrevBrand = () => {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : brandsData.length - 1
+    handleDotClick(newIndex)
+  }
+
+  // Навигация к следующему бренду
+  const goToNextBrand = () => {
+    const newIndex = currentIndex < brandsData.length - 1 ? currentIndex + 1 : 0
+    handleDotClick(newIndex)
   }
 
   // Навигация к секции "О компании"
@@ -209,19 +335,51 @@ const Brands = () => {
             </div>
             
             <div className="journey-brand-products">
-              {brandProducts[brand.id]?.slice(0, 4).map((product: BrandProduct) => (
-                <div key={product.article} className="journey-product-card product-card-slider-item">
-                  <div className="journey-product-card-image-container">
-                    <img src={product.image} alt={product.name} />
-                  </div>
-                  <div className="product-info-container">
-                    <div className="product-category">{product.category}</div>
-                    <h4 className="product-name" style={{ textTransform: 'none' }}>{product.name}</h4>
-                    <div className="product-article">Артикул: {product.article}</div>
-                    <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>Подробнее</button>
-                  </div>
+              {isMobile ? (
+                /* Карусель на мобильных с обёрткой */
+                <div 
+                  className="product-carousel-track"
+                  ref={(el) => { productCarouselRefs.current[brand.id] = el }}
+                  style={{
+                    transform: `translateX(-${(productCarouselIndices[brand.id] || 0) * (cardWidth + cardGap)}px)`,
+                    transition: 'transform 0.5s ease-in-out'
+                  }}
+                >
+                  {/* Дублируем карточки для бесконечной карусели */}
+                  {[...(brandProducts[brand.id]?.slice(0, 4) || []), ...(brandProducts[brand.id]?.slice(0, 4) || [])].map((product: BrandProduct, idx: number) => (
+                    <div 
+                      key={`${product.article}-${idx}`} 
+                      className="journey-product-card product-card-slider-item"
+                      style={{ width: `${cardWidth}px`, minWidth: `${cardWidth}px` }}
+                    >
+                      <div className="journey-product-card-image-container">
+                        <img src={product.image} alt={product.name} />
+                      </div>
+                      <div className="product-info-container">
+                        <div className="product-category">{product.category}</div>
+                        <h4 className="product-name" style={{ textTransform: 'none' }}>{product.name}</h4>
+                        <div className="product-article">Артикул: {product.article}</div>
+                        <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>Подробнее</button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                /* Обычное отображение на десктопе */
+                brandProducts[brand.id]?.slice(0, 4).map((product: BrandProduct) => (
+                  <div key={product.article} className="journey-product-card product-card-slider-item">
+                    <div className="journey-product-card-image-container">
+                      <img src={product.image} alt={product.name} />
+                    </div>
+                    <div className="product-info-container">
+                      <div className="product-category">{product.category}</div>
+                      <h4 className="product-name" style={{ textTransform: 'none' }}>{product.name}</h4>
+                      <div className="product-article">Артикул: {product.article}</div>
+                      <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>Подробнее</button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </section>
         ))}
@@ -251,25 +409,37 @@ const Brands = () => {
         <span>или используйте навигацию</span>
       </div>
 
-      {/* Стрелки навигации между секциями */}
+      {/* Стрелки навигации: на десктопе - между секциями, на мобильных - между брендами */}
       <button 
-        className="section-nav-arrow arrow-up"
-        onClick={navigateToAbout}
-        aria-label="К разделу О компании"
+        className={`section-nav-arrow ${isMobile ? 'arrow-left' : 'arrow-up'}`}
+        onClick={isMobile ? goToPrevBrand : navigateToAbout}
+        aria-label={isMobile ? "Предыдущий бренд" : "К разделу О компании"}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M5 15l7-7 7 7" />
-        </svg>
+        {isMobile ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M15 5l-7 7 7 7" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 15l7-7 7 7" />
+          </svg>
+        )}
       </button>
       
       <button 
-        className="section-nav-arrow arrow-down"
-        onClick={navigateToTimeline}
-        aria-label="К разделу История"
+        className={`section-nav-arrow ${isMobile ? 'arrow-right' : 'arrow-down'}`}
+        onClick={isMobile ? goToNextBrand : navigateToTimeline}
+        aria-label={isMobile ? "Следующий бренд" : "К разделу История"}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M5 9l7 7 7-7" />
-        </svg>
+        {isMobile ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 9l7 7 7-7" />
+          </svg>
+        )}
       </button>
     </section>
   )

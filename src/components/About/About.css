@@ -534,76 +534,9 @@
 /* Планшеты */
 @media (max-width: 992px) {
     .about {
-        padding: 50px 20px;
-    }
-    
-    .about .hexagon-particle {
-        width: 22px;
-        height: 22px;
-    }
-    
-    .about .content-container {
-        padding: 30px 40px;
-        border-radius: 24px;
-    }
-    
-    .about .section-title {
-        font-size: 2.8rem;
-    }
-    
-    .about .section-subtitle {
-        font-size: 1rem;
-    }
-    
-    .about .content-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-    
-    .about .holographic-container {
-        width: 280px;
-        height: 280px;
-        margin: 0 auto;
-    }
-    
-    .about .hexagon-3d {
-        width: 280px;
-        height: 280px;
-    }
-    
-    .about .fit-logo-svg {
-        width: 180px;
-    }
-    
-    .about .company-description {
-        font-size: 1rem;
-    }
-    
-    .about .mission-block {
-        padding: 25px;
-        margin: 25px 0;
-    }
-    
-    .about .energy-ring:nth-child(1) {
-        width: 210px;
-        height: 210px;
-    }
-    
-    .about .energy-ring:nth-child(2) {
-        width: 250px;
-        height: 250px;
-    }
-    
-    .about .energy-ring:nth-child(3) {
-        width: 290px;
-        height: 290px;
-    }
-}
-
-/* Мобильные устройства */
-@media (max-width: 768px) {
-    .about {
-        padding: 40px 15px;
+        padding: 35px 20px;
+        min-height: 50vh;
+        height: 70vh;
     }
     
     .about .hexagon-particle {
@@ -612,98 +545,19 @@
     }
     
     .about .content-container {
-        padding: 25px 30px;
-        border-radius: 20px;
+        padding: 20px 30px;
+        border-radius: 18px;
+        margin: 0;
+        max-width: 95%;
     }
     
     .about .section-header {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
     
     .about .section-title {
-        font-size: 2.2rem;
-        margin-bottom: 8px;
-    }
-    
-    .about .section-subtitle {
-        font-size: 0.9rem;
-    }
-    
-    .about .content-grid {
-        gap: 35px;
-    }
-    
-    .about .holographic-container {
-        width: 220px;
-        height: 220px;
-    }
-    
-    .about .hexagon-3d {
-        width: 220px;
-        height: 220px;
-    }
-    
-    .about .fit-logo-svg {
-        width: 150px;
-    }
-    
-    .about .fit-letter {
-        font-size: 2.2rem;
-    }
-    
-    .about .company-description {
-        font-size: 0.95rem;
-        line-height: 1.6;
-    }
-    
-    .about .mission-block {
-        padding: 20px;
-        margin: 20px 0;
-        border-radius: 16px;
-    }
-    
-    .about .mission-title {
-        font-size: 1.3rem;
-    }
-    
-    .about .mission-text {
-        font-size: 0.9rem;
-    }
-    
-    .about .energy-ring:nth-child(1) {
-        width: 180px;
-        height: 180px;
-    }
-    
-    .about .energy-ring:nth-child(2) {
-        width: 210px;
-        height: 210px;
-    }
-    
-    .about .energy-ring:nth-child(3) {
-        width: 240px;
-        height: 240px;
-    }
-}
-
-/* Маленькие мобильные */
-@media (max-width: 480px) {
-    .about {
-        padding: 30px 10px;
-    }
-    
-    .about .hexagon-particle {
-        width: 15px;
-        height: 15px;
-    }
-    
-    .about .content-container {
-        padding: 20px;
-        border-radius: 16px;
-    }
-    
-    .about .section-title {
-        font-size: 1.8rem;
+        font-size: 2rem;
+        margin-bottom: 6px;
     }
     
     .about .section-subtitle {
@@ -711,12 +565,21 @@
     }
     
     .about .content-grid {
-        gap: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px 20px;
+        align-items: flex-start;
+    }
+    
+    .about .image-section {
+        flex: 0 0 auto;
+        width: 180px;
     }
     
     .about .holographic-container {
         width: 180px;
         height: 180px;
+        margin: 0;
     }
     
     .about .hexagon-3d {
@@ -725,48 +588,282 @@
     }
     
     .about .fit-logo-svg {
-        width: 120px;
+        width: 130px;
     }
     
-    .about .fit-letter {
-        font-size: 1.8rem;
+    .about .text-section {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
     }
     
     .about .company-description {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 0;
     }
     
     .about .mission-block {
         padding: 15px;
-        margin: 15px 0;
+        margin: 0;
+        border-radius: 12px;
+        width: 100%;
+        flex-basis: 100%;
     }
     
     .about .mission-title {
-        font-size: 1.1rem;
-        margin-bottom: 8px;
+        font-size: 1.15rem;
+        margin-bottom: 6px;
     }
     
     .about .mission-text {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        line-height: 1.5;
     }
     
     .about .cta-button {
-        padding: 12px 25px;
-        font-size: 0.95rem;
+        padding: 10px 24px;
+        font-size: 0.9rem;
     }
     
     .about .energy-ring:nth-child(1) {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .about .energy-ring:nth-child(2) {
+        width: 190px;
+        height: 190px;
+    }
+    
+    .about .energy-ring:nth-child(3) {
+        width: 220px;
+        height: 220px;
+    }
+}
+
+/* Мобильные устройства */
+/* @media (max-width: 768px) {
+    .about {
+        padding: 35px 20px;
+        min-height: 50vh;
+        height: 70vh;
+    }
+    
+    .about .hexagon-particle {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .about .content-container {
+        padding: 20px 30px;
+        border-radius: 18px;
+        margin: 0;
+        max-width: 95%;
+    }
+    
+    .about .section-header {
+        margin-bottom: 15px;
+    }
+    
+    .about .section-title {
+        font-size: 2rem;
+        margin-bottom: 6px;
+    }
+    
+    .about .section-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .about .content-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px 20px;
+        align-items: flex-start;
+    }
+    
+    .about .image-section {
+        flex: 0 0 auto;
+        width: 180px;
+    }
+    
+    .about .holographic-container {
+        width: 180px;
+        height: 180px;
+        margin: 0;
+    }
+    
+    .about .hexagon-3d {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .about .fit-logo-svg {
+        width: 130px;
+    }
+    
+    .about .text-section {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .about .company-description {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 0;
+    }
+    
+    .about .mission-block {
+        padding: 15px;
+        margin: 0;
+        border-radius: 12px;
+        width: 100%;
+        flex-basis: 100%;
+    }
+    
+    .about .mission-title {
+        font-size: 1.15rem;
+        margin-bottom: 6px;
+    }
+    
+    .about .mission-text {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+    
+    .about .cta-button {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .about .energy-ring:nth-child(1) {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .about .energy-ring:nth-child(2) {
+        width: 190px;
+        height: 190px;
+    }
+    
+    .about .energy-ring:nth-child(3) {
+        width: 220px;
+        height: 220px;
+    }
+} */
+
+/* Маленькие мобильные */
+@media (max-width: 768px) {
+    .about {
+        padding: 30px 15px;
+        min-height: 50vh;
+        height: auto;
+    }
+    
+    .about .hexagon-particle {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .about .content-container {
+        padding: 18px 20px;
+        border-radius: 16px;
+        max-width: 100%;
+    }
+    
+    .about .section-header {
+        margin-bottom: 12px;
+    }
+    
+    .about .section-title {
+        font-size: 1.7rem;
+        margin-bottom: 5px;
+    }
+    
+    .about .section-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .about .content-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .about .image-section {
+        width: 140px;
+        flex: 0 0 auto;
+    }
+    
+    .about .holographic-container {
+        width: 140px;
+        height: 140px;
+        margin: 0;
+    }
+    
+    .about .hexagon-3d {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .about .fit-logo-svg {
+        width: 100px;
+    }
+    
+    .about .fit-letter {
+        font-size: 1.6rem;
+    }
+    
+    .about .text-section {
+        width: 100%;
+        gap: 12px;
+    }
+    
+    .about .company-description {
+        font-size: 0.82rem;
+        line-height: 1.5;
+        text-align: center;
+    }
+    
+    .about .mission-block {
+        padding: 12px;
+        margin: 0;
+        border-radius: 10px;
+    }
+    
+    .about .mission-title {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+    
+    .about .mission-text {
+        font-size: 0.75rem;
+        line-height: 1.5;
+    }
+    
+    .about .cta-button {
+        padding: 9px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .about .energy-ring:nth-child(1) {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .about .energy-ring:nth-child(2) {
         width: 150px;
         height: 150px;
     }
     
-    .about .energy-ring:nth-child(2) {
-        width: 175px;
-        height: 175px;
-    }
-    
     .about .energy-ring:nth-child(3) {
-        width: 200px;
-        height: 200px;
+        width: 170px;
+        height: 170px;
     }
 } 

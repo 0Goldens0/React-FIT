@@ -384,6 +384,51 @@
 
 /* ========== RESPONSIVE DESIGN - HERO ========== */
 
+/* Средние ноутбуки */
+@media (max-width: 1399px) {
+    .hero {
+        min-height: 750px;
+        padding-top: 75px;
+    }
+    
+    .hero-wrapper {
+        gap: 32px;
+        margin-top: 100px;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+        letter-spacing: 2.8px;
+    }
+    
+    .hero-title {
+        font-size: 1.95rem;
+        margin-bottom: 1.9rem;
+    }
+    
+    .hero-description {
+        font-size: 1.08rem;
+        max-width: 95%;
+    }
+    
+    .stats-grid {
+        gap: 16px;
+    }
+    
+    .stat-number {
+        font-size: 34px;
+    }
+    
+    .stat-label {
+        font-size: 13px;
+    }
+    
+    .btn {
+        padding: 13px 30px;
+        font-size: 15px;
+    }
+}
+
 /* Планшеты и маленькие ноутбуки */
 @media (max-width: 1200px) {
     .hero {
@@ -395,12 +440,17 @@
         gap: 30px;
     }
     
+    .hero-subtitle {
+        font-size: 1.15rem;
+        letter-spacing: 2.6px;
+    }
+    
     .hero-title {
-        font-size: 3.8rem;
+        font-size: 1.85rem;
     }
     
     .hero-description {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
     }
     
     .stats-grid {
@@ -415,42 +465,72 @@
 /* Планшеты */
 @media (max-width: 992px) {
     .hero {
-        min-height: 650px;
-        padding: 80px 20px 30px;
+        min-height: 100vh;
+        height: 100vh;
+        padding: 70px 20px 25px;
     }
     
     .hero-wrapper {
         flex-direction: column;
-        gap: 40px;
+        gap: 25px;
     }
     
-    .hero-content {
+    .hero .hero-content {
         text-align: center;
         max-width: 100%;
     }
     
-    .hero-title {
-        font-size: 3.2rem;
+    .hero .hero-subtitle {
+        font-size: 0.95rem;
+        letter-spacing: 2px;
+        margin-bottom: 0.8rem;
     }
     
-    .hero-description {
+    .hero .hero-title {
+        font-size: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .hero .hero-description {
+        font-size: 0.8rem;
         max-width: 600px;
-        margin: 0 auto 2.5rem;
+        margin: 0 auto 1.8rem;
+        line-height: 1.6;
     }
     
-    .hero-buttons {
+    .hero .hero-buttons {
         justify-content: center;
+        gap: 8px;
+    }
+    
+    .hero .btn,
+    .hero-buttons .btn {
+        padding: 8px 20px !important;
+        font-size: 13px !important;
     }
     
     .hero-image {
-        max-width: 70%;
+        max-width: 50%;
+        max-height: 280px;
     }
 
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        max-width: 600px;
+    .hero .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        max-width: 100%;
         margin: 0 auto;
+    }
+    
+    .hero .stat-card {
+        padding: 12px 8px;
+    }
+    
+    .hero .stat-number {
+        font-size: 22px;
+    }
+    
+    .hero .stat-label {
+        font-size: 10px;
     }
 }
 
@@ -459,101 +539,117 @@
     .hero {
         min-height: auto;
         height: auto;
-        padding: 90px 20px 40px;
+        padding: clamp(70px, 15vh, 90px) clamp(15px, 4vw, 20px) clamp(30px, 8vh, 40px);
     }
     
     .hero-wrapper {
-        gap: 30px;
+        gap: clamp(20px, 5vh, 30px);
     }
     
-    .hero-title {
-        font-size: 2.5rem;
-        margin-bottom: 1.5rem;
+    .hero .hero-subtitle {
+        font-size: clamp(0.85rem, 2.5vw, 1rem);
+        letter-spacing: clamp(1.5px, 0.5vw, 2px);
     }
     
-    .hero-subtitle {
-        font-size: 1rem;
-        letter-spacing: 2px;
+    .hero .hero-title {
+        font-size: clamp(1.4rem, 4vw, 1.65rem);
+        margin-bottom: clamp(1rem, 3vh, 1.5rem);
     }
     
-    .hero-description {
-        font-size: 0.95rem;
-        margin-bottom: 2rem;
+    .hero .hero-description {
+        font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+        margin-bottom: clamp(1.5rem, 4vh, 2rem);
     }
     
     .hero-buttons {
         flex-direction: column;
-        gap: 12px;
+        align-items: center;
+        gap: clamp(10px, 2.5vh, 12px);
+        margin-bottom: 40px;
         width: 100%;
     }
     
-    .btn {
+    .hero .btn, .hero-buttons .btn {
         width: 100%;
-        max-width: 300px;
+        max-width: clamp(280px, 70vw, 300px);
+        padding: clamp(8px, 2vw, 10px) clamp(18px, 5vw, 20px) !important;
+        font-size: clamp(12px, 3vw, 13px) !important;
     }
     
     .hero-image {
-        max-width: 85%;
+        max-width: clamp(70%, 85vw, 80%);
+        margin-bottom: clamp(15px, 4vh, 20px);
     }
     
-    .hero-stats {
-        margin-top: 25px;
-        padding-top: 25px;
+    .hero .hero-stats {
+        margin-top: clamp(25px, 6vh, 30px);
+        padding-top: clamp(25px, 6vh, 30px);
     }
     
-    .stat-number {
-        font-size: 28px;
+    .hero .stats-grid {
+        grid-template-columns: 1fr;
+        gap: clamp(10px, 2.5vh, 12px);
+        max-width: clamp(280px, 80vw, 320px);
+        margin: 0 auto;
     }
     
-    .stat-label {
-        font-size: 12px;
+    .hero .stat-card {
+        padding: clamp(12px, 3vh, 15px) clamp(10px, 2.5vw, 12px);
+    }
+    
+    .hero .stat-number {
+        font-size: clamp(22px, 6vw, 28px);
+    }
+    
+    .hero .stat-label {
+        font-size: clamp(10px, 2.5vw, 12px);
     }
 }
 
-/* Маленькие мобильные */
-@media (max-width: 480px) {
+/* Маленькие мобильные - используют те же стили что и 768px */
+/* @media (max-width: 480px) {
     .hero {
         padding: 80px 15px 30px;
     }
     
-    .hero-title {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-    }
-    
-    .hero-subtitle {
+    .hero .hero-subtitle {
         font-size: 0.9rem;
         letter-spacing: 1.5px;
     }
     
-    .hero-description {
+    .hero .hero-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero .hero-description {
         font-size: 0.9rem;
     }
     
-    .btn {
-        padding: 12px 25px;
-        font-size: 0.95rem;
+    .hero .btn, .hero-buttons .btn {
+        padding: 12px 25px !important;
+        font-size: 0.95rem !important;
     }
     
     .hero-image {
         max-width: 95%;
     }
     
-    .stats-grid {
+    .hero .stats-grid {
         grid-template-columns: 1fr;
         gap: 12px;
         max-width: 300px;
     }
     
-    .stat-item {
+    .hero .stat-item {
         padding: 15px 12px;
     }
     
-    .stat-number {
+    .hero .stat-number {
         font-size: 24px;
     }
     
-    .stat-label {
+    .hero .stat-label {
         font-size: 11px;
     }
-} 
+} */ 

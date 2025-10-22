@@ -127,6 +127,39 @@
 
 /* ========== RESPONSIVE DESIGN - FOOTER ========== */
 
+/* Средние планшеты */
+@media (max-width: 1200px) {
+  .footer {
+    padding: 55px 0 28px;
+  }
+  
+  .footer-content {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 38px;
+    margin-bottom: 38px;
+  }
+  
+  .footer-title {
+    font-size: 23px;
+  }
+  
+  .footer-subtitle {
+    font-size: 17.5px;
+  }
+  
+  .footer-text {
+    font-size: 15px;
+  }
+  
+  .footer-logo {
+    width: 110px;
+  }
+  
+  .qr-popup img {
+    width: 150px;
+  }
+}
+
 /* Планшеты */
 @media (max-width: 992px) {
   .footer {

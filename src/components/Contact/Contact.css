@@ -548,6 +548,102 @@
   }
 }
 
+@media (max-width: 992px) {
+  .contact-section {
+    padding: 80px 0 60px;
+    min-height: 100vh;
+  }
+  
+  .contact-hero {
+    margin-bottom: 30px;
+  }
+  
+  .contact-hero-title {
+    font-size: 2.8rem;
+    margin-bottom: 12px;
+  }
+  
+  .contact-hero-description {
+    font-size: 1rem;
+  }
+  
+  .contact-main-content {
+    gap: 25px;
+  }
+  
+  .contact-methods-sidebar {
+    width: 280px;
+    gap: 15px;
+  }
+  
+  .contact-method-card {
+    padding: 20px;
+  }
+  
+  .method-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.8rem;
+  }
+  
+  .method-title {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+  
+  .method-value,
+  .method-detail {
+    font-size: 0.85rem;
+  }
+  
+  .form-container {
+    padding: 35px 30px;
+  }
+  
+  .form-header h3 {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
+  
+  .form-header p {
+    font-size: 0.9rem;
+  }
+  
+  .modern-form {
+    gap: 18px;
+  }
+  
+  .floating-input-group input,
+  .floating-input-group textarea {
+    padding: 22px 16px 10px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .floating-input-group label {
+    font-size: 0.9rem;
+  }
+  
+  .submit-modern-btn {
+    padding: 14px 32px;
+    font-size: 1rem;
+  }
+  
+  .privacy-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  
+  .checkbox-custom {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+  }
+  
+  .privacy-consent {
+    margin: 20px 0 14px 0;
+  }
+}
+
 @media (max-width: 768px) {
   .contact-section {
     padding: 100px 0;

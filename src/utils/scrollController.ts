@@ -27,6 +27,8 @@ export class ScrollController {
   private isEnabled: boolean = true; // Флаг активности контроллера
   private wheelThrottle: number = 0; // Throttle для wheel событий
   private wheelThrottleDelay: number = 50; // Задержка throttle в мс
+  private isMobileDevice: boolean = false; // Флаг мобильного устройства
+  private resizeHandler: (() => void) | null = null; // Обработчик resize
   
   // Колбэки
   private onSectionChange?: (index: number, section: ScrollSection) => void;
@@ -37,12 +39,23 @@ export class ScrollController {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.checkMobileDevice = this.checkMobileDevice.bind(this);
+  }
+
+  /**
+   * Проверка, является ли устройство мобильным
+   */
+  private checkMobileDevice(): boolean {
+    return window.innerWidth <= 992;
   }
 
   /**
    * Инициализация контроллера
    */
   public init(sectionIds: string[]) {
+    // Проверяем, мобильное ли устройство
+    this.isMobileDevice = this.checkMobileDevice();
+    
     // Регистрируем все секции
     this.sections = sectionIds
       .map((id, index) => {
@@ -58,7 +71,31 @@ export class ScrollController {
       })
       .filter((section): section is ScrollSection => section !== null);
 
-    // Добавляем обработчики событий
+    // На мобильных устройствах используем нативный скролл
+    if (this.isMobileDevice) {
+      console.log('ScrollController: мобильное устройство, кастомный скролл отключен');
+      this.isEnabled = false;
+      
+      // Добавляем только resize обработчик для переключения при изменении размера
+      this.resizeHandler = () => {
+        const wasMobile = this.isMobileDevice;
+        this.isMobileDevice = this.checkMobileDevice();
+        
+        if (wasMobile && !this.isMobileDevice) {
+          // Переключились с мобильного на десктоп
+          console.log('ScrollController: переключение на десктоп режим');
+          this.enableScrollControl();
+        } else if (!wasMobile && this.isMobileDevice) {
+          // Переключились с десктопа на мобильный
+          console.log('ScrollController: переключение на мобильный режим');
+          this.disableScrollControl();
+        }
+      };
+      window.addEventListener('resize', this.resizeHandler);
+      return;
+    }
+
+    // На десктопе добавляем обработчики событий
     window.addEventListener('wheel', this.handleWheel, { passive: false });
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('touchstart', this.handleTouchStart, { passive: false });
@@ -78,8 +115,61 @@ export class ScrollController {
     };
     window.addEventListener('brandScrollUpdate', this.handleBrandScrollUpdate);
 
+    // Добавляем resize обработчик для переключения режимов
+    this.resizeHandler = () => {
+      const wasMobile = this.isMobileDevice;
+      this.isMobileDevice = this.checkMobileDevice();
+      
+      if (wasMobile && !this.isMobileDevice) {
+        // Переключились с мобильного на десктоп
+        console.log('ScrollController: переключение на десктоп режим');
+        this.enableScrollControl();
+      } else if (!wasMobile && this.isMobileDevice) {
+        // Переключились с десктопа на мобильный
+        console.log('ScrollController: переключение на мобильный режим');
+        this.disableScrollControl();
+      }
+    };
+    window.addEventListener('resize', this.resizeHandler);
+
     // Определяем текущую секцию при инициализации
     this.updateCurrentSection();
+  }
+
+  /**
+   * Включение контроля скролла (для десктопа)
+   */
+  private enableScrollControl() {
+    if (this.isEnabled) return;
+    
+    this.isEnabled = true;
+    window.addEventListener('wheel', this.handleWheel, { passive: false });
+    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('touchstart', this.handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', this.handleTouchMove, { passive: false });
+    window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+    
+    if (this.handleBrandScrollUpdate) {
+      window.addEventListener('brandScrollUpdate', this.handleBrandScrollUpdate);
+    }
+  }
+
+  /**
+   * Отключение контроля скролла (для мобильных)
+   */
+  private disableScrollControl() {
+    if (!this.isEnabled) return;
+    
+    this.isEnabled = false;
+    window.removeEventListener('wheel', this.handleWheel);
+    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('touchstart', this.handleTouchStart);
+    window.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('scroll', this.handleScroll);
+    
+    if (this.handleBrandScrollUpdate) {
+      window.removeEventListener('brandScrollUpdate', this.handleBrandScrollUpdate);
+    }
   }
 
   /**
@@ -119,6 +209,10 @@ export class ScrollController {
     
     if (this.handleBrandScrollUpdate) {
       window.removeEventListener('brandScrollUpdate', this.handleBrandScrollUpdate);
+    }
+    
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
     }
     
     if (this.scrollTimeout) {

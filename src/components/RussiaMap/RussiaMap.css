@@ -211,9 +211,40 @@
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+  .russia-map-container {
+    padding: 35px 18px;
+    min-height: 100%;
+  }
+
+  .map-header h2 {
+    font-size: 2.3rem;
+  }
+
+  .map-header p {
+    font-size: 1.1rem;
+  }
+
+  .control-btn {
+    padding: 11px 20px;
+    font-size: 0.95rem;
+    min-width: 150px;
+  }
+
+  .map-wrapper {
+    max-width: 1000px;
+  }
+
+  .center-label {
+    font-size: 10.5px;
+    padding: 3.5px 7.5px;
+  }
+}
+
 @media (max-width: 768px) {
   .russia-map-container {
     padding: 20px 10px;
+    
   }
   
   .map-header h2 {
