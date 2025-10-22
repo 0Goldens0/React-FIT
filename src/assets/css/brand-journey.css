@@ -325,7 +325,7 @@ section#brands.brands {
 /* Индикатор прокрутки - изящный стиль */
 .scroll-indicator {
     position: fixed;
-    bottom: 5.5rem;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 110;
