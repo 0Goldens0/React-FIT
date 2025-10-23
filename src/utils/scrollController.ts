@@ -14,11 +14,12 @@ export class ScrollController {
   private sections: ScrollSection[] = [];
   private currentSectionIndex: number = 0;
   private isScrolling: boolean = false;
+  private isHorizontallyScrolling: boolean = false; // Флаг для блокировки во время анимации слайдов
   private scrollTimeout: NodeJS.Timeout | null = null;
   private horizontalScrollProgress: number = 0;
   private horizontalScrollMax: number = 0;
   private lastScrollTime: number = 0;
-  private scrollCooldown: number = 800; // Увеличена задержка для снижения чувствительности
+  private scrollCooldown: number = 800; // Возвращаем исходную задержку
   private savedBrandsPosition: number = 0; // Сохраняем позицию брендов при выходе
   private hasLeftControlledArea: boolean = false; // Флаг: вышли ли за пределы контролируемых секций
   private touchStartY: number = 0; // Начальная позиция касания по Y
@@ -106,6 +107,12 @@ export class ScrollController {
     this.handleBrandScrollUpdate = (e: Event) => {
       const customEvent = e as CustomEvent<{ index: number }>;
       const newIndex = customEvent.detail.index;
+      
+      // КРИТИЧНО: Игнорируем синхронизацию, если идет активный скролл
+      // Это предотвращает race condition
+      if (this.isHorizontallyScrolling) {
+        return;
+      }
       
       // Обновляем внутреннее состояние scrollController
       this.horizontalScrollProgress = newIndex;
@@ -260,13 +267,20 @@ export class ScrollController {
       return;
     }
     
+    // КРИТИЧНО: Блокировка ДОЛЖНА быть ПЕРВОЙ проверкой
+    // Это предотвращает накопление событий при резком скролле
+    if (this.isScrolling || this.isHorizontallyScrolling) {
+      e.preventDefault();
+      return;
+    }
+    
     // Throttle для wheel событий - оптимизация производительности
     const now = Date.now();
     if (now - this.wheelThrottle < this.wheelThrottleDelay) {
       return;
     }
     this.wheelThrottle = now;
-    
+
     const scrollDown = e.deltaY > 0;
     
     // Если мы на последней контролируемой секции (Timeline) и скроллим вниз
@@ -302,11 +316,74 @@ export class ScrollController {
 
     // Если текущая секция - горизонтальная (brands)
     if (currentSection.type === 'horizontal') {
-      this.handleHorizontalScroll(scrollDown);
-    } else {
-      // Вертикальный скролл
-      this.handleVerticalScroll(scrollDown);
+      this.handleBrandsScroll(scrollDown);
+      return;
     }
+    
+    // Вертикальный скролл для всех остальных секций
+    this.handleVerticalScroll(scrollDown);
+  }
+
+  /**
+   * Обработка скролла в секции брендов (горизонтальный слайдер)
+   * ПРАВИЛА:
+   * 1. На слайде 0 скролл вверх -> выход к предыдущей секции
+   * 2. На слайде 6 (последний) скролл вниз -> выход к следующей секции
+   * 3. ВО ВСЕХ ОСТАЛЬНЫХ СЛУЧАЯХ -> только переключение слайдов, выход ЗАПРЕЩЕН
+   */
+  private handleBrandsScroll(scrollDown: boolean) {
+    // Получаем количество слайдов (7 брендов = индексы 0-6)
+    const totalSlides = 7;
+    const currentSlide = this.horizontalScrollProgress;
+    
+    // Правило 1: На первом слайде (0) скролл вверх -> выход вверх
+    if (currentSlide === 0 && !scrollDown) {
+      this.handleVerticalScroll(false);
+      return;
+    }
+    
+    // Правило 2: На последнем слайде (6) скролл вниз -> выход вниз
+    if (currentSlide === (totalSlides - 1) && scrollDown) {
+      this.handleVerticalScroll(true);
+      return;
+    }
+    
+    // Правило 3: Все остальные случаи -> ТОЛЬКО переключение слайдов
+    // Блокируем любые дальнейшие события на время анимации
+    this.isHorizontallyScrolling = true;
+    this.lastScrollTime = Date.now();
+    
+    setTimeout(() => {
+      this.isHorizontallyScrolling = false;
+    }, 1000);
+    
+    // Переключаем слайд
+    if (scrollDown && currentSlide < (totalSlides - 1)) {
+      this.horizontalScrollProgress++;
+      this.updateHorizontalScroll();
+      
+      if (this.onHorizontalProgress) {
+        this.onHorizontalProgress(this.horizontalScrollProgress, totalSlides - 1);
+      }
+    } else if (!scrollDown && currentSlide > 0) {
+      this.horizontalScrollProgress--;
+      this.updateHorizontalScroll();
+      
+      if (this.onHorizontalProgress) {
+        this.onHorizontalProgress(this.horizontalScrollProgress, totalSlides - 1);
+      }
+    }
+  }
+
+  /**
+   * Публичные методы для блокировки/разблокировки скролла извне (например, из Brands.tsx)
+   */
+  public lockHorizontalScroll() {
+    this.isHorizontallyScrolling = true;
+  }
+
+  public unlockHorizontalScroll() {
+    this.isHorizontallyScrolling = false;
   }
 
   /**
@@ -355,16 +432,7 @@ export class ScrollController {
     const brandsSection = this.sections[this.currentSectionIndex];
     if (!brandsSection || brandsSection.type !== 'horizontal') return;
 
-    // Получаем максимальное значение скролла от компонента Brands
-    const brandsContainer = brandsSection.element.querySelector('.brand-journey-container') as HTMLElement;
-    if (!brandsContainer) return;
-
-    // Рассчитываем максимальный горизонтальный скролл (количество брендов)
-    // У нас 7 брендов - fit, kypc, mos, xbat, greatflex, cutop, mastercolor
-    const totalBrands = brandsContainer.children.length;
-    this.horizontalScrollMax = totalBrands - 1;
-    
-    this.lastScrollTime = Date.now();
+    // Блокировка установлена в handleWheel, здесь только переключаем слайд
 
     if (scrollDown) {
       // Скролл вправо (вниз колесом)
@@ -375,11 +443,7 @@ export class ScrollController {
         if (this.onHorizontalProgress) {
           this.onHorizontalProgress(this.horizontalScrollProgress, this.horizontalScrollMax);
         }
-      } else {
-        // Достигли конца горизонтального скролла - сохраняем позицию и переходим к следующей секции
-        this.savedBrandsPosition = this.horizontalScrollMax; // Сохраняем последнюю страницу
-        this.handleVerticalScroll(true);
-      }
+      } 
     } else {
       // Скролл влево (вверх колесом)
       if (this.horizontalScrollProgress > 0) {
@@ -389,10 +453,6 @@ export class ScrollController {
         if (this.onHorizontalProgress) {
           this.onHorizontalProgress(this.horizontalScrollProgress, this.horizontalScrollMax);
         }
-      } else {
-        // Достигли начала горизонтального скролла - переходим к предыдущей секции
-        this.savedBrandsPosition = 0; // Сохраняем первую страницу
-        this.handleVerticalScroll(false);
       }
     }
   }

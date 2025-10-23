@@ -182,6 +182,8 @@
     height: 100%;
     transition: transform 0.8s ease;
     transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden; /* Для совместимости */
+    backface-visibility: hidden; /* Для совместимости */
 }
 
 .service-3d-card:hover .service-card-inner {
@@ -196,6 +198,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
+    -webkit-backface-visibility: hidden; /* Добавляем префикс для Firefox и Safari */
     backface-visibility: hidden;
     border-radius: 20px;
     padding: 30px;
@@ -412,7 +415,6 @@
 
 /* Responsive Design */
 @media (max-width: 1399px) {
-
 
     .service-card-back .service-description {
         font-size: 0.9rem;
