@@ -57,6 +57,13 @@
 
 .social-item {
   position: relative;
+  z-index: 1; /* Устанавливаем базовый z-index */
+  transition: z-index 0s 0.2s; /* Убираем задержку для z-index */
+}
+
+.social-item:hover {
+  z-index: 21; /* При наведении поднимаем над другими иконками */
+  transition-delay: 0s;
 }
 
 .social-link {
@@ -105,17 +112,21 @@
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 20;
+  will-change: transform, opacity; /* Оптимизация для анимации */
+  width: 180px; /* 160px (картинка) + 2*10px (padding) */
+  height: 180px; /* 160px (картинка) + 2*10px (padding) */
 }
 
 .qr-popup img {
   width: 160px;
-  height: auto;
+  height: 160px; /* Явно задаем высоту */
   display: block;
 }
 
 .social-item:hover .qr-popup {
   opacity: 1;
   transform: translateX(-50%) scale(1);
+  pointer-events: auto; /* Явно разрешаем события */
 }
 
 .footer-bottom {

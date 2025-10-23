@@ -39,30 +39,12 @@ const brandsData: Brand[] = [
     parallaxFgColor: '#002F3A'
   },
   {
-    id: 'kypc',
-    displayName: 'КУРС',
-    description: 'Разработан для занятия ниши среднего ценового сегмента.КУРС — практичные решения для повседневных задач. Ручные инструменты, оснастка и хозяйственные товары сочетают доступность и надежность, помогая справляться с ремонтом и обслуживанием дома.',
-    logo: getAssetPath('logo/brands/Kurs-CMYK.svg'),
-    primaryColor: '#D81515',
-    parallaxBgColor: '#D81515',
-    parallaxFgColor: '#FFFFFF'
-  },
-  {
-    id: 'mos',
-    displayName: 'MOS',
-    description: 'Бренд закрывает потребности бизнеса в удовлетворении спроса на продукцию в низком ценовом сегменте. MOS — разумный выбор для дома и мастерской. Доступные ручные инструменты и хозяйственные товары решают базовые задачи, сохраняя достойное качество без переплат.',
-    logo: getAssetPath('logo/brands/MOS-CMYK.svg'),
-    primaryColor: '#00AEEF',
-    parallaxBgColor: '#00AEEF',
-    parallaxFgColor: '#FFFFFF'
-  },
-  {
-    id: 'xbat',
-    displayName: 'ХВАТ',
-    description: 'Бренд с говорящим названием! ХВАТ - специализированный бренд, который фокусируется на узком сегменте рынка - крепёж и сопутствующие товары для бытового и профессионального применения. Прочные, устойчивые к нагрузкам и долговечные решения для надежной фиксации, крепления и энергоснабжения.',
-    logo: getAssetPath('logo/brands/Xbat-CMYK.svg'),
-    primaryColor: '#1A1A1A',
-    parallaxBgColor: '#1A1A1A',
+    id: 'cutop',
+    displayName: 'CUTOP',
+    description: 'Продукция бренда — профессиональная и промышленная оснастка для электроинструмента. Бренд использует самые передовые технологии производства и  предлагает готовые решения для работы с высокими нагрузками и сверхтвердыми материалами. Продукция CUTOP обеспечивает максимальную точность, увеличенный ресурс и безопасность при выполнении ответственных задач.',
+    logo: getAssetPath('logo/brands/Cutop-CMYK.svg'),
+    primaryColor: '#2A4998',
+    parallaxBgColor: '#2A4998',
     parallaxFgColor: '#FFFFFF'
   },
   {
@@ -75,12 +57,12 @@ const brandsData: Brand[] = [
     parallaxFgColor: '#FFFFFF'
   },
   {
-    id: 'cutop',
-    displayName: 'CUTOP',
-    description: 'Продукция бренда — профессиональная и промышленная оснастка для электроинструмента. Бренд использует самые передовые технологии производства и  предлагает готовые решения для работы с высокими нагрузками и сверхтвердыми материалами. Продукция CUTOP обеспечивает максимальную точность, увеличенный ресурс и безопасность при выполнении ответственных задач.',
-    logo: getAssetPath('logo/brands/Cutop-CMYK.svg'),
-    primaryColor: '#2A4998',
-    parallaxBgColor: '#2A4998',
+    id: 'mos',
+    displayName: 'MOS',
+    description: 'Бренд закрывает потребности бизнеса в удовлетворении спроса на продукцию в низком ценовом сегменте. MOS — разумный выбор для дома и мастерской. Доступные ручные инструменты и хозяйственные товары решают базовые задачи, сохраняя достойное качество без переплат.',
+    logo: getAssetPath('logo/brands/MOS-CMYK.svg'),
+    primaryColor: '#00AEEF',
+    parallaxBgColor: '#00AEEF',
     parallaxFgColor: '#FFFFFF'
   },
   {
@@ -90,6 +72,24 @@ const brandsData: Brand[] = [
     logo: getAssetPath('logo/brands/Master_Color_logo-1.svg'),
     primaryColor: '#0065A8',
     parallaxBgColor: '#0065A8',
+    parallaxFgColor: '#FFFFFF'
+  },
+  {
+    id: 'kypc',
+    displayName: 'КУРС',
+    description: 'Разработан для занятия ниши среднего ценового сегмента.КУРС — практичные решения для повседневных задач. Ручные инструменты, оснастка и хозяйственные товары сочетают доступность и надежность, помогая справляться с ремонтом и обслуживанием дома.',
+    logo: getAssetPath('logo/brands/Kurs-CMYK.svg'),
+    primaryColor: '#D81515',
+    parallaxBgColor: '#D81515',
+    parallaxFgColor: '#FFFFFF'
+  },
+  {
+    id: 'xbat',
+    displayName: 'ХВАТ',
+    description: 'Бренд с говорящим названием! ХВАТ - специализированный бренд, который фокусируется на узком сегменте рынка - крепёж и сопутствующие товары для бытового и профессионального применения. Прочные, устойчивые к нагрузкам и долговечные решения для надежной фиксации, крепления и энергоснабжения.',
+    logo: getAssetPath('logo/brands/Xbat-CMYK.svg'),
+    primaryColor: '#1A1A1A',
+    parallaxBgColor: '#1A1A1A',
     parallaxFgColor: '#FFFFFF'
   }
 ]

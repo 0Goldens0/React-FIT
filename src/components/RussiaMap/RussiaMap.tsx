@@ -227,11 +227,12 @@ const RussiaMap: React.FC = () => {
               return (
                 <div
                   key={center.id}
-                  className={`regional-center ${selectedRegion === center.region ? 'selected' : ''}`}
+                  className={`regional-center ${selectedRegion === center.region ? 'selected' : ''} ${shouldShowLabel ? 'label-visible' : ''}`}
                   style={{
                     left: `${percentX}%`,
                     top: `${percentY}%`,
-                    transform: 'translate(-50%, -50%)'
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: shouldShowLabel ? 101 : 100 /* Поднимаем активную метку наверх */
                   }}
                   onClick={() => handleCenterClick(center)}
                 >
