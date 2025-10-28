@@ -98,6 +98,9 @@ const Header = () => {
       scrollController.scrollToSection(sectionIndex, true)
     } else {
       // Для остальных секций используем стандартный scrollIntoView с центрированием
+      // И отключаем scrollController
+      scrollController.leaveControlledArea()
+      
       targetElement.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
@@ -146,6 +149,16 @@ const Header = () => {
             ))}
           </nav>
 
+          {/* Кнопка каталога для десктопа */}
+          <a 
+            href="https://fit24.ru/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="catalog-button"
+          >
+            Каталог
+          </a>
+
           {/* Кнопка мобильного меню */}
           <button 
             className="mobile-menu-toggle"
@@ -173,6 +186,17 @@ const Header = () => {
                 {item.label}
               </a>
             ))}
+            
+            {/* Кнопка каталога в мобильном меню */}
+            <a 
+              href="https://fit24.ru/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="catalog-button-mobile"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Каталог
+            </a>
           </nav>
         )}
       </div>

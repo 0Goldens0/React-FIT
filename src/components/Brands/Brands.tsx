@@ -97,46 +97,46 @@ const brandsData: Brand[] = [
 // Данные о продуктах брендов
 const brandProducts: BrandProductsMap = {
   fit: [
-    { name: "Дрель-Шуруповерт аккумуляторная", article: "79905", image: getAssetPath("img/fit/79905.png"), price: "3 828.00 ₽", category: "Электроинструмент" },
-    { name: "Перфоратор монтажный аккумуляторный", article: "79910", image: getAssetPath("img/fit/79910.png"), price: "11 880.00 ₽", category: "Электроинструмент" },
-    { name: "Шлифмашина угловая аккумуляторная", article: "79912", image: getAssetPath("img/fit/79912.png"), price: "6 220.00 ₽", category: "Электроинструмент" },
-    { name: "Пила дисковая циркулярная", article: "79920", image: getAssetPath("img/fit/79920.png"), price: "7 425.00 ₽", category: "Электроинструмент" }
+    { name: "Дрель-Шуруповерт аккумуляторная", article: "79905", image: getAssetPath("img/fit/79905.webp"), price: "3 828.00 ₽", category: "Электроинструмент" },
+    { name: "Перфоратор монтажный аккумуляторный", article: "79910", image: getAssetPath("img/fit/79910.webp"), price: "11 880.00 ₽", category: "Электроинструмент" },
+    { name: "Шлифмашина угловая аккумуляторная", article: "79912", image: getAssetPath("img/fit/79912.webp"), price: "6 220.00 ₽", category: "Электроинструмент" },
+    { name: "Пила дисковая циркулярная", article: "79920", image: getAssetPath("img/fit/79920.webp"), price: "7 425.00 ₽", category: "Электроинструмент" }
   ],
   kypc: [
-    { name: "Тачка строительная КУРС", article: "77607", image: getAssetPath("img/kurs/77607.png"), price: "3 590 ₽", category: "Садовый инструмент" },
-    { name: "Кисть ОПТИМА", article: "00811", image: getAssetPath("img/kurs/00811.png"), price: "2 790 ₽", category: "Отделочный инструмент" },
-    { name: "Гвоздодер с изолированной ручкоЙ КУРС", article: "46913", image: getAssetPath("img/kurs/46913.png"), price: "4 190 ₽", category: "Столярный инструмент" },
-    { name: "Киянка резиновая КУРС", article: "45390", image: getAssetPath("img/kurs/45390.png"), price: "3 290 ₽", category: "Столярный инструмент" }
+    { name: "Тачка строительная КУРС", article: "77607", image: getAssetPath("img/kurs/77607.webp"), price: "3 590 ₽", category: "Садовый инструмент" },
+    { name: "Кисть ОПТИМА", article: "00811", image: getAssetPath("img/kurs/00811.webp"), price: "2 790 ₽", category: "Отделочный инструмент" },
+    { name: "Гвоздодер с изолированной ручкоЙ КУРС", article: "46913", image: getAssetPath("img/kurs/46913.webp"), price: "4 190 ₽", category: "Столярный инструмент" },
+    { name: "Киянка резиновая КУРС", article: "45390", image: getAssetPath("img/kurs/45390.webp"), price: "3 290 ₽", category: "Столярный инструмент" }
   ],
   mos: [
-    { name: "КИСТЬ ФЛЕЙЦЕВАЯ MOS", article: "00701", image: getAssetPath("img/mos/00701.png"), price: "1 990 ₽", category: "Отделочный инструмент" },
-    { name: "РУЛЕТКА MOS ", article: "16983", image: getAssetPath("img/mos/16983.png"), price: "499 ₽", category: "Измерительный инструмент" },
-    { name: "ДИСК ОТРЕЗНОЙ АЛМАЗНЫЙ MOS", article: "37201", image: getAssetPath("img/mos/37201.png"), price: "690 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "КЛЮЧ РАЗВОДНОЙ MOS", article: "70091", image: getAssetPath("img/mos/70091.png"), price: "890 ₽", category: "Сантехнический инструмент" }
+    { name: "КИСТЬ ФЛЕЙЦЕВАЯ MOS", article: "00701", image: getAssetPath("img/mos/00701.webp"), price: "1 990 ₽", category: "Отделочный инструмент" },
+    { name: "РУЛЕТКА MOS ", article: "16983", image: getAssetPath("img/mos/16983.webp"), price: "499 ₽", category: "Измерительный инструмент" },
+    { name: "ДИСК ОТРЕЗНОЙ АЛМАЗНЫЙ MOS", article: "37201", image: getAssetPath("img/mos/37201.webp"), price: "690 ₽", category: "Абразивно-шлифовальный инструмент" },
+    { name: "КЛЮЧ РАЗВОДНОЙ MOS", article: "70091", image: getAssetPath("img/mos/70091.webp"), price: "890 ₽", category: "Сантехнический инструмент" }
   ],
   xbat: [
-    { name: "РЕМЕНЬ БАГАЖНЫЙ ХВАТ", article: "77-253", image: getAssetPath("img/xbat/77-253.png"), price: "149 ₽", category: "Инструмент автомобильный" },
-    { name: "НАБОР КРЕПЕЖА УНИВЕРСАЛЬНЫЙ ХВАТ", article: "20000", image: getAssetPath("img/xbat/20000.png"), price: "189 ₽", category: "Крепеж и крепежный инструмент" },
-    { name: "АНКЕРНЫЙ БОЛТ С ПОЛНЫМ КРЮКОМ ХВАТ", article: "26654", image: getAssetPath("img/xbat/26654.png"), price: "590 ₽", category: "Крепёж" },
-    { name: "ГЕНЕРАТОР ДИЗЕЛЬНЫЙ ХВАТ", article: "KM7500DE", image: getAssetPath("img/xbat/KM7500DE.png"), price: "249 ₽", category: "Генератор" }
+    { name: "РЕМЕНЬ БАГАЖНЫЙ ХВАТ", article: "77-253", image: getAssetPath("img/xbat/77-253.webp"), price: "149 ₽", category: "Инструмент автомобильный" },
+    { name: "НАБОР КРЕПЕЖА УНИВЕРСАЛЬНЫЙ ХВАТ", article: "20000", image: getAssetPath("img/xbat/20000.webp"), price: "189 ₽", category: "Крепеж и крепежный инструмент" },
+    { name: "АНКЕРНЫЙ БОЛТ С ПОЛНЫМ КРЮКОМ ХВАТ", article: "26654", image: getAssetPath("img/xbat/26654.webp"), price: "590 ₽", category: "Крепёж" },
+    { name: "ГЕНЕРАТОР ДИЗЕЛЬНЫЙ ХВАТ", article: "KM7500DE", image: getAssetPath("img/xbat/KM7500DE.webp"), price: "249 ₽", category: "Генератор" }
   ],
   greatflex: [
-    { name: "ДИСКИ АЛМАЗНЫЕ GREATFLEX light", article: "55-771", image: getAssetPath("img/gf/55-771.png"), price: "1 290 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "ДИСКИ АЛМАЗНЫЕ GREATFLEX light", article: "55-776", image: getAssetPath("img/gf/55-776.png"), price: "590 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "ПРОФЕССИОНАЛЬНЫЙ ШЛИФОВАЛЬНЫЙ АЛМАЗНЫЙ ДИСК «СЕГМЕНТИРОВАННЫЙ ТУРБО»", article: "55-781", image: getAssetPath("img/gf/55-781.png"), price: "290 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "КРУГ НАЖДАЧНЫЙ ЛЕПЕСТКОВЫЙ GREATFLEX light", article: "71-837", image: getAssetPath("img/gf/71-837.png"), price: "1 490 ₽", category: "Абразивно-шлифовальный инструмент" }
+    { name: "ДИСКИ АЛМАЗНЫЕ GREATFLEX light", article: "55-771", image: getAssetPath("img/gf/55-771.webp"), price: "1 290 ₽", category: "Абразивно-шлифовальный инструмент" },
+    { name: "ДИСКИ АЛМАЗНЫЕ GREATFLEX light", article: "55-776", image: getAssetPath("img/gf/55-776.webp"), price: "590 ₽", category: "Абразивно-шлифовальный инструмент" },
+    { name: "ПРОФЕССИОНАЛЬНЫЙ ШЛИФОВАЛЬНЫЙ АЛМАЗНЫЙ ДИСК «СЕГМЕНТИРОВАННЫЙ ТУРБО»", article: "55-781", image: getAssetPath("img/gf/55-781.webp"), price: "290 ₽", category: "Абразивно-шлифовальный инструмент" },
+    { name: "КРУГ НАЖДАЧНЫЙ ЛЕПЕСТКОВЫЙ GREATFLEX light", article: "71-837", image: getAssetPath("img/gf/71-837.webp"), price: "1 490 ₽", category: "Абразивно-шлифовальный инструмент" }
   ],
   cutop: [
-    { name: "ШУРУПОВЕРТ CUTOP e-profi", article: "01-884", image: getAssetPath("img/cutop/01-884.png"), price: "190 ₽", category: "Электроинструмент" },
-    { name: "РОФЕССИОНАЛЬНЫЙ ОТРЕЗНОЙ АЛМАЗНЫЙ ДИСК CUTOP", article: "73-419", image: getAssetPath("img/cutop/73-419-02 (2).png"), price: "210 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "КОРЩЕТКИ РУЧНЫЕ CUTOP profi", article: "82-547", image: getAssetPath("img/cutop/82-547.png"), price: "990 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "НАБОР БИТ В ПЛАСТИКОВОМ БОКСЕ CUTOP profi", article: "83-869", image: getAssetPath("img/cutop/83-869.png"), price: "1 590 ₽", category: "Слесарный инструмент" }
+    { name: "ШУРУПОВЕРТ CUTOP e-profi", article: "01-884", image: getAssetPath("img/cutop/01-884.webp"), price: "190 ₽", category: "Электроинструмент" },
+    { name: "РОФЕССИОНАЛЬНЫЙ ОТРЕЗНОЙ АЛМАЗНЫЙ ДИСК CUTOP", article: "73-419", image: getAssetPath("img/cutop/73-419-02 (2).webp"), price: "210 ₽", category: "Абразивно-шлифовальный инструмент" },
+    { name: "КОРЩЕТКИ РУЧНЫЕ CUTOP profi", article: "82-547", image: getAssetPath("img/cutop/82-547.webp"), price: "990 ₽", category: "Абразивно-шлифовальный инструмент" },
+    { name: "НАБОР БИТ В ПЛАСТИКОВОМ БОКСЕ CUTOP profi", article: "83-869", image: getAssetPath("img/cutop/83-869.webp"), price: "1 590 ₽", category: "Слесарный инструмент" }
   ],
   mastercolor: [
-    { name: "КИСТЬ ФЛЕЙЦЕВАЯ Master Color 25 мм", article: "30-0011", image: getAssetPath("img/mc/30-0011.png"), price: "250 ₽", category: "Отделочный инструмент" },
-    { name: "РОЛИК Master Color 180мм", article: "30-0844", image: getAssetPath("img/mc/30-0844.png"), price: "390 ₽", category: "Отделочный инструмент" },
-    { name: "МАЛЯРНАЯ ЛЕНТА Master Color", article: "30-6412", image: getAssetPath("img/mc/30-6412.png"), price: "290 ₽", category: "Отделочный инструмент" },
-    { name: "ПРОФЕССИОНАЛЬНАЯ РАБОЧАЯ ОДЕЖДА Master Color", article: "30-8042", image: getAssetPath("img/mc/30-8042.png"), price: "990 ₽", category: "Отделочный инструмент" }
+    { name: "КИСТЬ ФЛЕЙЦЕВАЯ Master Color 25 мм", article: "30-0011", image: getAssetPath("img/mc/30-0011.webp"), price: "250 ₽", category: "Отделочный инструмент" },
+    { name: "РОЛИК Master Color 180мм", article: "30-0844", image: getAssetPath("img/mc/30-0844.webp"), price: "390 ₽", category: "Отделочный инструмент" },
+    { name: "МАЛЯРНАЯ ЛЕНТА Master Color", article: "30-6412", image: getAssetPath("img/mc/30-6412.webp"), price: "290 ₽", category: "Отделочный инструмент" },
+    { name: "ПРОФЕССИОНАЛЬНАЯ РАБОЧАЯ ОДЕЖДА Master Color", article: "30-8042", image: getAssetPath("img/mc/30-8042.webp"), price: "990 ₽", category: "Отделочный инструмент" }
   ]
 };
 

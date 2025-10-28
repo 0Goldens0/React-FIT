@@ -1,0 +1,13 @@
+# Разрешить обработку PHP
+<Files "contact.php">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Включить обработку ошибок
+php_flag display_errors Off
+php_flag log_errors On
+
+# Установить временную зону (при необходимости)
+php_value date.timezone "Europe/Moscow"
+

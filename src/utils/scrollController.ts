@@ -183,24 +183,8 @@ export class ScrollController {
    * Обработка обычного скролла для отслеживания текущей секции
    */
   private handleScroll() {
-    // Проверяем, находимся ли мы в пределах контролируемых секций
-    const lastSection = this.sections[this.sections.length - 1];
-    if (lastSection && this.hasLeftControlledArea) {
-      const rect = lastSection.element.getBoundingClientRect();
-      const sectionTop = window.scrollY + rect.top;
-      const sectionHeight = rect.height;
-      const viewportTop = window.scrollY;
-      
-      // Сбрасываем флаг только когда ВЕРХ viewport зашёл как минимум на половину высоты Timeline
-      // Это предотвращает раннее включение контроллера, пока пользователь ещё в футере/ниже
-      if (viewportTop <= sectionTop + sectionHeight / 2) {
-        this.hasLeftControlledArea = false;
-        document.documentElement.classList.remove('smooth-scroll');
-        // Устанавливаем текущую секцию явно на Timeline (последнюю контролируемую)
-        this.currentSectionIndex = this.sections.length - 1;
-      }
-    }
-    
+    // Просто обновляем текущую секцию для правильной подсветки в навигации
+    // НЕ включаем контроллер автоматически при обычном скролле
     this.updateCurrentSection();
   }
 
@@ -283,17 +267,38 @@ export class ScrollController {
 
     const scrollDown = e.deltaY > 0;
     
+    // Если контроллер выключен, проверяем, находимся ли мы в пределах Timeline
+    if (this.hasLeftControlledArea) {
+      const lastSection = this.sections[this.sections.length - 1]; // Timeline
+      if (lastSection) {
+        const rect = lastSection.element.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        
+        // Проверяем, находится ли Timeline в видимой области
+        const timelineVisible = rect.top < viewportHeight && rect.bottom > 0;
+        const timelineVisibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+        const timelineVisibilityRatio = timelineVisibleHeight / viewportHeight;
+        
+        // Если Timeline занимает 50%+ экрана, включаем контроллер обратно
+        if (timelineVisible && timelineVisibilityRatio >= 0.5) {
+          this.hasLeftControlledArea = false;
+          document.documentElement.classList.remove('smooth-scroll');
+          this.currentSectionIndex = this.sections.length - 1;
+          // НЕ возвращаемся из функции — продолжаем обработку скролла
+        } else {
+          // Все еще вне Timeline, пропускаем событие
+          return;
+        }
+      } else {
+        return;
+      }
+    }
+    
     // Если мы на последней контролируемой секции (Timeline) и скроллим вниз
     // Устанавливаем флаг и разрешаем обычный браузерный скролл
     if (this.currentSectionIndex === this.sections.length - 1 && scrollDown) {
       this.hasLeftControlledArea = true;
       document.documentElement.classList.add('smooth-scroll');
-      return;
-    }
-    
-    // Если мы вышли за пределы контролируемой области, разрешаем обычный скролл
-    // handleScroll() автоматически сбросит флаг, когда мы вернемся в Timeline
-    if (this.hasLeftControlledArea) {
       return;
     }
     
@@ -641,6 +646,15 @@ export class ScrollController {
   }
 
   /**
+   * Принудительный выход из контролируемой области
+   * Используется при навигации к секциям ниже Timeline
+   */
+  public leaveControlledArea() {
+    this.hasLeftControlledArea = true;
+    document.documentElement.classList.add('smooth-scroll');
+  }
+
+  /**
    * Скролл к определенной секции
    */
   public scrollToSection(index: number, smooth: boolean = true) {
@@ -651,7 +665,10 @@ export class ScrollController {
 
     this.isScrolling = true;
     
-    // Сбрасываем флаг, так как возвращаемся в контролируемую область
+    // При навигации к контролируемой секции всегда возвращаем контроль
+    if (this.hasLeftControlledArea) {
+      document.documentElement.classList.remove('smooth-scroll');
+    }
     this.hasLeftControlledArea = false;
     
     // Проверяем, выходим ли мы из горизонтальной секции
