@@ -6,7 +6,10 @@
   "homepage": "https://0Goldens0.github.io/React-FIT",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && npm run copy-api",
+    "copy-api": "node scripts/copy-api.js",
+    "convert-images": "node scripts/convert-to-webp.js",
+    "cleanup-images": "node scripts/cleanup-originals.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "predeploy": "npm run build",
@@ -31,6 +34,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "gh-pages": "^6.1.1",
     "postcss": "^8.5.6",
+    "sharp": "^0.33.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   }
