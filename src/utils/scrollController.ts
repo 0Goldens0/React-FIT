@@ -28,6 +28,8 @@ export class ScrollController {
   private isEnabled: boolean = true; // Флаг активности контроллера
   private wheelThrottle: number = 0; // Throttle для wheel событий
   private wheelThrottleDelay: number = 50; // Задержка throttle в мс
+  private isMacOS: boolean = false; // Флаг для macOS
+  private deltaYThreshold: number = 10; // Порог для deltaY (игнорируем мелкие движения)
   private isMobileDevice: boolean = false; // Флаг мобильного устройства
   private resizeHandler: (() => void) | null = null; // Обработчик resize
   
@@ -56,6 +58,17 @@ export class ScrollController {
   public init(sectionIds: string[]) {
     // Проверяем, мобильное ли устройство
     this.isMobileDevice = this.checkMobileDevice();
+    
+    // Определяем macOS
+    this.isMacOS = /Mac|iPod|iPhone|iPad/.test(navigator.platform) || 
+                   /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+    
+    // Настраиваем параметры для macOS
+    if (this.isMacOS) {
+      this.scrollCooldown = 1000; // Увеличиваем cooldown для macOS
+      this.deltaYThreshold = 30; // Увеличиваем порог для фильтрации мелких движений
+      this.wheelThrottleDelay = 100; // Увеличиваем throttle
+    }
     
     // Регистрируем все секции
     this.sections = sectionIds
@@ -264,6 +277,11 @@ export class ScrollController {
       return;
     }
     this.wheelThrottle = now;
+
+    // Фильтрация мелких движений (особенно важно для macOS тачпада)
+    if (Math.abs(e.deltaY) < this.deltaYThreshold) {
+      return; // Игнорируем слишком мелкие движения
+    }
 
     const scrollDown = e.deltaY > 0;
     

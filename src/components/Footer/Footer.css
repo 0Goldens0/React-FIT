@@ -10,6 +10,10 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 40px;
   margin-bottom: 40px;
+  max-width: 1400px; /* Ограничиваем ширину */
+  margin-left: auto; /* Центрируем */
+  margin-right: auto; /* Центрируем */
+  padding: 0 40px; /* Отступы по бокам */
 }
 
 .footer-section {
