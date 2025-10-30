@@ -7,13 +7,14 @@ interface RegionalCenter {
   x: number;
   y: number;
   region: string;
+  isMainCenter?: boolean; // Основные региональные центры
 }
 
 // Координаты региональных центров взяты из оригинального SVG файла
 const regionalCenters: RegionalCenter[] = [
-  { id: "moskva", name: "Москва", x: 130, y: 259, region: "RU-MOW" },
-  { id: "spb", name: "Санкт-Петербург", x: 136, y: 182, region: "RU-SPE" },
-  { id: "arkhangelsk", name: "Архангельск", x: 220, y: 185, region: "RU-ARK" },
+  { id: "moskva", name: "Москва", x: 130, y: 259, region: "RU-MOW", isMainCenter: true },
+  { id: "spb", name: "Санкт-Петербург", x: 136, y: 182, region: "RU-SPE", isMainCenter: true },
+  { id: "arkhangelsk", name: "Архангельск", x: 220, y: 185, region: "RU-ARK", isMainCenter: true },
   { id: "kaliningrad", name: "Калининград", x: 37, y: 178, region: "RU-KGD" },
   { id: "pskov", name: "Псков", x: 100, y: 205, region: "RU-PSK" },
   { id: "velikiy_novgorod", name: "Великий Новгород", x: 127, y: 203, region: "RU-NGR" },
@@ -22,13 +23,13 @@ const regionalCenters: RegionalCenter[] = [
   { id: "naryan_mar", name: "Нарьян-Мар", x: 300, y: 190, region: "RU-NEN" },
   { id: "salekhard", name: "Салехард", x: 375, y: 250, region: "RU-YAN" },
   { id: "khanty_mansiysk", name: "Ханты-Мансийск", x: 343, y: 300, region: "RU-KHM" },
-  { id: "ekaterinburg", name: "Екатеринбург", x: 280, y: 350, region: "RU-SVE" },
+  { id: "ekaterinburg", name: "Екатеринбург", x: 280, y: 350, region: "RU-SVE", isMainCenter: true },
   { id: "perm", name: "Пермь", x: 260, y: 320, region: "RU-PER" },
   { id: "izhevsk", name: "Ижевск", x: 225, y: 320, region: "RU-UD" },
   { id: "yoshkar_ola", name: "Йошкар-Ола", x: 187, y: 295, region: "RU-ME" },
   { id: "cheboksary", name: "Чебоксары", x: 180, y: 310, region: "RU-CU" },
-  { id: "kazan", name: "Казань", x: 200, y: 320, region: "RU-TA" },
-  { id: "nizhniy_novgorod", name: "Нижний Новгород", x: 166, y: 295, region: "RU-NIZ" },
+  { id: "kazan", name: "Казань", x: 200, y: 320, region: "RU-TA", isMainCenter: true },
+  { id: "nizhniy_novgorod", name: "Нижний Новгород", x: 166, y: 295, region: "RU-NIZ", isMainCenter: true },
   { id: "kirov", name: "Киров", x: 223, y: 290, region: "RU-KIR" },
   { id: "kostroma", name: "Кострома", x: 168, y: 263, region: "RU-KOS" },
   { id: "yaroslavl", name: "Ярославль", x: 152, y: 253, region: "RU-YAR" },
@@ -41,7 +42,7 @@ const regionalCenters: RegionalCenter[] = [
   { id: "orel", name: "Орёл", x: 95, y: 285, region: "RU-ORL" },
   { id: "kursk", name: "Курск", x: 80, y: 290, region: "RU-KRS" },
   { id: "belgorod", name: "Белгород", x: 80, y: 305, region: "RU-BEL" },
-  { id: "voronezh", name: "Воронеж", x: 100, y: 310, region: "RU-VOR" },
+  { id: "voronezh", name: "Воронеж", x: 100, y: 310, region: "RU-VOR", isMainCenter: true },
   { id: "lipetsk", name: "Липецк", x: 111, y: 300, region: "RU-LIP" },
   { id: "tambov", name: "Тамбов", x: 121, y: 311, region: "RU-TAM" },
   { id: "penza", name: "Пенза", x: 145, y: 320, region: "RU-PNZ" },
@@ -52,12 +53,12 @@ const regionalCenters: RegionalCenter[] = [
   { id: "volgograd", name: "Волгоград", x: 113, y: 362, region: "RU-VGG" },
   { id: "astrakhan", name: "Астрахань", x: 113, y: 410, region: "RU-AST" },
   { id: "elista", name: "Элиста", x: 90, y: 389, region: "RU-KL" },
-  { id: "rostov_na_donu", name: "Ростов-на-Дону", x: 65, y: 352, region: "RU-ROS" },
-  { id: "krasnodar", name: "Краснодар", x: 46, y: 370, region: "RU-KDA" },
+  { id: "rostov_na_donu", name: "Ростов-на-Дону", x: 65, y: 352, region: "RU-ROS", isMainCenter: true },
+  { id: "krasnodar", name: "Краснодар", x: 46, y: 370, region: "RU-KDA", isMainCenter: true },
   { id: "maykop", name: "Майкоп", x: 46, y: 381, region: "RU-AD" },
   { id: "cherkessk", name: "Черкесск", x: 50, y: 395, region: "RU-KC" },
   { id: "stavropol", name: "Ставрополь", x: 65, y: 395, region: "RU-STA" },
-  { id: "pyatigorsk", name: "Пятигорск", x: 60, y: 410, region: "RU-KB" },
+  { id: "pyatigorsk", name: "Пятигорск", x: 60, y: 410, region: "RU-KB", isMainCenter: true },
   { id: "vladikavkaz", name: "Владикавказ", x: 65, y: 420, region: "RU-SE" },
   { id: "nazran", name: "Назрань", x: 70, y: 425, region: "RU-IN" },
   { id: "grozny", name: "Грозный", x: 75, y: 425, region: "RU-CE" },
@@ -99,6 +100,7 @@ const RussiaMap: React.FC = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [hoveredCity, setHoveredCity] = useState<string | null>(null);
   const [svgContent, setSvgContent] = useState<string>('');
   const svgRef = useRef<HTMLDivElement>(null);
 
@@ -188,13 +190,14 @@ const RussiaMap: React.FC = () => {
   };
 
   return (
-    <div className="russia-map-container" id="map">
-      <div className="map-header">
-        <h2>Интерактивная карта России</h2>
-        <p>85 регионов с региональными центрами</p>
-      </div>
+    <section className="russia-map-section" id="map">
+      <div className="russia-map-container">
+        <div className="map-header">
+          <h2>Интерактивная карта России</h2>
+          <p>85 регионов с региональными центрами</p>
+        </div>
 
-      <div className="map-wrapper">
+        <div className="map-wrapper">
         <div 
           ref={svgRef}
           className="svg-container"
@@ -206,7 +209,9 @@ const RussiaMap: React.FC = () => {
             {regionalCenters.map(center => {
               const isHovered = hoveredRegion === center.region;
               const isSelected = selectedCity === center.id;
-              const shouldShowLabel = isHovered || isSelected;
+              const isCityHovered = hoveredCity === center.id;
+              const isMainCenter = center.isMainCenter || false;
+              const shouldShowLabel = isHovered || isSelected || isCityHovered;
               
               // Определяем позицию метки относительно краев
               const percentX = (center.x / 1000) * 100;
@@ -227,7 +232,7 @@ const RussiaMap: React.FC = () => {
               return (
               <div
                 key={center.id}
-                  className={`regional-center ${selectedRegion === center.region ? 'selected' : ''} ${shouldShowLabel ? 'label-visible' : ''}`}
+                  className={`regional-center ${selectedRegion === center.region ? 'selected' : ''} ${shouldShowLabel ? 'label-visible' : ''} ${isMainCenter ? 'main-center' : ''}`}
                 style={{
                     left: `${percentX}%`,
                     top: `${percentY}%`,
@@ -235,6 +240,8 @@ const RussiaMap: React.FC = () => {
                     zIndex: shouldShowLabel ? 101 : 100 /* Поднимаем активную метку наверх */
                 }}
                 onClick={() => handleCenterClick(center)}
+                onMouseEnter={() => setHoveredCity(center.id)}
+                onMouseLeave={() => setHoveredCity(null)}
               >
                 <div className="center-dot" />
                   {shouldShowLabel && (
@@ -247,8 +254,9 @@ const RussiaMap: React.FC = () => {
             })}
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

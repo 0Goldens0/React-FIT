@@ -352,17 +352,17 @@ const Brands = () => {
                       className="journey-product-card product-card-slider-item"
                       style={{ width: `${cardWidth}px`, minWidth: `${cardWidth}px` }}
                     >
-                      <div className="journey-product-card-image-container">
-                        <img src={product.image} alt={product.name} />
-                      </div>
-                      <div className="product-info-container">
-                        <div className="product-category">{product.category}</div>
-                        <h4 className="product-name" style={{ textTransform: 'none' }}>{product.name}</h4>
-                        <div className="product-article">Артикул: {product.article}</div>
-                        <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>Подробнее</button>
-                      </div>
-                    </div>
-                  ))}
+                  <div className="journey-product-card-image-container">
+                    <img src={product.image} alt={product.name} />
+                  </div>
+                  <div className="product-info-container">
+                    <div className="product-category">{product.category}</div>
+                    <h4 className="product-name" style={{ textTransform: 'none' }}>{product.name}</h4>
+                    <div className="product-article">Артикул: {product.article}</div>
+                    <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>Подробнее</button>
+                  </div>
+                </div>
+              ))}
                 </div>
               ) : (
                 /* Обычное отображение на десктопе */
