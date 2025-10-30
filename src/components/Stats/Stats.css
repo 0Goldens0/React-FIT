@@ -46,6 +46,14 @@
     animation: neon-pulse 3s ease-in-out infinite;
 }
 
+/* Стили для ссылок-карточек */
+a.stat-item {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
 .stat-item::before {
     content: '';
     position: absolute;

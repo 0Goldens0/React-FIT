@@ -468,7 +468,7 @@ const Timeline = memo(() => {
 
   useEffect(() => {
     if (isAutoPlay) {
-      startAnimation()
+    startAnimation()
     }
 
     return () => {
@@ -675,8 +675,8 @@ const Timeline = memo(() => {
         }}
         onMouseLeave={() => {
           if (isAutoPlay) {
-            lastTimeRef.current = 0
-            startAnimation()
+          lastTimeRef.current = 0
+          startAnimation()
           }
         }}
       >
@@ -698,9 +698,9 @@ const Timeline = memo(() => {
             </div>
           ))}
         </div>
-      </div>
-      
-      <div className="timeline-controls">
+        </div>
+        
+        <div className="timeline-controls">
         <button 
           className="timeline-control prev" 
           onClick={movePrev}

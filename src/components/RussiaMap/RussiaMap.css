@@ -1,13 +1,20 @@
-.russia-map-container {
+/* Секция с фоном на всю ширину */
+.russia-map-section {
   background: #171719;
-  padding: 40px 20px;
   min-height: 100vh;
+  width: 100%;
+  padding: 40px 0;
+}
+
+/* Контейнер с ограничением ширины */
+.russia-map-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Inter', 'Roboto', sans-serif;
-  max-width: 95vw; /* Карта может быть шире, но не должна касаться краев */
-  margin: 0 auto; /* Центрируем */
   width: 100%;
 }
 
@@ -75,8 +82,9 @@
 
 .map-wrapper {
   position: relative;
-  width: 100%;
-  max-width: 90vw; /* Карта может быть шире, адаптивно */
+  width: 80%; /* 80% от ширины контейнера */
+  max-width: 1120px; /* 80% от 1400px */
+  margin: 0 auto;
   background: #171719;
   border-radius: 20px;
   overflow: hidden;
@@ -146,6 +154,19 @@
   box-shadow: 0 4px 15px rgba(231, 76, 60, 0.6);
 }
 
+/* Основные региональные центры - жёлтые точки */
+.regional-center.main-center .center-dot {
+  background: #FFB800;
+  border-color: #FFFFFF;
+  box-shadow: 0 2px 12px rgba(255, 184, 0, 0.6);
+  width: 12px;
+  height: 12px;
+}
+
+.regional-center.main-center .center-dot:hover {
+  box-shadow: 0 4px 20px rgba(255, 184, 0, 0.8);
+}
+
 .regional-center.selected .center-dot {
   background: #FFB800;
   border-color: #171719;
@@ -168,6 +189,16 @@
   opacity: 1; /* Убираем прозрачность */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   z-index: 2; /* Подсказка - НАД точкой */
+}
+
+/* Надписи основных центров - жёлтая рамка */
+.regional-center.main-center .center-label {
+  border: 2px solid #FFB800;
+  font-weight: 600;
+  padding: 5px 10px;
+  font-size: 12px;
+  background: linear-gradient(135deg, rgba(23, 23, 25, 0.95) 0%, rgba(45, 45, 48, 0.95) 100%);
+  box-shadow: 0 4px 20px rgba(255, 184, 0, 0.4);
 }
 
 /* Единственное позиционирование для всех подсказок, чтобы они скрывали точку */
@@ -211,17 +242,21 @@
 
 /* Responsive design */
 
-/* Большие экраны - карта должна быть широкой */
+/* Большие экраны - карта 80% от контейнера */
 @media (min-width: 1400px) {
   .map-wrapper {
-    max-width: 1800px; /* Широкая карта на больших экранах */
+    width: 80%;
+    max-width: 1120px; /* 80% от 1400px */
   }
 }
 
 @media (max-width: 1200px) {
+  .russia-map-section {
+    padding: 35px 0;
+  }
+  
   .russia-map-container {
-    padding: 35px 18px;
-    min-height: 100%;
+    padding: 0 18px;
   }
 
   .map-header h2 {
@@ -239,19 +274,28 @@
   }
 
   .map-wrapper {
-    max-width: 90vw; /* Адаптивно на средних экранах */
+    width: 90%; /* Чуть шире на средних экранах */
+    max-width: 100%;
   }
 
   .center-label {
     font-size: 10.5px;
     padding: 3.5px 7.5px;
   }
+  
+  .regional-center.main-center .center-label {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
 }
 
 @media (max-width: 768px) {
+  .russia-map-section {
+    padding: 20px 0;
+  }
+  
   .russia-map-container {
-    padding: 20px 10px;
-    
+    padding: 0 10px;
   }
   
   .map-header h2 {
@@ -277,9 +321,19 @@
     padding: 3px 6px;
   }
   
+  .regional-center.main-center .center-label {
+    font-size: 10px;
+    padding: 3.5px 7px;
+  }
+  
   .center-dot {
     width: 8px;
     height: 8px;
+  }
+  
+  .regional-center.main-center .center-dot {
+    width: 10px;
+    height: 10px;
   }
   
   .region-info {
@@ -308,9 +362,19 @@
     height: 6px;
   }
   
+  .regional-center.main-center .center-dot {
+    width: 8px;
+    height: 8px;
+  }
+  
   .center-label {
     font-size: 8px;
     padding: 2px 4px;
+  }
+  
+  .regional-center.main-center .center-label {
+    font-size: 9px;
+    padding: 3px 5px;
   }
 }
 
@@ -469,7 +533,7 @@
   }
 }
 
-.russia-map-container {
+.russia-map-section {
   animation: mapFadeIn 1s ease-out;
 }
 

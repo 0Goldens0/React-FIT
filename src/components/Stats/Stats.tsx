@@ -28,6 +28,7 @@ const Stats = () => {
 
   const animateCounter = (element: HTMLElement) => {
     const target = parseInt(element.getAttribute('data-count') || '0')
+    const suffix = element.getAttribute('data-suffix') || ''
     const duration = 2000
     const start = 0
     const startTime = performance.now()
@@ -39,12 +40,12 @@ const Stats = () => {
       const easeOutQuart = 1 - Math.pow(1 - progress, 4)
       const current = Math.floor(start + (target - start) * easeOutQuart)
       
-      element.textContent = current.toString()
+      element.textContent = current.toString() + suffix
       
       if (progress < 1) {
         requestAnimationFrame(updateCounter)
       } else {
-        element.textContent = target.toString()
+        element.textContent = target.toString() + suffix
       }
     }
 
@@ -56,20 +57,20 @@ const Stats = () => {
       <div className="stats-bg"></div>
       <div className="container">
         <div className="stats-grid">
-          <div className="stat-item animate fadeInUp delay-1">
+          <a href="https://fit24.ru/catalog/" target="_blank" rel="noopener noreferrer" className="stat-item animate fadeInUp delay-1">
             <div className="stat-number" data-count="12000">0</div>
             <div className="stat-label">позиций в каталоге</div>
-          </div>
-          <div className="stat-item animate fadeInUp delay-2">
+          </a>
+          <a href="#map" className="stat-item animate fadeInUp delay-2">
             <div className="stat-number" data-count="10">0</div>
             <div className="stat-label">филиалов по всей России</div>
-          </div>
+          </a>
           <div className="stat-item animate fadeInUp delay-3">
-            <div className="stat-number" data-count="1000">0</div>
+            <div className="stat-number" data-count="1000" data-suffix="+">0</div>
             <div className="stat-label">сотрудников в штате</div>
           </div>
           <div className="stat-item animate fadeInUp delay-4">
-            <div className="stat-number" data-count="40">0</div>
+            <div className="stat-number" data-count="60" data-suffix="+">0</div>
             <div className="stat-label">единиц собственного транспорта</div>
           </div>
         </div>

@@ -151,31 +151,8 @@ const Services = () => {
               </div>
             </div>
 
-            {/* Логистика */}
-            <div className="service-3d-card animate fadeInUp delay-4">
-              <div className="service-card-inner">
-                <div className="service-card-front">
-                  <div className="service-card-shine"></div>
-                  <div className="service-icon">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="1" y="3" width="15" height="13"></rect>
-                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                      <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                      <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                    </svg>
-                  </div>
-                  <h3 className="service-title">Логистика</h3>
-                  <p className="service-description">Бесплатная и своевременная доставка</p>
-                </div>
-                <div className="service-card-back">
-                  <h3 className="service-title">Логистика</h3>
-                  <p className="service-description">Собственная доставка позволяет бесплатно на регулярной основе и в кратчайшие сроки доставлять товар до клиента. Мы гарантируем надежность и своевременность всех поставок благодаря собственному автопарку.</p>
-                </div>
-              </div>
-            </div>
-
             {/* Рекламные предложения */}
-            <div className="service-3d-card animate fadeInUp delay-5">
+            <div className="service-3d-card animate fadeInUp delay-4">
               <div className="service-card-inner">
                 <div className="service-card-front">
                   <div className="service-card-shine"></div>
@@ -195,7 +172,7 @@ const Services = () => {
             </div>
 
             {/* Промоакции */}
-            <div className="service-3d-card animate fadeInUp delay-6">
+            <div className="service-3d-card animate fadeInUp delay-5">
               <div className="service-card-inner">
                 <div className="service-card-front">
                   <div className="service-card-shine"></div>
@@ -211,6 +188,29 @@ const Services = () => {
                 <div className="service-card-back">
                   <h3 className="service-title">Промоакции</h3>
                   <p className="service-description">Компания FIT организует промоакции в ваших торговых точках. FIT берет на себя все этапы подготовки: от разработки сценария до полного сопровождения мероприятия. Выгоды: рост продаж, привлечение клиентов, лояльность покупателей.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Логистика */}
+            <div className="service-3d-card animate fadeInUp delay-6">
+              <div className="service-card-inner">
+                <div className="service-card-front">
+                  <div className="service-card-shine"></div>
+                  <div className="service-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="1" y="3" width="15" height="13"></rect>
+                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                      <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                      <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                    </svg>
+                  </div>
+                  <h3 className="service-title">Логистика</h3>
+                  <p className="service-description">Бесплатная и своевременная доставка</p>
+                </div>
+                <div className="service-card-back">
+                  <h3 className="service-title">Логистика</h3>
+                  <p className="service-description">Собственная доставка позволяет бесплатно на регулярной основе и в кратчайшие сроки доставлять товар до клиента. Мы гарантируем надежность и своевременность всех поставок благодаря собственному автопарку.</p>
                 </div>
               </div>
             </div>
@@ -273,68 +273,224 @@ const Services = () => {
             {/* Первый набор логотипов */}
             <div className="partners-logo-group">
               <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/21vek (1).svg")} alt="21 Век" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/AQUALINE-Photoroom.svg")} alt="Aqualine" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Бауцентр-Photoroom.svg")} alt="Бауцентр" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Бигам-Photoroom.svg")} alt="Бигам" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/В2B-Photoroom.svg")} alt="B2B" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Вимос-Photoroom.svg")} alt="Вимос" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Вираж.svg")} alt="Вираж" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/ВсеИнструменты.svg")} alt="Все Инструменты" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Гарвин Инструмент.svg")} alt="Гарвин Инструмент" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Главторг24-Photoroom.svg")} alt="Главторг24" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Добрострой.svg")} alt="Добрострой" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Комус-Photoroom.svg")} alt="Комус" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Кувалдару-Photoroom.svg")} alt="Кувалда.ру" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/лемана про.svg")} alt="Лемана Про" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Материк-Photoroom.svg")} alt="Материк" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Мегаполис.svg")} alt="Мегаполис" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Метизы (1).svg")} alt="Метизы" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/обойкин-Photoroom.svg")} alt="Обойкин" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Петович.svg")} alt="Петович" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Промметиз.svg")} alt="Промметиз" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Русский свет (1).svg")} alt="Русский Свет" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/строительный двор.svg")} alt="Строительный Двор" />
+              </div>
+              <div className="partner-logo-item">
                 <img src={getAssetPath("logo/partners/Технониколь.svg")} alt="Технониколь" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/строительный двор.svg")} alt="Строительный двор" />
+                <img src={getAssetPath("logo/partners/ТермоМакс.svg")} alt="ТермоМакс" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/ИнфраКом.svg")} alt="ИнфраКом" />
+                <img src={getAssetPath("logo/partners/citilink-logo.svg")} alt="Ситилинк" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/Все инструменты.ру.svg")} alt="Все инструменты.ру" />
+                <img src={getAssetPath("logo/partners/dns-logo.svg")} alt="DNS" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/вш ремстройснаб.svg")} alt="ВШ Ремстройснаб" />
+                <img src={getAssetPath("logo/partners/etm.svg")} alt="ЭТМ" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/Саморезик.svg")} alt="Саморезик" />
+                <img src={getAssetPath("logo/partners/exist.svg")} alt="Exist" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/Русский свет.svg")} alt="Русский свет" />
+                <img src={getAssetPath("logo/partners/kubaninstrument.svg")} alt="Кубань Инструмент" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/ozon png.svg")} alt="Ozon" />
+                <img src={getAssetPath("logo/partners/maxidom.svg")} alt="Максидом" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/ЭТМ.svg")} alt="ЭТМ" />
+                <img src={getAssetPath("logo/partners/mvideo-logo.svg")} alt="М.Видео" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/autodoc.svg")} alt="Autodoc" />
+                <img src={getAssetPath("logo/partners/OMA.svg")} alt="OMA" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/RDS.svg")} alt="RDS" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/severstal-logo-rus.svg")} alt="Северсталь" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Som.svg")} alt="SOM" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/tddomovoy.svg")} alt="ТД Домовой" />
               </div>
             </div>
             
             {/* Дублирующий набор для непрерывного движения */}
             <div className="partners-logo-group">
               <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/21vek (1).svg")} alt="21 Век" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/AQUALINE-Photoroom.svg")} alt="Aqualine" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Бауцентр-Photoroom.svg")} alt="Бауцентр" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Бигам-Photoroom.svg")} alt="Бигам" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/В2B-Photoroom.svg")} alt="B2B" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Вимос-Photoroom.svg")} alt="Вимос" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Вираж.svg")} alt="Вираж" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/ВсеИнструменты.svg")} alt="Все Инструменты" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Гарвин Инструмент.svg")} alt="Гарвин Инструмент" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Главторг24-Photoroom.svg")} alt="Главторг24" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Добрострой.svg")} alt="Добрострой" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Комус-Photoroom.svg")} alt="Комус" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Кувалдару-Photoroom.svg")} alt="Кувалда.ру" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/лемана про.svg")} alt="Лемана Про" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Материк-Photoroom.svg")} alt="Материк" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Мегаполис.svg")} alt="Мегаполис" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Метизы (1).svg")} alt="Метизы" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/обойкин-Photoroom.svg")} alt="Обойкин" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Петович.svg")} alt="Петович" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Промметиз.svg")} alt="Промметиз" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Русский свет (1).svg")} alt="Русский Свет" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/строительный двор.svg")} alt="Строительный Двор" />
+              </div>
+              <div className="partner-logo-item">
                 <img src={getAssetPath("logo/partners/Технониколь.svg")} alt="Технониколь" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/строительный двор.svg")} alt="Строительный двор" />
+                <img src={getAssetPath("logo/partners/ТермоМакс.svg")} alt="ТермоМакс" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/ИнфраКом.svg")} alt="ИнфраКом" />
+                <img src={getAssetPath("logo/partners/citilink-logo.svg")} alt="Ситилинк" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/Все инструменты.ру.svg")} alt="Все инструменты.ру" />
+                <img src={getAssetPath("logo/partners/dns-logo.svg")} alt="DNS" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/вш ремстройснаб.svg")} alt="ВШ Ремстройснаб" />
+                <img src={getAssetPath("logo/partners/etm.svg")} alt="ЭТМ" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/Саморезик.svg")} alt="Саморезик" />
+                <img src={getAssetPath("logo/partners/exist.svg")} alt="Exist" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/Русский свет.svg")} alt="Русский свет" />
+                <img src={getAssetPath("logo/partners/kubaninstrument.svg")} alt="Кубань Инструмент" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/ozon png.svg")} alt="Ozon" />
+                <img src={getAssetPath("logo/partners/maxidom.svg")} alt="Максидом" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/ЭТМ.svg")} alt="ЭТМ" />
+                <img src={getAssetPath("logo/partners/mvideo-logo.svg")} alt="М.Видео" />
               </div>
               <div className="partner-logo-item">
-                <img src={getAssetPath("logo/partners/autodoc.svg")} alt="Autodoc" />
+                <img src={getAssetPath("logo/partners/OMA.svg")} alt="OMA" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/RDS.svg")} alt="RDS" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/severstal-logo-rus.svg")} alt="Северсталь" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/Som.svg")} alt="SOM" />
+              </div>
+              <div className="partner-logo-item">
+                <img src={getAssetPath("logo/partners/tddomovoy.svg")} alt="ТД Домовой" />
               </div>
             </div>
           </div>
