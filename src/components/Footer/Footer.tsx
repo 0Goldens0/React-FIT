@@ -70,7 +70,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
+        
         <div className="footer-bottom">
           <p>&copy; 2025 FIT. Все права защищены.</p>
         </div>

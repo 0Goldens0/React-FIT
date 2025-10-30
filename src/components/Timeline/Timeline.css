@@ -24,8 +24,9 @@
 }
 
 .timeline-section .container {
-    max-width: 100%;
-    padding: 0 15px;
+    max-width: 1400px; /* Ограничиваем ширину */
+    margin: 0 auto; /* Центрируем */
+    padding: 0 40px;
 }
 
 .timeline-section .section-title {
@@ -493,10 +494,30 @@
 
 /* ========== RESPONSIVE DESIGN - TIMELINE ========== */
 
+/* Большие экраны */
+@media (max-width: 1600px) {
+    .timeline-section .container {
+        max-width: 1300px;
+        padding: 0 30px;
+    }
+    
+    .timeline-section .section-title h2 {
+        font-size: 2.8rem;
+    }
+    
+    .timeline-section .section-title p {
+        font-size: 1.1rem;
+    }
+}
+
 /* Средние экраны - оптимизация для 100vh */
 @media (max-width: 1399px) {
     .timeline-section {
         padding: 80px 0 40px;
+    }
+    
+    .timeline-section .container {
+        max-width: 1200px;
     }
     
     .timeline-section .section-title {

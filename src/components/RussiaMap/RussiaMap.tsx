@@ -154,7 +154,7 @@ const RussiaMap: React.FC = () => {
           // Добавляем обработчики событий
           const handleClick = () => {
             if (center) {
-              setSelectedRegion(regionCode === selectedRegion ? null : regionCode);
+            setSelectedRegion(regionCode === selectedRegion ? null : regionCode);
               setSelectedCity(selectedCity === center.id ? null : center.id);
             }
           };
@@ -225,24 +225,24 @@ const RussiaMap: React.FC = () => {
               }
               
               return (
-                <div
-                  key={center.id}
+              <div
+                key={center.id}
                   className={`regional-center ${selectedRegion === center.region ? 'selected' : ''} ${shouldShowLabel ? 'label-visible' : ''}`}
-                  style={{
+                style={{
                     left: `${percentX}%`,
                     top: `${percentY}%`,
                     transform: 'translate(-50%, -50%)',
                     zIndex: shouldShowLabel ? 101 : 100 /* Поднимаем активную метку наверх */
-                  }}
-                  onClick={() => handleCenterClick(center)}
-                >
-                  <div className="center-dot" />
+                }}
+                onClick={() => handleCenterClick(center)}
+              >
+                <div className="center-dot" />
                   {shouldShowLabel && (
                     <div className={`center-label ${labelPositionClass}`}>
-                      {center.name}
-                    </div>
-                  )}
-                </div>
+                    {center.name}
+                  </div>
+                )}
+              </div>
               );
             })}
           </div>

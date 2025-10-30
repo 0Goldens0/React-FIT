@@ -3,6 +3,14 @@ import { motion } from 'framer-motion'
 import { Mail, Phone, Send, User, Building, MapPin, MessageSquare, Sparkles } from 'lucide-react'
 import './Contact.css'
 
+interface FormErrors {
+  name?: string
+  email?: string
+  company?: string
+  message?: string
+  privacy?: string
+}
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -11,21 +19,111 @@ const Contact = () => {
     message: ''
   })
 
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false)
 
+  // Функция валидации отдельного поля
+  const validateField = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) {
+          return 'Имя обязательно для заполнения'
+        }
+        if (value.trim().length < 2) {
+          return 'Имя должно содержать минимум 2 символа'
+        }
+        if (value.trim().length > 50) {
+          return 'Имя не может быть длиннее 50 символов'
+        }
+        if (!/^[а-яА-ЯёЁa-zA-Z\s-]+$/.test(value)) {
+          return 'Имя может содержать только буквы, пробелы и дефисы'
+        }
+        break
+      
+      case 'email':
+        if (!value.trim()) {
+          return 'Email обязателен для заполнения'
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(value)) {
+          return 'Введите корректный email адрес'
+        }
+        break
+      
+      case 'message':
+        if (!value.trim()) {
+          return 'Сообщение обязательно для заполнения'
+        }
+        if (value.trim().length < 10) {
+          return 'Сообщение должно содержать минимум 10 символов'
+        }
+        if (value.trim().length > 1000) {
+          return 'Сообщение не может быть длиннее 1000 символов'
+        }
+        break
+      
+      default:
+        return undefined
+    }
+    return undefined
+  }
+
+  // Валидация всей формы
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {}
+    
+    newErrors.name = validateField('name', formData.name)
+    newErrors.email = validateField('email', formData.email)
+    newErrors.message = validateField('message', formData.message)
+    
+    if (!isPrivacyAccepted) {
+      newErrors.privacy = 'Необходимо согласие на обработку персональных данных'
+    }
+    
+    setErrors(newErrors)
+    
+    // Возвращаем true если нет ошибок
+    return !Object.values(newErrors).some(error => error !== undefined)
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+    
+    // Валидация при изменении, если поле уже было "тронуто"
+    if (touched[name]) {
+      const error = validateField(name, value)
+      setErrors(prev => ({ ...prev, [name]: error }))
+    }
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setTouched(prev => ({ ...prev, [name]: true }))
+    
+    // Валидация при потере фокуса
+    const error = validateField(name, value)
+    setErrors(prev => ({ ...prev, [name]: error }))
+    setFocusedField(null)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!isPrivacyAccepted) {
-      return
+    // Отмечаем все поля как "тронутые"
+    setTouched({
+      name: true,
+      email: true,
+      message: true
+    })
+    
+    // Валидация формы
+    if (!validateForm()) {
+      return // Останавливаем отправку если есть ошибки
     }
     
     setIsSubmitting(true)
@@ -41,6 +139,8 @@ const Contact = () => {
       setFormData({ name: '', email: '', company: '', message: '' })
       setIsSubmitted(false)
       setIsPrivacyAccepted(false)
+      setErrors({})
+      setTouched({})
     }, 4000)
   }
 
@@ -183,40 +283,44 @@ const Contact = () => {
               ) : (
                 <form onSubmit={handleSubmit} className="modern-form">
                   <div className="form-row">
-                    <div className="floating-input-group">
+                    <div className={`floating-input-group ${errors.name && touched.name ? 'error' : ''}`}>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         onFocus={() => setFocusedField('name')}
-                        onBlur={() => setFocusedField(null)}
-                        required
+                        onBlur={handleBlur}
                         className={focusedField === 'name' || formData.name ? 'focused' : ''}
                       />
                       <label>
                         <User size={18} />
-                        Ваше имя
+                        Ваше имя *
                       </label>
                       <div className="input-border"></div>
+                      {errors.name && touched.name && (
+                        <span className="error-message">{errors.name}</span>
+                      )}
                     </div>
 
-                    <div className="floating-input-group">
+                    <div className={`floating-input-group ${errors.email && touched.email ? 'error' : ''}`}>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                         onFocus={() => setFocusedField('email')}
-                        onBlur={() => setFocusedField(null)}
-                        required
+                        onBlur={handleBlur}
                         className={focusedField === 'email' || formData.email ? 'focused' : ''}
                       />
                       <label>
                         <Mail size={18} />
-                        Email адрес
+                        Email адрес *
                       </label>
                       <div className="input-border"></div>
+                      {errors.email && touched.email && (
+                        <span className="error-message">{errors.email}</span>
+                      )}
                     </div>
                   </div>
 
@@ -237,30 +341,37 @@ const Contact = () => {
                     <div className="input-border"></div>
                   </div>
 
-                  <div className="floating-input-group">
+                  <div className={`floating-input-group ${errors.message && touched.message ? 'error' : ''}`}>
                     <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       onFocus={() => setFocusedField('message')}
-                      onBlur={() => setFocusedField(null)}
-                      required
+                      onBlur={handleBlur}
                       rows={4}
                       className={focusedField === 'message' || formData.message ? 'focused' : ''}
                     />
                     <label>
                       <MessageSquare size={18} />
-                      Ваше сообщение
+                      Ваше сообщение *
                     </label>
                     <div className="input-border"></div>
+                    {errors.message && touched.message && (
+                      <span className="error-message">{errors.message}</span>
+                    )}
                   </div>
 
-                  <div className="privacy-consent">
+                  <div className={`privacy-consent ${errors.privacy ? 'error' : ''}`}>
                     <label className="privacy-checkbox-label">
                       <input
                         type="checkbox"
                         checked={isPrivacyAccepted}
-                        onChange={(e) => setIsPrivacyAccepted(e.target.checked)}
+                        onChange={(e) => {
+                          setIsPrivacyAccepted(e.target.checked)
+                          if (e.target.checked) {
+                            setErrors(prev => ({ ...prev, privacy: undefined }))
+                          }
+                        }}
                         className="privacy-checkbox"
                       />
                       <span className="checkbox-custom"></span>
@@ -275,14 +386,17 @@ const Contact = () => {
                         </button>
                       </span>
                     </label>
+                    {errors.privacy && (
+                      <span className="error-message">{errors.privacy}</span>
+                    )}
                   </div>
 
                   <motion.button 
                     type="submit" 
                     className="submit-modern-btn"
-                    disabled={isSubmitting || !isPrivacyAccepted}
-                    whileHover={{ scale: isPrivacyAccepted ? 1.02 : 1 }}
-                    whileTap={{ scale: isPrivacyAccepted ? 0.98 : 1 }}
+                    disabled={isSubmitting}
+                    whileHover={{ scale: !isSubmitting ? 1.02 : 1 }}
+                    whileTap={{ scale: !isSubmitting ? 0.98 : 1 }}
                   >
                     <span className="btn-content">
                       {isSubmitting ? (

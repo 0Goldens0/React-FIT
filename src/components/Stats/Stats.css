@@ -22,8 +22,9 @@
     /* Use adaptive columns and limit overall width to prevent excessive stretching */
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 30px;
-    max-width: 900px;
+    max-width: 1200px; /* Увеличили для больших экранов */
     margin: 0 auto;
+    padding: 0 40px; /* Отступы по бокам */
     position: relative;
     z-index: 1;
 }
@@ -140,6 +141,21 @@
 }
 
 /* Responsive */
+
+/* Большие экраны */
+@media (max-width: 1600px) {
+    .stats-grid {
+        max-width: 1100px;
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 1399px) {
+    .stats-grid {
+        max-width: 1000px;
+    }
+}
+
 @media (max-width: 1200px) {
     .stats-section {
         padding: 70px 0;
@@ -152,6 +168,7 @@
 
     .stats-grid {
         gap: 35px;
+        max-width: 900px;
     }
 
     .stat-card {

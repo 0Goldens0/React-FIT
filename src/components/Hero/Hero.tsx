@@ -87,7 +87,6 @@ const Hero = () => {
       <div className="container">
         <div className="hero-wrapper">
           <div className="hero-content">
-            <div className="hero-subtitle">Профессиональный инструмент</div>
             <h1 className="hero-title">Технологичный инструмент для профессионалов и домашних мастеров. <br /> <br /> Готовые решения для эффективной работы. Надежный результат  с первого подхода!</h1>
             <p className="hero-description">
             <strong>Более 25 лет</strong> мы создаем решения, которым <strong>доверяют</strong>.

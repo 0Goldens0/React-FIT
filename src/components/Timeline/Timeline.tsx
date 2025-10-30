@@ -376,6 +376,8 @@ const Timeline = memo(() => {
   const [currentItem, setCurrentItem] = useState<TimelineData | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isAutoPlay, setIsAutoPlay] = useState(true) // Состояние автопроигрывания
+  const wasAutoPlayActiveRef = useRef<boolean>(true) // Сохраняем состояние перед открытием модалки
+  const isHoveringRef = useRef<boolean>(false) // Флаг наведения на карточку
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const trackRef = useRef<HTMLDivElement | null>(null)
@@ -530,8 +532,8 @@ const Timeline = memo(() => {
       // Включаем scrollController обратно
       scrollController.enable()
       
-      // Возобновляем анимацию Timeline с сохраненной позиции
-      startAnimation()
+      // НЕ запускаем анимацию здесь автоматически!
+      // Анимация управляется через closeModal() с проверкой wasAutoPlayActiveRef
     }
     
     // Cleanup при размонтировании компонента
@@ -551,6 +553,9 @@ const Timeline = memo(() => {
 
   // Защита от непроизвольного наведения с задержкой
   const handleItemHover = useCallback((item: TimelineData) => {
+    // Устанавливаем флаг наведения
+    isHoveringRef.current = true
+    
     // Очищаем таймер закрытия если он есть
     if (leaveTimeoutRef.current) {
       clearTimeout(leaveTimeoutRef.current)
@@ -562,43 +567,41 @@ const Timeline = memo(() => {
       clearTimeout(hoverTimeoutRef.current)
     }
 
-    // Устанавливаем задержку перед открытием (5000ms = 5 секунд)
+    // Устанавливаем задержку перед открытием (700ms)
     hoverTimeoutRef.current = setTimeout(() => {
+      // Проверяем, что курсор все еще на карточке
+      if (!isHoveringRef.current) {
+        return // Не открываем модалку, если курсор уже ушел
+      }
+      
+      // Сохраняем текущее состояние автопрокрутки ПЕРЕД открытием модалки
+      wasAutoPlayActiveRef.current = isAutoPlay
+      
       setCurrentItem(item)
       setIsModalOpen(true)
+      
+      // Останавливаем автопрокрутку при открытии модалки
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
     }, 700)
-  }, [])
+  }, [isAutoPlay])
 
-  // Защита от непроизвольного закрытия с задержкой
+  // Обработчик ухода с карточки
   const handleItemLeave = useCallback(() => {
+    // Сбрасываем флаг наведения
+    isHoveringRef.current = false
+    
     // Очищаем таймер открытия если он есть
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
       hoverTimeoutRef.current = null
     }
-
-    // Устанавливаем задержку перед закрытием (500ms)
-    leaveTimeoutRef.current = setTimeout(() => {
-      setIsModalOpen(false)
-      setTimeout(() => setCurrentItem(null), 300)
-    }, 500)
   }, [])
 
-  // Обработка наведения на модальное окно (предотвращает закрытие)
-  const handleModalHover = useCallback(() => {
-    if (leaveTimeoutRef.current) {
-      clearTimeout(leaveTimeoutRef.current)
-      leaveTimeoutRef.current = null
-    }
-  }, [])
-
-  // Обработка ухода с модального окна
-  const handleModalLeave = useCallback(() => {
-    leaveTimeoutRef.current = setTimeout(() => {
-      setIsModalOpen(false)
-      setTimeout(() => setCurrentItem(null), 300)
-    }, 300)
-  }, [])
+  // Закрытие модального окна (убрали логику с onMouseLeave)
+  // Модалка закрывается только по кнопке или клику вне области
 
   const closeModal = useCallback(() => {
     // Очищаем все таймеры
@@ -613,7 +616,32 @@ const Timeline = memo(() => {
 
     setIsModalOpen(false)
     setTimeout(() => setCurrentItem(null), 300)
-  }, [])
+    
+    // Возобновляем автопрокрутку ТОЛЬКО если:
+    // 1. Она была активна ДО открытия модалки (wasAutoPlayActiveRef.current)
+    // 2. И она все еще активна СЕЙЧАС (isAutoPlay)
+    if (wasAutoPlayActiveRef.current && isAutoPlay) {
+      lastTimeRef.current = 0
+      startAnimation()
+    }
+  }, [startAnimation, isAutoPlay])
+
+  // Обработчик нажатия клавиши Escape для закрытия модалки
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isModalOpen) {
+        closeModal()
+      }
+    }
+
+    if (isModalOpen) {
+      document.addEventListener('keydown', handleEscapeKey)
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey)
+    }
+  }, [isModalOpen, closeModal])
 
   // Очистка таймеров при размонтировании
   useEffect(() => {
@@ -699,8 +727,6 @@ const Timeline = memo(() => {
       {/* Полноэкранное модальное окно */}
       <div 
         className={`timeline-fullscreen ${isModalOpen ? 'active' : ''}`}
-        onMouseEnter={handleModalHover}
-        onMouseLeave={handleModalLeave}
         onClick={() => {
           if (isModalOpen) closeModal()
         }}
