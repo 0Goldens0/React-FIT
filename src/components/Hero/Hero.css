@@ -605,7 +605,7 @@ a.stat-item {
     .hero {
         min-height: auto;
         height: auto;
-        padding: clamp(70px, 15vh, 90px) clamp(15px, 4vw, 20px) clamp(30px, 8vh, 40px);
+        padding: clamp(120px, 18vh, 150px) clamp(15px, 4vw, 20px) clamp(30px, 8vh, 40px);
     }
     
     .hero-wrapper {
