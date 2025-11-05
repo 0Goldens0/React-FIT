@@ -13,7 +13,7 @@ section#brands.brands {
 
 .brand-journey-container {
     display: flex;
-    width: 700vw; /* Для 7 брендов */
+    width: 600vw; /* Для 6 брендов */
     height: 100vh;
     transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;

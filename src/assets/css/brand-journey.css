@@ -28,7 +28,7 @@ section#brands.brands {
 
 .brand-journey-container {
     display: flex;
-    width: 700vw; /* Обновленная ширина для 7 брендов */
+    width: 600vw; /* Ширина для 6 брендов */
     height: 100vh;
     transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); /* Плавный переход */
     position: relative;
@@ -90,10 +90,6 @@ section#brands.brands {
 
 #brand-xbat {
     background: radial-gradient(ellipse at center, #1A1A1A 0%, #111111 60%, #0a0a0f 100%);
-}
-
-#brand-greatflex {
-    background: radial-gradient(ellipse at top left, #00A651 0%, #00753a 60%, #0a0a0f 100%);
 }
 
 /* Основной контент бренда */
@@ -173,9 +169,8 @@ section#brands.brands {
     filter: brightness(0) invert(1);
 }
 
-/* Обводка по контуру для CUTOP, GREATFLEX и MASTER COLOR */
+/* Обводка по контуру для CUTOP и MASTER COLOR */
 #brand-cutop .brand-logo-journey img,
-#brand-greatflex .brand-logo-journey img,
 #brand-mastercolor .brand-logo-journey img {
     filter: 
         drop-shadow(0.3px 0 0 #fff)
@@ -189,7 +184,6 @@ section#brands.brands {
 }
 
 #brand-cutop.active .brand-logo-journey img,
-#brand-greatflex.active .brand-logo-journey img,
 #brand-mastercolor.active .brand-logo-journey img {
     filter: 
         drop-shadow(0.3px 0 0 #fff)
@@ -262,7 +256,6 @@ section#brands.brands {
 #brand-kypc .brand-description::before { --brand-color: rgba(216, 21, 21, 0.6); }
 #brand-mos .brand-description::before { --brand-color: rgba(0, 174, 239, 0.6); }
 #brand-xbat .brand-description::before { --brand-color: rgba(26, 26, 26, 0.6); }
-#brand-greatflex .brand-description::before { --brand-color: rgba(0, 166, 81, 0.6); }
 #brand-cutop .brand-description::before { --brand-color: rgba(42, 73, 152, 0.6); }
 #brand-mastercolor .brand-description::before { --brand-color: rgba(0, 101, 168, 0.6); }
 
@@ -1034,7 +1027,7 @@ section#brands.brands {
     } */
     
     .brand-journey-container {
-        width: 700vw;
+        width: 600vw;
         height: auto;
         min-height: auto;
     }

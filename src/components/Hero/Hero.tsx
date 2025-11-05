@@ -110,20 +110,20 @@ const Hero = () => {
         {/* Integrated Stats Section */}
         <div className="hero-stats" ref={statsRef}>
           <div className="stats-grid">
-            <div className="stat-item animate fadeInUp delay-1">
+            <a href="https://fit24.ru/catalog/" target="_blank" rel="noopener noreferrer" className="stat-item animate fadeInUp delay-1">
               <div className="stat-number" data-count="12000">0</div>
               <div className="stat-label">позиций в каталоге</div>
-            </div>
-            <div className="stat-item animate fadeInUp delay-2">
+            </a>
+            <a href="#map" className="stat-item animate fadeInUp delay-2">
               <div className="stat-number" data-count="10">0</div>
               <div className="stat-label">филиалов по всей России</div>
-            </div>
+            </a>
             <div className="stat-item animate fadeInUp delay-3">
-              <div className="stat-number" data-count="1000">0</div>
+              <div className="stat-number" data-count="1000" data-suffix="+">0</div>
               <div className="stat-label">сотрудников в штате</div>
             </div>
             <div className="stat-item animate fadeInUp delay-4">
-              <div className="stat-number" data-count="40">0</div>
+              <div className="stat-number" data-count="60" data-suffix="+">0</div>
               <div className="stat-label">единиц собственного транспорта</div>
             </div>
           </div>
