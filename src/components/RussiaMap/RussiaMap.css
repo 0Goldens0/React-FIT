@@ -250,6 +250,37 @@
   }
 }
 
+/* Средние экраны - уменьшаем высоту для MacBook */
+@media (max-width: 1399px) {
+  .russia-map-section {
+    min-height: auto;
+    padding: 40px 0 30px;
+  }
+  
+  .russia-map-container {
+    max-width: 1150px;
+    padding: 0 20px;
+  }
+  
+  .map-header {
+    margin-bottom: 20px;
+  }
+  
+  .map-header h2 {
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+  
+  .map-header p {
+    font-size: 1rem;
+  }
+  
+  .map-wrapper {
+    width: 75%;
+    max-width: 850px;
+  }
+}
+
 @media (max-width: 1200px) {
   .russia-map-section {
     padding: 35px 0;

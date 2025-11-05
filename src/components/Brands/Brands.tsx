@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { getAssetPath } from '../../utils/paths'
 import { scrollController } from '../../utils/scrollController'
+import { performanceOptimizer } from '../../utils/performanceOptimizer'
 import '../../assets/css/brand-journey.css'
 
 interface Brand {
@@ -208,9 +209,11 @@ const Brands = () => {
             // Сбрасываем на начало
             setProductCarouselIndices(prev => ({ ...prev, [brand.id]: 0 }))
             
-            // Включаем transition обратно
+            // Включаем transition обратно (или оставляем выключенным на слабых устройствах)
             setTimeout(() => {
-              carousel.style.transition = 'transform 0.5s ease-in-out'
+              carousel.style.transition = performanceOptimizer.isLowEnd() 
+                ? 'none' 
+                : 'transform 0.5s ease-in-out'
             }, 50)
           }, 500) // После завершения анимации (0.5s)
         }
@@ -300,7 +303,10 @@ const Brands = () => {
       <div 
         className="brand-journey-container" 
         ref={containerRef}
-        style={{ transform: `translateX(-${currentIndex * 100}vw)` }}
+        style={{ 
+          transform: `translate3d(-${currentIndex * 100}vw, 0, 0)`,
+          WebkitTransform: `translate3d(-${currentIndex * 100}vw, 0, 0)`
+        }}
       >
         {brandsData.map((brand, index) => (
           <section 
@@ -327,7 +333,7 @@ const Brands = () => {
                   ref={(el) => { productCarouselRefs.current[brand.id] = el }}
                   style={{
                     transform: `translateX(-${(productCarouselIndices[brand.id] || 0) * (cardWidth + cardGap)}px)`,
-                    transition: 'transform 0.5s ease-in-out'
+                    transition: performanceOptimizer.isLowEnd() ? 'none' : 'transform 0.5s ease-in-out'
                   }}
                 >
                   {/* Дублируем карточки для бесконечной карусели */}

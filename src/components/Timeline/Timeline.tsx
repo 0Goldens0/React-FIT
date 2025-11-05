@@ -1,6 +1,10 @@
 import { useEffect, useState, useRef, useCallback, memo } from 'react'
 import { scrollController } from '../../utils/scrollController'
+import { performanceOptimizer } from '../../utils/performanceOptimizer'
 import './Timeline.css'
+
+// Определяем скорость transition в зависимости от производительности
+const getTransitionSpeed = () => performanceOptimizer.isLowEnd() ? '0.3s' : '0.5s'
 
 interface TimelineData {
   year: string
@@ -375,7 +379,8 @@ const timelineData: TimelineData[] = [
 const Timeline = memo(() => {
   const [currentItem, setCurrentItem] = useState<TimelineData | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isAutoPlay, setIsAutoPlay] = useState(true) // Состояние автопроигрывания
+  // Отключаем автопрокрутку на слабых устройствах для экономии ресурсов
+  const [isAutoPlay, setIsAutoPlay] = useState(!performanceOptimizer.isLowEnd())
   const wasAutoPlayActiveRef = useRef<boolean>(true) // Сохраняем состояние перед открытием модалки
   const isHoveringRef = useRef<boolean>(false) // Флаг наведения на карточку
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -502,13 +507,15 @@ const Timeline = memo(() => {
     
     positionRef.current = newPosition
     
-    track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+    const transitionSpeed = getTransitionSpeed()
+    track.style.transition = `transform ${transitionSpeed} cubic-bezier(0.4, 0, 0.2, 1)`
     track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
     
     // Убираем transition после завершения анимации
+    const duration = performanceOptimizer.isLowEnd() ? 300 : 500
     setTimeout(() => {
       track.style.transition = ''
-    }, 500)
+    }, duration)
     
     // Сбрасываем lastTimeRef для корректной работы при возобновлении
     lastTimeRef.current = 0
@@ -558,13 +565,15 @@ const Timeline = memo(() => {
     
     positionRef.current = newPosition
     
-    track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+    const transitionSpeed = getTransitionSpeed()
+    track.style.transition = `transform ${transitionSpeed} cubic-bezier(0.4, 0, 0.2, 1)`
     track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
     
     // Убираем transition после завершения анимации
+    const duration = performanceOptimizer.isLowEnd() ? 300 : 500
     setTimeout(() => {
       track.style.transition = ''
-    }, 500)
+    }, duration)
     
     // Сбрасываем lastTimeRef для корректной работы при возобновлении
     lastTimeRef.current = 0

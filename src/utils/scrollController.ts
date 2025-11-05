@@ -264,8 +264,46 @@ export class ScrollController {
       return;
     }
     
-    // КРИТИЧНО: Блокировка ДОЛЖНА быть ПЕРВОЙ проверкой
-    // Это предотвращает накопление событий при резком скролле
+    // Проверяем, находимся ли мы в секции брендов ПЕРВЫМ ДЕЛОМ
+    const currentSection = this.sections[this.currentSectionIndex];
+    
+    // АГРЕССИВНАЯ блокировка для секции брендов - предотвращаем проскок
+    if (currentSection && currentSection.type === 'horizontal') {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Если уже идет скролл - НЕ делаем ничего
+      if (this.isScrolling || this.isHorizontallyScrolling) {
+        return;
+      }
+      
+      // Для MacOS используем очень низкий порог - принимаем почти любое движение
+      const brandsThreshold = this.isMacOS ? 3 : 8;
+      
+      // Фильтрация только очень мелких случайных движений
+      if (Math.abs(e.deltaY) < brandsThreshold) {
+        return;
+      }
+      
+      // Throttle для wheel событий
+      const now = Date.now();
+      
+      // Для MacOS уменьшаем cooldown для более отзывчивой навигации
+      const brandsCooldown = this.isMacOS ? 250 : 500;
+      
+      // Проверка на cooldown
+      if (now - this.lastScrollTime < brandsCooldown) {
+        return;
+      }
+      
+      this.wheelThrottle = now;
+      const scrollDown = e.deltaY > 0;
+      
+      this.handleBrandsScroll(scrollDown);
+      return;
+    }
+    
+    // КРИТИЧНО: Блокировка для остальных секций
     if (this.isScrolling || this.isHorizontallyScrolling) {
       e.preventDefault();
       return;
@@ -277,13 +315,13 @@ export class ScrollController {
       return;
     }
     this.wheelThrottle = now;
-
-    // Фильтрация мелких движений (особенно важно для macOS тачпада)
-    if (Math.abs(e.deltaY) < this.deltaYThreshold) {
-      return; // Игнорируем слишком мелкие движения
-    }
-
+    
     const scrollDown = e.deltaY > 0;
+    
+    // Фильтрация мелких движений для остальных секций
+    if (Math.abs(e.deltaY) < this.deltaYThreshold) {
+      return;
+    }
     
     // Если контроллер выключен, проверяем, находимся ли мы в пределах Timeline
     if (this.hasLeftControlledArea) {
@@ -320,9 +358,6 @@ export class ScrollController {
       return;
     }
     
-    // Проверяем, активен ли ScrollController для текущей секции
-    const currentSection = this.sections[this.currentSectionIndex];
-    
     // Если мы за пределами контролируемых секций
     if (!currentSection || this.currentSectionIndex >= this.sections.length) {
       return;
@@ -336,16 +371,10 @@ export class ScrollController {
     }
 
     if (this.isScrolling) return;
-
-    // Если текущая секция - горизонтальная (brands)
-    if (currentSection.type === 'horizontal') {
-      this.handleBrandsScroll(scrollDown);
-      return;
-    }
     
-    // Вертикальный скролл для всех остальных секций
+    // Вертикальный скролл для всех остальных секций (бренды уже обработаны выше)
     this.handleVerticalScroll(scrollDown);
-  }
+    }
 
   /**
    * Обработка скролла в секции брендов (горизонтальный слайдер)
@@ -466,7 +495,7 @@ export class ScrollController {
         if (this.onHorizontalProgress) {
           this.onHorizontalProgress(this.horizontalScrollProgress, this.horizontalScrollMax);
         }
-      } 
+      }
     } else {
       // Скролл влево (вверх колесом)
       if (this.horizontalScrollProgress > 0) {
