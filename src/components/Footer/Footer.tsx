@@ -9,8 +9,7 @@ const Footer = () => {
           <div className="footer-section">
             <img src={getAssetPath("logo/fit-logo-clean.svg")} alt="FIT" className="footer-logo" />
             <p className="footer-text">
-              Профессиональные инструменты с 1996 года. 
-              Качество, надежность и инновации.
+            Технологичный инструмент для профессионалов и домашних мастеров.
             </p>
             {/* Соцсети вынесены ниже в общий ряд */}
           </div>

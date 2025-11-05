@@ -387,12 +387,19 @@ const Timeline = memo(() => {
   const isAnimationActiveRef = useRef<boolean>(true) // Флаг активности анимации
   const isModalOpenRef = useRef<boolean>(false) // Ref для isModalOpen для доступа в анимации
   const scrollPositionRef = useRef<number>(0) // Сохраняем позицию скролла при открытии модального окна
+  const touchStartRef = useRef<{ x: number; y: number; startPosition: number } | null>(null)
+  const isDraggingRef = useRef<boolean>(false)
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
   const startAnimation = useCallback(() => {
     const track = trackRef.current
     if (!track) return
 
-    const itemWidth = 450 // 350px width + 100px margin
+    // ДИНАМИЧЕСКИ вычисляем размер карточки
+    const firstItem = track.querySelector('.timeline-item:not(.clone)') as HTMLElement
+    if (!firstItem) return
+    
+    const itemWidth = firstItem.offsetWidth + parseFloat(getComputedStyle(firstItem).marginRight)
     const totalItems = timelineData.length
     const totalWidth = itemWidth * totalItems
     const speed = 200 // пикселей в секунду
@@ -443,28 +450,125 @@ const Timeline = memo(() => {
     })
   }, [startAnimation, stopAnimation])
 
-  // Функция для перемещения ленты влево (назад)
+  // Функция для перемещения ленты влево (назад) - ЯКОРНАЯ НАВИГАЦИЯ по карточкам
   const movePrev = useCallback(() => {
     const track = trackRef.current
     if (!track) return
 
-    const itemWidth = 450
-    positionRef.current = Math.max(0, positionRef.current - itemWidth)
-    track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
-  }, [])
+    // Останавливаем автопрокрутку при ручном управлении
+    if (isAutoPlay) {
+      setIsAutoPlay(false)
+      stopAnimation()
+    }
 
-  // Функция для перемещения ленты вправо (вперед)
+    // ДИНАМИЧЕСКИ вычисляем размер карточки из DOM
+    const firstItem = track.querySelector('.timeline-item:not(.clone)') as HTMLElement
+    if (!firstItem) return
+    
+    const itemWidth = firstItem.offsetWidth + parseFloat(getComputedStyle(firstItem).marginRight)
+    const totalItems = timelineData.length
+    const screenCenter = window.innerWidth / 2
+    
+    // Получаем padding-left трека
+    const trackPaddingLeft = parseFloat(getComputedStyle(track).paddingLeft)
+    
+    // Находим текущую карточку - какая сейчас ближе всего к центру экрана
+    // Центр экрана в координатах трека = positionRef.current + screenCenter
+    const currentCenterInTrack = positionRef.current + screenCenter
+    
+    // Определяем индекс текущей карточки
+    // Центр карточки N = trackPaddingLeft + N * itemWidth + itemWidth/2
+    let currentCardIndex = Math.round((currentCenterInTrack - trackPaddingLeft - itemWidth / 2) / itemWidth)
+    
+    // Нормализуем индекс (на случай зацикливания)
+    currentCardIndex = ((currentCardIndex % totalItems) + totalItems) % totalItems
+    
+    // ПРЕДЫДУЩАЯ карточка по индексу массива (хронологический порядок)
+    let targetCardIndex = currentCardIndex - 1
+    
+    // Зацикливание
+    if (targetCardIndex < 0) {
+      targetCardIndex = totalItems - 1
+    }
+    
+    // Вычисляем, где находится ЦЕНТР целевой карточки в координатах трека
+    // Карточка N: начало = trackPaddingLeft + N * itemWidth
+    // Центр = trackPaddingLeft + N * itemWidth + itemWidth/2
+    const targetCardCenter = trackPaddingLeft + targetCardIndex * itemWidth + itemWidth / 2
+    
+    // Вычисляем новую позицию, чтобы центр карточки совпал с центром экрана
+    // position = centerOfCard - screenCenter
+    const newPosition = targetCardCenter - screenCenter
+    
+    positionRef.current = newPosition
+    
+    track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+    track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
+    
+    // Убираем transition после завершения анимации
+    setTimeout(() => {
+      track.style.transition = ''
+    }, 500)
+    
+    // Сбрасываем lastTimeRef для корректной работы при возобновлении
+    lastTimeRef.current = 0
+  }, [isAutoPlay, stopAnimation])
+
+  // Функция для перемещения ленты вправо (вперед) - ЯКОРНАЯ НАВИГАЦИЯ по карточкам
   const moveNext = useCallback(() => {
     const track = trackRef.current
     if (!track) return
 
-    const itemWidth = 450
-    const totalItems = timelineData.length
-    const totalWidth = itemWidth * totalItems
+    // Останавливаем автопрокрутку при ручном управлении
+    if (isAutoPlay) {
+      setIsAutoPlay(false)
+      stopAnimation()
+    }
+
+    // ДИНАМИЧЕСКИ вычисляем размер карточки из DOM
+    const firstItem = track.querySelector('.timeline-item:not(.clone)') as HTMLElement
+    if (!firstItem) return
     
-    positionRef.current = (positionRef.current + itemWidth) % totalWidth
+    const itemWidth = firstItem.offsetWidth + parseFloat(getComputedStyle(firstItem).marginRight)
+    const totalItems = timelineData.length
+    const screenCenter = window.innerWidth / 2
+    
+    // Получаем padding-left трека
+    const trackPaddingLeft = parseFloat(getComputedStyle(track).paddingLeft)
+    
+    // Находим текущую карточку - какая сейчас ближе всего к центру экрана
+    const currentCenterInTrack = positionRef.current + screenCenter
+    
+    // Определяем индекс текущей карточки
+    // Центр карточки N = trackPaddingLeft + N * itemWidth + itemWidth/2
+    let currentCardIndex = Math.round((currentCenterInTrack - trackPaddingLeft - itemWidth / 2) / itemWidth)
+    
+    // Нормализуем индекс
+    currentCardIndex = ((currentCardIndex % totalItems) + totalItems) % totalItems
+    
+    // СЛЕДУЮЩАЯ карточка по индексу массива (хронологический порядок)
+    const targetCardIndex = (currentCardIndex + 1) % totalItems
+    
+    // Вычисляем, где находится ЦЕНТР целевой карточки
+    // Центр = trackPaddingLeft + N * itemWidth + itemWidth/2
+    const targetCardCenter = trackPaddingLeft + targetCardIndex * itemWidth + itemWidth / 2
+    
+    // Вычисляем новую позицию, чтобы центр карточки совпал с центром экрана
+    const newPosition = targetCardCenter - screenCenter
+    
+    positionRef.current = newPosition
+    
+    track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
     track.style.transform = `translate3d(-${positionRef.current}px, 0, 0)`
-  }, [])
+    
+    // Убираем transition после завершения анимации
+    setTimeout(() => {
+      track.style.transition = ''
+    }, 500)
+    
+    // Сбрасываем lastTimeRef для корректной работы при возобновлении
+    lastTimeRef.current = 0
+  }, [isAutoPlay, stopAnimation])
 
   useEffect(() => {
     if (isAutoPlay) {
@@ -600,6 +704,85 @@ const Timeline = memo(() => {
     }
   }, [])
 
+  // Touch-события для drag-перетаскивания
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const track = trackRef.current
+    if (!track) return
+    
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      startPosition: positionRef.current
+    }
+    isDraggingRef.current = false
+    
+    // ОСТАНАВЛИВАЕМ автопрокрутку полностью при касании
+    setIsAutoPlay(false)
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current)
+      animationRef.current = null
+    }
+    isAnimationActiveRef.current = false
+    
+    // Убираем transition для плавного перетаскивания
+    track.style.transition = ''
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!touchStartRef.current) return
+    
+    const track = trackRef.current
+    if (!track) return
+    
+    const currentX = e.touches[0].clientX
+    const currentY = e.touches[0].clientY
+    const deltaX = currentX - touchStartRef.current.x
+    const deltaY = currentY - touchStartRef.current.y
+    
+    // Проверяем, что это горизонтальное движение
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+      isDraggingRef.current = true
+      // Предотвращаем вертикальный скролл при горизонтальном движении
+      e.preventDefault()
+      
+      // ДИНАМИЧЕСКИ вычисляем размер карточки
+      const firstItem = track.querySelector('.timeline-item:not(.clone)') as HTMLElement
+      if (!firstItem) return
+      
+      const itemWidth = firstItem.offsetWidth + parseFloat(getComputedStyle(firstItem).marginRight)
+      const totalItems = timelineData.length
+      const totalWidth = itemWidth * totalItems
+      
+      // Обновляем позицию в реальном времени (инвертируем deltaX, так как движение влево = прокрутка вправо)
+      let newPosition = touchStartRef.current.startPosition - deltaX
+      
+      // Зацикливаем позицию
+      if (newPosition < 0) {
+        newPosition = totalWidth + (newPosition % totalWidth)
+      } else if (newPosition >= totalWidth) {
+        newPosition = newPosition % totalWidth
+      }
+      
+      positionRef.current = newPosition
+      track.style.transform = `translate3d(-${newPosition}px, 0, 0)`
+    }
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    const track = trackRef.current
+    if (!track) return
+    
+    if (!touchStartRef.current) {
+      return
+    }
+    
+    // НЕ выравниваем позицию - оставляем где пользователь остановился
+    // Пользователь хочет свободного управления
+    
+    touchStartRef.current = null
+    isDraggingRef.current = false
+  }, [])
+
   // Закрытие модального окна (убрали логику с onMouseLeave)
   // Модалка закрывается только по кнопке или клику вне области
 
@@ -668,17 +851,22 @@ const Timeline = memo(() => {
       <div 
         className="timeline-container"
         onMouseEnter={() => {
-          if (isAutoPlay && animationRef.current) {
+          if (!isTouchDevice && isAutoPlay && animationRef.current) {
             cancelAnimationFrame(animationRef.current)
             animationRef.current = null
           }
         }}
         onMouseLeave={() => {
-          if (isAutoPlay) {
+          if (!isTouchDevice && isAutoPlay) {
           lastTimeRef.current = 0
           startAnimation()
           }
         }}
+        {...(isTouchDevice ? {
+          onTouchStart: handleTouchStart,
+          onTouchMove: handleTouchMove,
+          onTouchEnd: handleTouchEnd
+        } : {})}
       >
         <div className="center-line"></div>
         <div className="timeline-track" ref={trackRef}>
@@ -686,8 +874,9 @@ const Timeline = memo(() => {
             <div 
               key={index}
               className={`timeline-item ${index % 2 === 0 ? 'top' : 'bottom'} ${index >= timelineData.length ? 'clone' : ''}`}
-              onMouseEnter={() => handleItemHover(item)}
-              onMouseLeave={handleItemLeave}
+              onMouseEnter={() => !isTouchDevice && handleItemHover(item)}
+              onMouseLeave={() => !isTouchDevice && handleItemLeave()}
+              onClick={() => isTouchDevice && (setCurrentItem(item), setIsModalOpen(true))}
             >
               <div className="timeline-dot"></div>
               <div className="timeline-content">

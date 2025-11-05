@@ -47,15 +47,6 @@ const brandsData: Brand[] = [
     parallaxBgColor: '#2A4998',
     parallaxFgColor: '#FFFFFF'
   },
-  // {
-  //   id: 'greatflex',
-  //   displayName: 'GREATFLEX',
-  //   description: 'GREATFLEX — доступная и надежная оснастка для электроинструмента. Бренд предлагает готовые решения для домашних мастеров и профессионалов, обеспечивая оптимальное соотношение цены и качества. Продукция GREATFLEX гарантирует стабильную работу и безупречный результат при ежедневном использовании.',
-  //   logo: getAssetPath('logo/brands/GreatFlex_logo-1.svg'),
-  //   primaryColor: '#E40C0C',
-  //   parallaxBgColor: '#E40C0C',
-  //   parallaxFgColor: '#FFFFFF'
-  // },
   {
     id: 'mos',
     displayName: 'MOS',
@@ -120,12 +111,6 @@ const brandProducts: BrandProductsMap = {
     { name: "АНКЕРНЫЙ БОЛТ С ПОЛНЫМ КРЮКОМ ХВАТ", article: "26654", image: getAssetPath("img/xbat/26654.webp"), price: "590 ₽", category: "Крепёж" },
     { name: "ГЕНЕРАТОР ДИЗЕЛЬНЫЙ ХВАТ", article: "KM7500DE", image: getAssetPath("img/xbat/KM7500DE.webp"), price: "249 ₽", category: "Генератор" }
   ],
-  // greatflex: [
-  //   { name: "ДИСКИ АЛМАЗНЫЕ GREATFLEX light", article: "55-771", image: getAssetPath("img/gf/55-771.webp"), price: "1 290 ₽", category: "Абразивно-шлифовальный инструмент" },
-  //   { name: "ДИСКИ АЛМАЗНЫЕ GREATFLEX light", article: "55-776", image: getAssetPath("img/gf/55-776.webp"), price: "590 ₽", category: "Абразивно-шлифовальный инструмент" },
-  //   { name: "ПРОФЕССИОНАЛЬНЫЙ ШЛИФОВАЛЬНЫЙ АЛМАЗНЫЙ ДИСК «СЕГМЕНТИРОВАННЫЙ ТУРБО»", article: "55-781", image: getAssetPath("img/gf/55-781.webp"), price: "290 ₽", category: "Абразивно-шлифовальный инструмент" },
-  //   { name: "КРУГ НАЖДАЧНЫЙ ЛЕПЕСТКОВЫЙ GREATFLEX light", article: "71-837", image: getAssetPath("img/gf/71-837.webp"), price: "1 490 ₽", category: "Абразивно-шлифовальный инструмент" }
-  // ],
   cutop: [
     { name: "ШУРУПОВЕРТ CUTOP e-profi", article: "01-884", image: getAssetPath("img/cutop/01-884.webp"), price: "190 ₽", category: "Электроинструмент" },
     { name: "РОФЕССИОНАЛЬНЫЙ ОТРЕЗНОЙ АЛМАЗНЫЙ ДИСК CUTOP", article: "73-419", image: getAssetPath("img/cutop/73-419-02 (2).webp"), price: "210 ₽", category: "Абразивно-шлифовальный инструмент" },
