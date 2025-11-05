@@ -192,12 +192,12 @@ const RussiaMap: React.FC = () => {
   return (
     <section className="russia-map-section" id="map">
       <div className="russia-map-container">
-        <div className="map-header">
-          <h2>Интерактивная карта России</h2>
-          <p>85 регионов с региональными центрами</p>
-        </div>
+      <div className="map-header">
+        <h2>Интерактивная карта России</h2>
+        <p>85 регионов с региональными центрами</p>
+      </div>
 
-        <div className="map-wrapper">
+      <div className="map-wrapper">
         <div 
           ref={svgRef}
           className="svg-container"
@@ -254,8 +254,8 @@ const RussiaMap: React.FC = () => {
             })}
           </div>
         )}
-        </div>
       </div>
+    </div>
     </section>
   );
 };

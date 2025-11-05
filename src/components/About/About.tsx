@@ -1,5 +1,6 @@
 import { useEffect, memo } from 'react'
 import { getAssetPath } from '../../utils/paths'
+import { performanceOptimizer } from '../../utils/performanceOptimizer'
 import './About.css'
 
 const About = memo(() => {
@@ -9,6 +10,11 @@ const About = memo(() => {
   }, [])
 
   const createAboutParticles = () => {
+    // На слабых устройствах не создаем частицы
+    if (performanceOptimizer.isLowEnd()) {
+      return
+    }
+    
     const particlesContainer = document.getElementById('about-particles')
     if (!particlesContainer) return
 

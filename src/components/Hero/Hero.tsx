@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { getAssetPath } from '../../utils/paths'
+import { performanceOptimizer } from '../../utils/performanceOptimizer'
 import './Hero.css'
 
 const Hero = () => {
@@ -34,6 +35,14 @@ const Hero = () => {
 
   const animateCounter = (element: HTMLElement) => {
     const target = parseInt(element.getAttribute('data-count') || '0')
+    const suffix = element.getAttribute('data-suffix') || ''
+    
+    // На слабых устройствах показываем число сразу без анимации
+    if (performanceOptimizer.isLowEnd()) {
+      element.textContent = target.toString() + suffix
+      return
+    }
+    
     const duration = 2000
     const start = 0
     const startTime = performance.now()
@@ -45,12 +54,12 @@ const Hero = () => {
       const easeOutQuart = 1 - Math.pow(1 - progress, 4)
       const current = Math.floor(start + (target - start) * easeOutQuart)
       
-      element.textContent = current.toString()
+      element.textContent = current.toString() + suffix
       
       if (progress < 1) {
         requestAnimationFrame(updateCounter)
       } else {
-        element.textContent = target.toString()
+        element.textContent = target.toString() + suffix
       }
     }
 
@@ -58,6 +67,11 @@ const Hero = () => {
   }
 
   const createHeroParticles = () => {
+    // На слабых устройствах не создаем частицы
+    if (performanceOptimizer.isLowEnd()) {
+      return
+    }
+    
     const particlesContainer = document.getElementById('hero-particles')
     if (!particlesContainer) return
 

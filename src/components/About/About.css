@@ -2,7 +2,6 @@
 .about {
     position: relative;
     min-height: 100vh;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,6 +9,7 @@
     background-image: linear-gradient(135deg, #0F0F11 0%, #1F1F22 100%);
     overflow: hidden;
     contain: layout style paint;
+    padding: 80px 40px;
 }
 
 /* Анимированные гексагоны */
@@ -519,13 +519,74 @@
 }
 
 @media (max-width: 1399px) {
+    .about {
+        padding: 50px 25px;
+    }
+    
+    .about .content-container {
+        padding: 20px 30px;
+        max-width: 1050px;
+    }
+    
     .about .content-grid {
-        max-width: 1200px;
-        gap: 35px;
+        max-width: 1050px;
+        gap: 20px;
+    }
+    
+    .about .section-header {
+        margin-bottom: 10px;
     }
     
     .about .section-title {
-        font-size: 3rem;
+        font-size: 1.9rem;
+        margin-bottom: 5px;
+    }
+    
+    .about .section-subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+    }
+    
+    .about .company-description {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+    
+    .about .mission-block {
+        padding: 14px 16px;
+        margin-bottom: 10px;
+    }
+    
+    .about .mission-title {
+        font-size: 1.05rem;
+        margin-bottom: 6px;
+    }
+    
+    .about .mission-text {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+    
+    .about .cta-button {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .about .holographic-container {
+        width: 260px;
+        height: 260px;
+    }
+    
+    .about .hexagon-3d {
+        width: 260px;
+        height: 260px;
+    }
+    
+    /* Уменьшаем анимированные частицы для производительности */
+    .about .hexagon-particle {
+        width: 18px;
+        height: 18px;
     }
 }
 
@@ -900,5 +961,16 @@
     .about .energy-ring:nth-child(3) {
         width: 170px;
         height: 170px;
+    }
+}
+
+/* Safari/MacOS оптимизация производительности */
+@supports (-webkit-hyphens:none) {
+    .about .hexagon-particle {
+        animation-duration: 25s !important; /* Замедляем анимацию */
+    }
+    
+    .about .particles {
+        opacity: 0.7 !important; /* Уменьшаем видимость частиц */
     }
 } 
