@@ -105,8 +105,8 @@ export class PerformanceOptimizer {
             duration: Math.round(elapsed) + 'ms'
           });
           
-          // Если FPS < 45, включаем режим оптимизации
-          if (fps < 45) {
+          // Если FPS < 30, включаем режим оптимизации (30 FPS - это половина от 60, реально слабое устройство)
+          if (fps < 25) {
             console.warn('⚠️ Low FPS detected (' + fps + '), enabling optimizations...');
             this.isLowEndDevice = true;
             this.applyOptimizations();

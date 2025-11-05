@@ -454,24 +454,9 @@ export class ScrollController {
         return;
       }
     } else {
-      // Скролл вверх
-      const currentSection = this.sections[this.currentSectionIndex];
-      if (currentSection) {
-        // Проверяем, находимся ли мы в центре текущей секции
-        const rect = currentSection.element.getBoundingClientRect();
-        const sectionTop = window.scrollY + rect.top;
-        const sectionCenter = sectionTop + rect.height / 2;
-        const viewportCenter = window.scrollY + window.innerHeight / 2;
-        
-        // Если мы не в центре текущей секции (отклонение больше 100px)
-        // сначала возвращаемся к центру текущей секции
-        if (Math.abs(viewportCenter - sectionCenter) > 100) {
-          this.scrollToSection(this.currentSectionIndex);
-        } else if (this.currentSectionIndex > 0) {
-          // Если мы в центре, переходим к предыдущей секции
-          this.scrollToSection(this.currentSectionIndex - 1);
-        }
-      } else if (this.currentSectionIndex > 0) {
+      // Скролл вверх - УПРОЩЕННАЯ ЛОГИКА без проверки позиции
+      // Просто всегда переходим к предыдущей секции
+      if (this.currentSectionIndex > 0) {
         this.scrollToSection(this.currentSectionIndex - 1);
       }
     }
