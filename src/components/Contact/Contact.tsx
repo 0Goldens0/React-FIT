@@ -16,7 +16,8 @@ const Contact = () => {
     name: '',
     email: '',
     company: '',
-    message: ''
+    message: '',
+    honeypot: '' // Скрытое поле для ботов
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
@@ -25,6 +26,7 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false)
+  const [lastSubmitTime, setLastSubmitTime] = useState<number>(0)
 
   // Функция валидации отдельного поля
   const validateField = (name: string, value: string): string | undefined => {
@@ -114,6 +116,17 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    // ЗАЩИТА: Проверка времени между отправками (минимум 30 секунд)
+    const now = Date.now();
+    const timeSinceLastSubmit = now - lastSubmitTime;
+    const minDelay = 30000; // 30 секунд
+    
+    if (timeSinceLastSubmit < minDelay && lastSubmitTime > 0) {
+      const remainingSeconds = Math.ceil((minDelay - timeSinceLastSubmit) / 1000);
+      alert(`Пожалуйста, подождите ${remainingSeconds} секунд перед повторной отправкой.`);
+      return;
+    }
+    
     // Отмечаем все поля как "тронутые"
     setTouched({
       name: true,
@@ -126,34 +139,76 @@ const Contact = () => {
       return // Останавливаем отправку если есть ошибки
     }
     
+    // ЗАЩИТА: Проверка honeypot (если заполнено - это бот)
+    if (formData.honeypot) {
+      // Делаем вид что отправили
+      setIsSubmitting(true);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+        setTimeout(() => setIsSubmitted(false), 4000);
+      }, 2000);
+      return;
+    }
+    
     setIsSubmitting(true)
     
-    // Имитация отправки формы
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    setIsSubmitting(false)
+    try {
+      // Отправка на backend API
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3070'
+      const response = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          message: formData.message
+          // honeypot НЕ отправляем
+        })
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Ошибка при отправке сообщения')
+      }
+      
+      if (data.previewUrl) {
+        // Открываем письмо в новой вкладке для теста
+        window.open(data.previewUrl, '_blank')
+      }
+      
+      // Сохраняем время отправки
+      setLastSubmitTime(now)
     setIsSubmitted(true)
     
     // Сброс формы через 4 секунды
     setTimeout(() => {
-      setFormData({ name: '', email: '', company: '', message: '' })
+        setFormData({ name: '', email: '', company: '', message: '', honeypot: '' })
       setIsSubmitted(false)
-      setIsPrivacyAccepted(false)
-      setErrors({})
-      setTouched({})
+        setIsPrivacyAccepted(false)
+        setErrors({})
+        setTouched({})
     }, 4000)
+      
+    } catch (error) {
+      alert('Не удалось отправить сообщение. Пожалуйста, попробуйте позже или свяжитесь с нами по телефону.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handlePrivacyPolicyClick = (e: React.MouseEvent) => {
     e.preventDefault()
     // TODO: Открыть модальное окно с политикой конфиденциальности
-    console.log('Открыть политику конфиденциальности')
   }
 
   const handlePersonalDataClick = (e: React.MouseEvent) => {
     e.preventDefault()
     // TODO: Открыть модальное окно с согласием на обработку персональных данных
-    console.log('Открыть согласие на обработку персональных данных')
   }
 
   const contactMethods = [
@@ -323,6 +378,25 @@ const Contact = () => {
                       )}
                     </div>
                   </div>
+
+                  {/* Скрытое honeypot поле для защиты от ботов */}
+                  <input
+                    type="text"
+                    name="honeypot"
+                    value={formData.honeypot}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    tabIndex={-1}
+                    style={{
+                      position: 'absolute',
+                      left: '-9999px',
+                      width: '1px',
+                      height: '1px',
+                      opacity: 0,
+                      pointerEvents: 'none'
+                    }}
+                    aria-hidden="true"
+                  />
 
                   <div className="floating-input-group">
                     <input

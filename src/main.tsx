@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-)
+) 
 
 // Скрываем экран загрузки ТОЛЬКО после полной загрузки страницы
 window.addEventListener('load', () => {
