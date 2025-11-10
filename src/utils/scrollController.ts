@@ -29,6 +29,7 @@ export class ScrollController {
   private wheelThrottle: number = 0; // Throttle для wheel событий
   private wheelThrottleDelay: number = 50; // Задержка throttle в мс
   private isMacOS: boolean = false; // Флаг для macOS
+  private isAppleMouse: boolean = false; // Флаг для Apple Magic Mouse
   private deltaYThreshold: number = 10; // Порог для deltaY (игнорируем мелкие движения)
   private isMobileDevice: boolean = false; // Флаг мобильного устройства
   private resizeHandler: (() => void) | null = null; // Обработчик resize
@@ -68,6 +69,36 @@ export class ScrollController {
       this.scrollCooldown = 1000; // Увеличиваем cooldown для macOS
       this.deltaYThreshold = 30; // Увеличиваем порог для фильтрации мелких движений
       this.wheelThrottleDelay = 100; // Увеличиваем throttle
+    }
+    
+    // Динамическое определение Apple Magic Mouse по характеру скролла
+    // Magic Mouse отправляет очень маленькие значения deltaY (обычно 1-4)
+    let wheelEventCount = 0;
+    let smallDeltaCount = 0;
+    const detectAppleMouse = (e: WheelEvent) => {
+      if (!this.isMacOS) return;
+      
+      wheelEventCount++;
+      if (Math.abs(e.deltaY) <= 4 && Math.abs(e.deltaY) > 0) {
+        smallDeltaCount++;
+      }
+      
+      // После 10 событий определяем тип мышки
+      if (wheelEventCount === 10) {
+        // Если больше 70% событий имели deltaY <= 4, это Magic Mouse
+        if (smallDeltaCount >= 7) {
+          this.isAppleMouse = true;
+          // Настраиваем параметры для Apple Magic Mouse
+          this.scrollCooldown = 600; // Уменьшаем cooldown
+          this.deltaYThreshold = 2; // ОЧЕНЬ низкий порог для Magic Mouse
+          this.wheelThrottleDelay = 30; // Уменьшаем throttle
+        }
+        window.removeEventListener('wheel', detectAppleMouse);
+      }
+    };
+    
+    if (this.isMacOS) {
+      window.addEventListener('wheel', detectAppleMouse, { passive: true });
     }
     
     // Регистрируем все секции
@@ -277,8 +308,13 @@ export class ScrollController {
         return;
       }
       
-      // Для MacOS используем очень низкий порог - принимаем почти любое движение
-      const brandsThreshold = this.isMacOS ? 3 : 8;
+      // Адаптивный порог для разных типов мышек
+      let brandsThreshold = 8; // По умолчанию
+      if (this.isAppleMouse) {
+        brandsThreshold = 1; // Для Apple Magic Mouse - минимальный порог
+      } else if (this.isMacOS) {
+        brandsThreshold = 3; // Для обычных мышек на macOS
+      }
       
       // Фильтрация только очень мелких случайных движений
       if (Math.abs(e.deltaY) < brandsThreshold) {
@@ -288,8 +324,13 @@ export class ScrollController {
       // Throttle для wheel событий
       const now = Date.now();
       
-      // Для MacOS уменьшаем cooldown для более отзывчивой навигации
-      const brandsCooldown = this.isMacOS ? 250 : 500;
+      // Адаптивный cooldown для разных типов мышек
+      let brandsCooldown = 500; // По умолчанию
+      if (this.isAppleMouse) {
+        brandsCooldown = 200; // Для Apple Magic Mouse - быстрее
+      } else if (this.isMacOS) {
+        brandsCooldown = 250; // Для обычных мышек на macOS
+      }
       
       // Проверка на cooldown
       if (now - this.lastScrollTime < brandsCooldown) {

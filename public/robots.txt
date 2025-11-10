@@ -1,0 +1,41 @@
+# robots.txt для instrument-fit.ru
+
+User-agent: *
+Allow: /
+
+# Яндекс
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Особые правила для изображений
+User-agent: Yandex/MirrorDetector
+Allow: /
+
+# Блокируем служебные файлы
+Disallow: /server/
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: *.js.map$
+Disallow: *.ts$
+Disallow: *.tsx$
+
+# Разрешаем индексацию изображений
+Allow: /img/
+Allow: /logo/
+Allow: *.png$
+Allow: *.jpg$
+Allow: *.jpeg$
+Allow: *.svg$
+
+# Карта сайта
+Sitemap: https://instrument-fit.ru/sitemap.xml
+Sitemap: https://www.instrument-fit.ru/sitemap.xml
+
+# Главная страница
+Host: https://instrument-fit.ru
+

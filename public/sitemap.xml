@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Главная страница -->
+  <url>
+    <loc>https://instrument-fit.ru/</loc>
+    <lastmod>2025-01-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://instrument-fit.ru/" />
+  </url>
+  
+  <!-- Секция О компании -->
+  <url>
+    <loc>https://instrument-fit.ru/#about</loc>
+    <lastmod>2025-01-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Секция Бренды -->
+  <url>
+    <loc>https://instrument-fit.ru/#brands</loc>
+    <lastmod>2025-01-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://instrument-fit.ru/logo/brands/FIT_logo.png</image:loc>
+      <image:title>FIT - Профессиональный инструмент</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://instrument-fit.ru/logo/brands/greatflex.png</image:loc>
+      <image:title>GreatFlex - Шлифовальные инструменты</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://instrument-fit.ru/logo/brands/MOS.png</image:loc>
+      <image:title>MOS - Сварочное оборудование</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://instrument-fit.ru/logo/brands/xbat.png</image:loc>
+      <image:title>XBAT - Аккумуляторы и батареи</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://instrument-fit.ru/logo/brands/cutop.png</image:loc>
+      <image:title>Cutop - Режущий инструмент</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://instrument-fit.ru/logo/brands/master_color.png</image:loc>
+      <image:title>Master Color - Малярные инструменты</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://instrument-fit.ru/logo/brands/kurs.png</image:loc>
+      <image:title>Kurs - Садовый инструмент</image:title>
+    </image:image>
+  </url>
+  
+  <!-- Секция Клиентский сервис -->
+  <url>
+    <loc>https://instrument-fit.ru/#services</loc>
+    <lastmod>2025-01-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Секция История -->
+  <url>
+    <loc>https://instrument-fit.ru/#timeline</loc>
+    <lastmod>2025-01-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Секция География -->
+  <url>
+    <loc>https://instrument-fit.ru/#geography</loc>
+    <lastmod>2025-01-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Секция Контакты -->
+  <url>
+    <loc>https://instrument-fit.ru/#contact</loc>
+    <lastmod>2025-01-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+</urlset>
+
