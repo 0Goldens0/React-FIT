@@ -4,9 +4,13 @@ import App from './App.tsx'
 import './index.css'
 import { performanceOptimizer } from './utils/performanceOptimizer'
 import './utils/lazyLoad' // Автоматически инициализируется
+import { initViewportHeight } from './utils/viewportHeight'
 
 // Инициализируем оптимизацию производительности
 performanceOptimizer.applyOptimizations()
+
+// Инициализируем корректный расчёт высоты viewport (решает проблему с vh при изменении размера экрана)
+initViewportHeight()
 
 // Измеряем FPS после загрузки
 window.addEventListener('load', () => {

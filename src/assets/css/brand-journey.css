@@ -17,7 +17,8 @@ section#brands.brands {
     padding: 0 !important;
     margin-top: 0 !important;
     background: #0a0a0f !important;
-    height: 100vh !important; /* Возвращаем полную высоту */
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 100) !important;
     display: flex;
     align-items: center; /* Центрируем по вертикали */
     padding-top: 0 !important; /* Убираем лишний отступ */
@@ -29,7 +30,8 @@ section#brands.brands {
 .brand-journey-container {
     display: flex;
     width: 600vw; /* Ширина для 6 брендов */
-    height: 100vh;
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 100);
     transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); /* Плавный переход */
     position: relative;
     margin-top: 0; /* Убираем отрицательный отступ */
@@ -40,7 +42,8 @@ section#brands.brands {
 
 .brand-section {
     width: 100vw;
-    height: 100vh;
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 100);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -105,8 +108,10 @@ section#brands.brands {
     transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
     width: 40%;
     padding-left: 6%;
-    padding-top: calc(50vh - 220px);
-    height: 100vh;
+    /* Используем динамическую переменную --vh в calc */
+    padding-top: calc(calc(var(--vh, 1vh) * 50) - 220px);
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 100);
     margin-top: 0;
 }
 
@@ -878,7 +883,8 @@ section#brands.brands {
 @media (max-width: 992px) {
     section#brands.brands {
         height: auto !important;
-        min-height: min(90vh, 700px);
+        /* Используем динамическую переменную --vh */
+        min-height: min(calc(var(--vh, 1vh) * 90), 700px);
     }
     
     .brand-section {
@@ -1033,9 +1039,11 @@ section#brands.brands {
     }
     
     .brand-section {
-        gap: clamp(12px, 3vh, 18px);
-        padding: clamp(30px, 7vh, 45px) clamp(10px, 3vw, 15px) clamp(15px, 4vh, 20px);
-        min-height: 110vh;
+        /* Используем динамическую переменную --vh в clamp */
+        gap: clamp(12px, calc(var(--vh, 1vh) * 3), 18px);
+        padding: clamp(30px, calc(var(--vh, 1vh) * 7), 45px) clamp(10px, 3vw, 15px) clamp(15px, calc(var(--vh, 1vh) * 4), 20px);
+        /* Используем динамическую переменную --vh */
+        min-height: calc(var(--vh, 1vh) * 110);
         max-height: none;
         display: flex;
         flex-direction: column;
