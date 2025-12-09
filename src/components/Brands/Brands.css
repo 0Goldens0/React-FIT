@@ -3,7 +3,8 @@ section#brands.brands {
     padding: 0 !important;
     margin-top: 0 !important;
     background: #0a0a0f !important;
-    height: 100vh !important;
+    /* Используем динамическую переменную --vh вместо статической 100vh */
+    height: calc(var(--vh, 1vh) * 100) !important;
     display: flex;
     align-items: center;
     position: relative;
@@ -14,7 +15,8 @@ section#brands.brands {
 .brand-journey-container {
     display: flex;
     width: 600vw; /* Для 6 брендов */
-    height: 100vh;
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 100);
     transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;
     margin-top: 0;
@@ -22,7 +24,8 @@ section#brands.brands {
 
 .brand-section {
     width: 100vw;
-    height: 100vh;
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 100);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -66,7 +69,8 @@ section#brands.brands {
     transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
     width: 40%;
     padding-left: 6%;
-    height: 100vh;
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 100);
     margin-top: 0;
 }
 

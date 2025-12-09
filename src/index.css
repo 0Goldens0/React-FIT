@@ -11,6 +11,10 @@
     --border: rgba(255, 255, 255, 0.1);
     --shadow: rgba(0, 0, 0, 0.2);
     --bg-gradient: linear-gradient(135deg, #0F0F11 0%, #1F1F22 100%);
+    
+    /* Динамическая высота viewport (устанавливается через JS) */
+    /* Решает проблему с некорректным расчётом vh при изменении высоты экрана */
+    --vh: 1vh;
 }
 
 /* Улучшенная нормализация для кроссбраузерности */
@@ -48,7 +52,8 @@ body {
     background-color: var(--dark);
     overflow-x: hidden;
     padding-top: 80px;
-    min-height: 100vh;
+    /* Используем calc() с динамической переменной --vh для корректного расчёта высоты */
+    min-height: calc(var(--vh, 1vh) * 100);
     position: relative;
 }
 
@@ -161,7 +166,8 @@ section {
     position: relative;
     scroll-margin-top: 80px; /* Компенсация для фиксированного хедера при якорных ссылках */
     content-visibility: auto;
-    contain-intrinsic-size: auto 100vh;
+    /* Используем динамическую переменную --vh вместо статической 100vh */
+    contain-intrinsic-size: auto calc(var(--vh, 1vh) * 100);
 }
 
 /* Специальная секция для главной страницы - убираем верхний отступ */

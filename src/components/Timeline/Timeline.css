@@ -101,26 +101,37 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
+/* Смещаем карточки вверх/вниз от центра, точки остаются на центральной линии */
 .timeline-item.top {
-    align-self: flex-start;
+    transform: translateY(calc(-50% - 10px));
+}
+
+.timeline-item.top:hover {
+    transform: translateY(calc(-50% - 20px)) scale(1.02);
 }
 
 .timeline-item.top .timeline-dot {
-    bottom: -25px;
+    /* Точка в центре нижней грани карточки, выходит на центральную линию */
+    bottom: 0;
     top: auto;
+    transform: translate(-50%, calc(50% + 10px));
     z-index: 15;
-    overflow: visible;
 }
 
 .timeline-item.bottom {
-    align-self: flex-end;
+    transform: translateY(calc(50% + 10px));
+}
+
+.timeline-item.bottom:hover {
+    transform: translateY(calc(50% + 20px)) scale(1.02);
 }
 
 .timeline-item.bottom .timeline-dot {
-    top: -25px;
+    /* Точка в центре верхней грани карточки, выходит на центральную линию */
+    top: 0;
     bottom: auto;
+    transform: translate(-50%, calc(-50% - 10px));
     z-index: 15;
-    overflow: visible;
 }
 
 .timeline-dot {
@@ -132,6 +143,7 @@
     box-shadow: 0 0 15px rgba(255, 184, 0, 0.5);
     z-index: 15;
     left: 50%;
+    /* Центрируем точку горизонтально */
     transform: translateX(-50%);
     pointer-events: none;
     overflow: visible;
@@ -260,7 +272,8 @@
     position: relative;
     width: 90%;
     max-width: 1400px;
-    height: 90vh;
+    /* Используем динамическую переменную --vh */
+    height: calc(var(--vh, 1vh) * 90);
     background: rgba(17, 17, 17, 0.95);
     border-radius: 20px;
     overflow: hidden;
@@ -540,7 +553,8 @@
     }
     
     .timeline-container {
-        height: 52vh;
+        /* Используем динамическую переменную --vh */
+        height: calc(var(--vh, 1vh) * 52);
         margin: 0;
         padding: 12px 0;
     }
@@ -549,6 +563,34 @@
         flex: 0 0 280px;
         height: 180px;
         margin-right: 60px;
+    }
+
+    .timeline-item.top {
+        transform: translateY(calc(-50% - 8px));
+    }
+
+    .timeline-item.top:hover {
+        transform: translateY(calc(-50% - 16px)) scale(1.02);
+    }
+
+    .timeline-item.top .timeline-dot {
+        bottom: 0;
+        top: auto;
+        transform: translate(-50%, calc(50% + 8px));
+    }
+
+    .timeline-item.bottom {
+        transform: translateY(calc(50% + 8px));
+    }
+
+    .timeline-item.bottom:hover {
+        transform: translateY(calc(50% + 16px)) scale(1.02);
+    }
+
+    .timeline-item.bottom .timeline-dot {
+        top: 0;
+        bottom: auto;
+        transform: translate(-50%, calc(-50% - 8px));
     }
     
     .timeline-year {
@@ -576,15 +618,6 @@
         height: 14px;
     }
     
-    /* Точки строго на центральной линии */
-    .timeline-item.top .timeline-dot {
-        bottom: -40px;
-    }
-    
-    .timeline-item.bottom .timeline-dot {
-        top: -40px;
-    }
-    
     .timeline-controls {
         margin: -5px auto 0;
         gap: 15px;
@@ -605,15 +638,8 @@
     /* Safari/MacOS - особое позиционирование точек и расстояние карточек */
     @supports (-webkit-hyphens:none) {
         .timeline-container {
-            height: 60vh;
-        }
-        
-        .timeline-item.top .timeline-dot {
-            bottom: -32px;
-        }
-        
-        .timeline-item.bottom .timeline-dot {
-            top: -32px;
+            /* Используем динамическую переменную --vh */
+            height: calc(var(--vh, 1vh) * 60);
         }
     }
 }
@@ -638,7 +664,8 @@
     }
     
     .timeline-container {
-        height: 50vh;
+        /* Используем динамическую переменную --vh */
+        height: calc(var(--vh, 1vh) * 50);
         padding: 12px 0;
     }
     
@@ -646,6 +673,34 @@
         flex: 0 0 300px;
         height: 190px;
         margin-right: 70px;
+    }
+
+    .timeline-item.top {
+        transform: translateY(calc(-50% - 9px));
+    }
+
+    .timeline-item.top:hover {
+        transform: translateY(calc(-50% - 18px)) scale(1.02);
+    }
+
+    .timeline-item.top .timeline-dot {
+        bottom: 0;
+        top: auto;
+        transform: translate(-50%, calc(50% + 9px));
+    }
+
+    .timeline-item.bottom {
+        transform: translateY(calc(50% + 9px));
+    }
+
+    .timeline-item.bottom:hover {
+        transform: translateY(calc(50% + 18px)) scale(1.02);
+    }
+
+    .timeline-item.bottom .timeline-dot {
+        top: 0;
+        bottom: auto;
+        transform: translate(-50%, calc(-50% - 9px));
     }
     
     .timeline-year {
@@ -667,14 +722,6 @@
         height: 13px;
     }
     
-    .timeline-item.top .timeline-dot {
-        bottom: -21px;
-    }
-    
-    .timeline-item.bottom .timeline-dot {
-        top: -22px;
-    }
-    
     .timeline-controls {
         margin: 28px auto 0;
         gap: 16px;
@@ -693,21 +740,15 @@
     }
 
     .timeline-fullscreen-content {
-        height: 80vh;
+        /* Используем динамическую переменную --vh */
+        height: calc(var(--vh, 1vh) * 80);
     }
     
     /* Safari/MacOS - такая же высота как на 1399px */
     @supports (-webkit-hyphens:none) {
         .timeline-container {
-            height: 60vh;
-        }
-        
-        .timeline-item.top .timeline-dot {
-            bottom: -22px;
-        }
-        
-        .timeline-item.bottom .timeline-dot {
-            top: -22px;
+            /* Используем динамическую переменную --vh */
+            height: calc(var(--vh, 1vh) * 60);
         }
     }
 }
@@ -742,21 +783,15 @@
     .timeline-fullscreen-title {
         font-size: 28px;
     }
-
-    .timeline-item.top .timeline-dot {
-        bottom: -54px;
-    }
-    
-    .timeline-item.bottom .timeline-dot {
-        top: -54px;
-    }
 }
 
 /* Мобильные устройства */
 @media (max-width: 768px) {
     .timeline-section {
-        padding: clamp(35px, 8vh, 50px) clamp(10px, 3vw, 20px);
-        min-height: 100vh;
+        /* Используем динамическую переменную --vh в clamp */
+        padding: clamp(35px, calc(var(--vh, 1vh) * 8), 50px) clamp(10px, 3vw, 20px);
+        /* Используем динамическую переменную --vh */
+        min-height: calc(var(--vh, 1vh) * 100);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -781,8 +816,39 @@
     
     .timeline-item {
         flex: 0 0 clamp(220px, 55vw, 260px);
-        height: clamp(130px, 26vh, 160px);
+        /* Используем динамическую переменную --vh в clamp */
+        height: clamp(130px, calc(var(--vh, 1vh) * 26), 160px);
         margin-right: clamp(35px, 8vw, 50px);
+    }
+
+    .timeline-item.top {
+        transform: translateY(calc(-50% - 6px));
+    }
+
+    .timeline-item.top:hover {
+        transform: translateY(calc(-50% - 12px)) scale(1.02);
+    }
+
+    .timeline-item.top .timeline-dot {
+        bottom: 0;
+        top: auto;
+        /* Используем среднее значение высоты: (130 + 160) / 4 = 72.5px */
+        transform: translate(-50%, calc(50% + 6px));
+    }
+
+    .timeline-item.bottom {
+        transform: translateY(calc(50% + 6px));
+    }
+
+    .timeline-item.bottom:hover {
+        transform: translateY(calc(50% + 12px)) scale(1.02);
+    }
+
+    .timeline-item.bottom .timeline-dot {
+        top: 0;
+        bottom: auto;
+        /* Используем среднее значение высоты: (130 + 160) / 4 = 72.5px */
+        transform: translate(-50%, calc(-50% - 6px));
     }
 
     .timeline-content { 
@@ -809,14 +875,6 @@
         height: clamp(8px, 2.5vw, 10px);
     }
     
-    .timeline-item.top .timeline-dot {
-        bottom: -33px;
-    }
-    
-    .timeline-item.bottom .timeline-dot {
-        top: -33px;
-    }
-    
     .timeline-controls {
         gap: clamp(10px, 2.5vw, 12px);
         margin-top: clamp(15px, 4vh, 25px);
@@ -836,7 +894,8 @@
     
     .timeline-fullscreen-content {
         width: clamp(95%, 100% - 20px, 98%);
-        height: 75vh;
+        /* Используем динамическую переменную --vh */
+        height: calc(var(--vh, 1vh) * 75);
         padding: clamp(18px, 5vw, 30px);
     }
     
@@ -974,7 +1033,8 @@
 
 
 /* Маленькие мобильные - используют те же стили что и 768px */
-/* @media (max-width: 480px) {
+/*
+@media (max-width: 480px) {
     .timeline-section {
         padding: 50px 15px;
     }
@@ -1016,7 +1076,7 @@
     .timeline-fullscreen-content {
         width: 98%;
         padding: 20px;
-        height: 96vh;
+        height: calc(var(--vh, 1vh) * 96);
     }
     
     .timeline-fullscreen-header {
@@ -1066,4 +1126,5 @@
         padding: 8px;
         font-size: 1.3rem;
     }
-} */ 
+}
+*/ 
