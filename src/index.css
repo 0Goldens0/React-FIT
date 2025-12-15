@@ -173,7 +173,7 @@ section {
 /* Специальная секция для главной страницы - убираем верхний отступ */
 section#home {
     padding-top: 0;
-    margin-top: -80px; /* Компенсируем padding-top body */
+    margin-top: 0; /* Компенсируем padding-top body */
     scroll-margin-top: 0;
 }
 

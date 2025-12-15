@@ -1,7 +1,7 @@
+'use client'
+
 import { useEffect } from 'react'
 import { getAssetPath } from '../../utils/paths'
-import './Services.css'
-import '../../assets/css/services.css'
 
 const Services = () => {
   useEffect(() => {

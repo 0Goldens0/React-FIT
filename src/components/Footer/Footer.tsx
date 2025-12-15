@@ -1,5 +1,6 @@
+'use client'
+
 import { getAssetPath } from '../../utils/paths'
-import './Footer.css'
 
 const Footer = () => {
   return (

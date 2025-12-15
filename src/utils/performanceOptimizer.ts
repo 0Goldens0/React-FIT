@@ -9,6 +9,9 @@ export class PerformanceOptimizer {
   private isInitialized: boolean = false;
 
   constructor() {
+    if (typeof window === 'undefined') {
+      return;
+    }
     this.detectDeviceCapabilities();
     this.showLoadingScreen();
   }
@@ -48,7 +51,7 @@ export class PerformanceOptimizer {
     const cores = navigator.hardwareConcurrency || 2;
     
     // Проверяем память устройства (если доступно)
-    const memory = (navigator as any).deviceMemory || 4;
+    const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory || 4;
     
     // Проверяем user agent для старых устройств
     const userAgent = navigator.userAgent.toLowerCase();
@@ -768,7 +771,8 @@ export const performanceOptimizer = new PerformanceOptimizer();
 
 // Делаем доступным в консоли для тестирования
 if (typeof window !== 'undefined') {
-  (window as any).performanceOptimizer = performanceOptimizer;
+  (window as Window & { performanceOptimizer?: PerformanceOptimizer }).performanceOptimizer =
+    performanceOptimizer;
   console.log('💡 Tip: Use window.performanceOptimizer.forceLowEndMode() to test optimizations');
 }
 

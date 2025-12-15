@@ -1,0 +1,218 @@
+/* Страница контактов - компактная версия 100vh */
+.contacts-page-wrapper {
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a1f 50%, #0f0f14 100%);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.contacts-main-content {
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Компактная версия Contact секции для страницы /contacts */
+.compact-contact-page .contact-section {
+  padding: 20px 20px 20px 20px;
+  min-height: auto;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.compact-contact-page .contact-section .container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.compact-contact-page .contact-hero {
+  margin-bottom: 30px;
+}
+
+.compact-contact-page .contact-hero-title {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.compact-contact-page .contact-hero-description {
+  font-size: 1rem;
+  max-width: 500px;
+}
+
+.compact-contact-page .hero-badge {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.compact-contact-page .contact-main-content {
+  gap: 30px;
+}
+
+.compact-contact-page .contact-methods-sidebar {
+  gap: 16px;
+  width: 320px;
+}
+
+.compact-contact-page .contact-method-card {
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.compact-contact-page .method-icon-container {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+}
+
+.compact-contact-page .method-title {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.compact-contact-page .method-main {
+  font-size: 0.95rem;
+}
+
+.compact-contact-page .method-description {
+  font-size: 0.8rem;
+}
+
+.compact-contact-page .form-container {
+  padding: 30px;
+  max-width: 550px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.compact-contact-page .form-header {
+  margin-bottom: 24px;
+}
+
+.compact-contact-page .form-header h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.compact-contact-page .form-header p {
+  font-size: 0.9rem;
+}
+
+.compact-contact-page .modern-form {
+  gap: 20px;
+}
+
+.compact-contact-page .floating-input-group input,
+.compact-contact-page .floating-input-group textarea {
+  padding: 20px 16px 10px 16px;
+  font-size: 0.95rem;
+}
+
+.compact-contact-page .floating-input-group label {
+  font-size: 0.85rem;
+}
+
+.compact-contact-page .floating-input-group textarea {
+  min-height: 80px;
+}
+
+.compact-contact-page .privacy-consent {
+  margin: 16px 0 0 0;
+}
+
+.compact-contact-page .privacy-text {
+  font-size: 0.85rem;
+}
+
+.compact-contact-page .submit-modern-btn {
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+
+/* Адаптивность для компактной версии */
+@media (max-width: 1200px) {
+  .compact-contact-page .contact-hero-title {
+    font-size: 2.2rem;
+  }
+
+  .compact-contact-page .contact-main-content {
+    gap: 24px;
+  }
+
+  .compact-contact-page .contact-methods-sidebar {
+    width: 280px;
+  }
+}
+
+@media (max-width: 992px) {
+  .compact-contact-page .contact-section {
+    padding: 30px 20px 20px 20px;
+  }
+
+  .compact-contact-page .contact-hero-title {
+    font-size: 2rem;
+  }
+
+  .compact-contact-page .contact-hero {
+    margin-bottom: 30px;
+  }
+
+  .compact-contact-page .contact-main-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .compact-contact-page .contact-methods-sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .compact-contact-page .contact-method-card {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .compact-contact-page .contact-section {
+    padding: 24px 16px 16px 16px;
+  }
+
+  .compact-contact-page .contact-hero-title {
+    font-size: 1.8rem;
+  }
+
+  .compact-contact-page .contact-hero-description {
+    font-size: 0.95rem;
+  }
+
+  .compact-contact-page .contact-methods-sidebar {
+    flex-direction: column;
+  }
+
+  .compact-contact-page .form-container {
+    padding: 24px 20px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .compact-contact-page .contact-hero-title {
+    font-size: 1.5rem;
+  }
+
+  .compact-contact-page .form-container {
+    padding: 20px 16px;
+  }
+
+  .compact-contact-page .form-header h3 {
+    font-size: 1.3rem;
+  }
+}
+
