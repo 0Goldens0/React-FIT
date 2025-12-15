@@ -2,6 +2,7 @@
 
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
+import { getAssetPath } from '../utils/paths'
 
 const LogisticsPage = () => {
   const warehouses = [
@@ -9,43 +10,43 @@ const LogisticsPage = () => {
       city: 'Москва (ПНК Белый Раст)',
       address: 'Рогачёвское шоссе, 27 км от МКАД',
       status: 'Работает',
-      image: '/img/timeline/placeholder-warehouse.svg'
+      image: getAssetPath('img/timeline/placeholder-warehouse.svg')
     },
     {
       city: 'Санкт-Петербург',
       address: 'пр. Обуховской Обороны, 120',
       status: 'Работает',
-      image: '/img/timeline/placeholder-warehouse.svg'
+      image: getAssetPath('img/timeline/placeholder-warehouse.svg')
     },
     {
       city: 'Екатеринбург',
       address: 'Сибирский тракт, 12',
       status: 'Работает',
-      image: '/img/timeline/placeholder-warehouse.svg'
+      image: getAssetPath('img/timeline/placeholder-warehouse.svg')
     },
     {
       city: 'Казань',
       address: 'ул. Тихорецкая, 7',
       status: 'Работает',
-      image: '/img/timeline/placeholder-warehouse.svg'
+      image: getAssetPath('img/timeline/placeholder-warehouse.svg')
     },
     {
       city: 'Воронеж',
       address: 'ул. Димитрова, 148',
       status: 'Работает',
-      image: '/img/timeline/placeholder-warehouse.svg'
+      image: getAssetPath('img/timeline/placeholder-warehouse.svg')
     },
     {
       city: 'Краснодар',
       address: 'Уральская улица, 126',
       status: 'Работает',
-      image: '/img/timeline/placeholder-warehouse.svg'
+      image: getAssetPath('img/timeline/placeholder-warehouse.svg')
     },
     {
       city: 'Пятигорск',
       address: 'Черкесское шоссе, 25',
       status: 'Работает',
-      image: '/img/timeline/placeholder-warehouse.svg'
+      image: getAssetPath('img/timeline/placeholder-warehouse.svg')
     }
   ]
 
@@ -106,7 +107,7 @@ const LogisticsPage = () => {
               </p>
             </div>
             <div className="section-image">
-              <img src="/img/timeline/placeholder-port.svg" alt="Логистика FIT" />
+              <img src={getAssetPath('img/timeline/placeholder-port.svg')} alt="Логистика FIT" />
             </div>
           </div>
         </section>
@@ -154,7 +155,7 @@ const LogisticsPage = () => {
 
           <div className="dc-image">
             <img
-              src="/img/timeline/placeholder-warehouse-interior.svg"
+              src={getAssetPath('img/timeline/placeholder-warehouse-interior.svg')}
               alt="ПНК Белый Раст"
             />
           </div>
@@ -228,7 +229,7 @@ const LogisticsPage = () => {
             Логистика FIT — это не просто транспортировка. Это комплексная система, которая объединяет 
             мощности, технологии и людей.
           </p>
-          <a href="/contacts" className="cta-button">
+          <a href={getAssetPath('/contacts')} className="cta-button">
             Стать партнёром
           </a>
         </section>

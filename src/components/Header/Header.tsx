@@ -370,13 +370,7 @@ const Header = () => {
               >
                 Честный знак
               </Link>
-              <Link 
-                href="/services/packaging" 
-                className={`nav-link-mobile submenu-item ${isActive('/services/packaging') ? 'active' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Упаковка
-              </Link>
+              {/* packaging service removed */}
             </div>
             
             <Link href="/geography" className={`nav-link-mobile ${isActive('/geography') ? 'active' : ''}`}>
