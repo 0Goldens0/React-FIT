@@ -1,12 +1,14 @@
+'use client'
+
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Phone, Send, User, Building, MapPin, MessageSquare, Sparkles } from 'lucide-react'
-import './Contact.css'
 
 interface FormErrors {
   name?: string
   email?: string
   company?: string
+  city?: string
   message?: string
   privacy?: string
 }
@@ -16,6 +18,7 @@ const Contact = () => {
     name: '',
     email: '',
     company: '',
+    city: '',
     message: '',
     honeypot: '' // Скрытое поле для ботов
   })
@@ -30,6 +33,8 @@ const Contact = () => {
 
   // Функция валидации отдельного поля
   const validateField = (name: string, value: string): string | undefined => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
     switch (name) {
       case 'name':
         if (!value.trim()) {
@@ -50,9 +55,35 @@ const Contact = () => {
         if (!value.trim()) {
           return 'Email обязателен для заполнения'
         }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(value)) {
           return 'Введите корректный email адрес'
+        }
+        break
+      
+      case 'company':
+        if (!value.trim()) {
+          return 'Компания обязательна для заполнения'
+        }
+        if (value.trim().length < 2) {
+          return 'Название компании должно содержать минимум 2 символа'
+        }
+        if (value.trim().length > 100) {
+          return 'Название компании не может быть длиннее 100 символов'
+        }
+        break
+      
+      case 'city':
+        if (!value.trim()) {
+          return 'Город обязателен для заполнения'
+        }
+        if (value.trim().length < 2) {
+          return 'Название города должно содержать минимум 2 символа'
+        }
+        if (value.trim().length > 50) {
+          return 'Название города не может быть длиннее 50 символов'
+        }
+        if (!/^[а-яА-ЯёЁa-zA-Z\s-]+$/.test(value)) {
+          return 'Название города может содержать только буквы, пробелы и дефисы'
         }
         break
       
@@ -80,6 +111,8 @@ const Contact = () => {
     
     newErrors.name = validateField('name', formData.name)
     newErrors.email = validateField('email', formData.email)
+    newErrors.company = validateField('company', formData.company)
+    newErrors.city = validateField('city', formData.city)
     newErrors.message = validateField('message', formData.message)
     
     if (!isPrivacyAccepted) {
@@ -131,6 +164,8 @@ const Contact = () => {
     setTouched({
       name: true,
       email: true,
+      company: true,
+      city: true,
       message: true
     })
     
@@ -155,7 +190,7 @@ const Contact = () => {
     
     try {
       // Отправка на backend API
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3070'
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3070'
       const response = await fetch(`${API_URL}/api/contact`, {
         method: 'POST',
         headers: {
@@ -165,6 +200,7 @@ const Contact = () => {
           name: formData.name,
           email: formData.email,
           company: formData.company,
+          city: formData.city,
           message: formData.message
           // honeypot НЕ отправляем
         })
@@ -398,21 +434,46 @@ const Contact = () => {
                     aria-hidden="true"
                   />
 
-                  <div className="floating-input-group">
-                    <input
-                      type="text"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField('company')}
-                      onBlur={() => setFocusedField(null)}
-                      className={focusedField === 'company' || formData.company ? 'focused' : ''}
-                    />
-                    <label>
-                      <Building size={18} />
-                      Компания (необязательно)
-                    </label>
-                    <div className="input-border"></div>
+                  <div className="form-row">
+                    <div className={`floating-input-group ${errors.company && touched.company ? 'error' : ''}`}>
+                      <input
+                        type="text"
+                        name="company"
+                        value={formData.company}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('company')}
+                        onBlur={handleBlur}
+                        className={focusedField === 'company' || formData.company ? 'focused' : ''}
+                      />
+                      <label>
+                        <Building size={18} />
+                        Компания *
+                      </label>
+                      <div className="input-border"></div>
+                      {errors.company && touched.company && (
+                        <span className="error-message">{errors.company}</span>
+                      )}
+                    </div>
+
+                    <div className={`floating-input-group ${errors.city && touched.city ? 'error' : ''}`}>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('city')}
+                        onBlur={handleBlur}
+                        className={focusedField === 'city' || formData.city ? 'focused' : ''}
+                      />
+                      <label>
+                        <MapPin size={18} />
+                        Город *
+                      </label>
+                      <div className="input-border"></div>
+                      {errors.city && touched.city && (
+                        <span className="error-message">{errors.city}</span>
+                      )}
+                    </div>
                   </div>
 
                   <div className={`floating-input-group ${errors.message && touched.message ? 'error' : ''}`}>

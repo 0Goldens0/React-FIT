@@ -14,7 +14,7 @@ export class LazyLoader {
    * Инициализация IntersectionObserver
    */
   private initObserver(): void {
-    if ('IntersectionObserver' in window) {
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       this.observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
