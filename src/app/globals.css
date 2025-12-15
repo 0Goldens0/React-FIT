@@ -1,0 +1,42 @@
+/* Compatibility layer: keep existing global CSS working in Next.js.
+   Later you can migrate per-component styles to CSS Modules. */
+
+@import "../App.css";
+@import "../index.css";
+
+/* Screens */
+@import "../screens/HomePage.css";
+@import "../screens/BrandPage.css";
+@import "../screens/FAQPage.css";
+@import "../screens/InfoPage.css";
+@import "../screens/LogisticsPage.css";
+
+/* Shared / assets */
+@import "../assets/css/brand-journey.css";
+@import "../assets/css/services.css";
+
+/* Components */
+@import "../components/Header/Header.css";
+@import "../components/Hero/Hero.css";
+@import "../components/About/About.css";
+@import "../components/Brands/Brands.css";
+@import "../components/Timeline/Timeline.css";
+@import "../components/Services/Services.css";
+@import "../components/RussiaMap/RussiaMap.css";
+@import "../components/Contact/Contact.css";
+@import "../components/Footer/Footer.css";
+
+/* Header offset (fixes content under fixed header + anchors) */
+:root {
+  --header-height: 80px;
+}
+
+html {
+  scroll-padding-top: var(--header-height);
+}
+
+body {
+  padding-top: var(--header-height) !important;
+}
+
+

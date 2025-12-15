@@ -33,6 +33,7 @@ export class ScrollController {
   private deltaYThreshold: number = 10; // Порог для deltaY (игнорируем мелкие движения)
   private isMobileDevice: boolean = false; // Флаг мобильного устройства
   private resizeHandler: (() => void) | null = null; // Обработчик resize
+  private handleScrollBound: (() => void) | null = null; // Стабильная ссылка для add/removeEventListener(scroll)
   
   // Колбэки
   private onSectionChange?: (index: number, section: ScrollSection) => void;
@@ -145,7 +146,8 @@ export class ScrollController {
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('touchstart', this.handleTouchStart, { passive: false });
     window.addEventListener('touchmove', this.handleTouchMove, { passive: false });
-    window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+    this.handleScrollBound ??= this.handleScroll.bind(this);
+    window.addEventListener('scroll', this.handleScrollBound, { passive: true });
 
     // Слушаем события от Brands компонента (когда кликают на точки)
     this.handleBrandScrollUpdate = (e: Event) => {
@@ -198,7 +200,8 @@ export class ScrollController {
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('touchstart', this.handleTouchStart, { passive: false });
     window.addEventListener('touchmove', this.handleTouchMove, { passive: false });
-    window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+    this.handleScrollBound ??= this.handleScroll.bind(this);
+    window.addEventListener('scroll', this.handleScrollBound, { passive: true });
     
     if (this.handleBrandScrollUpdate) {
       window.addEventListener('brandScrollUpdate', this.handleBrandScrollUpdate);
@@ -216,7 +219,9 @@ export class ScrollController {
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('touchstart', this.handleTouchStart);
     window.removeEventListener('touchmove', this.handleTouchMove);
-    window.removeEventListener('scroll', this.handleScroll);
+    if (this.handleScrollBound) {
+      window.removeEventListener('scroll', this.handleScrollBound);
+    }
     
     if (this.handleBrandScrollUpdate) {
       window.removeEventListener('brandScrollUpdate', this.handleBrandScrollUpdate);
@@ -240,7 +245,9 @@ export class ScrollController {
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('touchstart', this.handleTouchStart);
     window.removeEventListener('touchmove', this.handleTouchMove);
-    window.removeEventListener('scroll', this.handleScroll);
+    if (this.handleScrollBound) {
+      window.removeEventListener('scroll', this.handleScrollBound);
+    }
     
     if (this.handleBrandScrollUpdate) {
       window.removeEventListener('brandScrollUpdate', this.handleBrandScrollUpdate);
@@ -249,6 +256,7 @@ export class ScrollController {
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
     }
+    this.handleScrollBound = null;
     
     if (this.scrollTimeout) {
       clearTimeout(this.scrollTimeout);
