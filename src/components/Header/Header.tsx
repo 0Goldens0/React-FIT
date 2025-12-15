@@ -96,7 +96,7 @@ const Header = () => {
                   e.preventDefault()
                   const aboutSection = document.getElementById('about')
                   if (aboutSection) {
-                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
                   }
                 }
               }}
@@ -118,7 +118,7 @@ const Header = () => {
                     e.preventDefault()
                     const brandsSection = document.getElementById('brands')
                     if (brandsSection) {
-                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
                     }
                   }
                 }}
@@ -177,9 +177,6 @@ const Header = () => {
                   </Link>
                   <Link href="/services/honest-sign" className="dropdown-item">
                     Честный знак
-                  </Link>
-                  <Link href="/services/packaging" className="dropdown-item">
-                    Упаковка
                   </Link>
                 </div>
               )}
@@ -304,7 +301,7 @@ const Header = () => {
                   e.preventDefault()
                   const aboutSection = document.getElementById('about')
                   if (aboutSection) {
-                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
                   }
                 }
                 setIsMenuOpen(false)
@@ -322,7 +319,7 @@ const Header = () => {
                     e.preventDefault()
                     const brandsSection = document.getElementById('brands')
                     if (brandsSection) {
-                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
                     }
                   }
                   setIsMenuOpen(false)
