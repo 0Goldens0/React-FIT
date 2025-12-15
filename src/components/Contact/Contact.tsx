@@ -1,7 +1,8 @@
+'use client'
+
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Phone, Send, User, Building, MapPin, MessageSquare, Sparkles } from 'lucide-react'
-import './Contact.css'
 
 interface FormErrors {
   name?: string
@@ -30,6 +31,8 @@ const Contact = () => {
 
   // Функция валидации отдельного поля
   const validateField = (name: string, value: string): string | undefined => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
     switch (name) {
       case 'name':
         if (!value.trim()) {
@@ -50,7 +53,6 @@ const Contact = () => {
         if (!value.trim()) {
           return 'Email обязателен для заполнения'
         }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(value)) {
           return 'Введите корректный email адрес'
         }
@@ -155,7 +157,7 @@ const Contact = () => {
     
     try {
       // Отправка на backend API
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3070'
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3070'
       const response = await fetch(`${API_URL}/api/contact`, {
         method: 'POST',
         headers: {

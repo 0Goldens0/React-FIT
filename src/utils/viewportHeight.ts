@@ -82,3 +82,6 @@ export function isDesktopDevice(): boolean {
   return window.innerWidth > 1024;
 }
 
+
+
+

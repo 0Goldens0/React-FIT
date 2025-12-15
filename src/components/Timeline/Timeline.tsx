@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef, useCallback, memo } from 'react'
+'use client'
+
+import { useEffect, useMemo, useState, useRef, useCallback, memo } from 'react'
 import { scrollController } from '../../utils/scrollController'
 import { performanceOptimizer } from '../../utils/performanceOptimizer'
-import './Timeline.css'
 
 // Определяем скорость transition в зависимости от производительности
 const getTransitionSpeed = () => performanceOptimizer.isLowEnd() ? '0.3s' : '0.5s'
@@ -394,7 +395,10 @@ const Timeline = memo(() => {
   const scrollPositionRef = useRef<number>(0) // Сохраняем позицию скролла при открытии модального окна
   const touchStartRef = useRef<{ x: number; y: number; startPosition: number } | null>(null)
   const isDraggingRef = useRef<boolean>(false)
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  const isTouchDevice = useMemo(() => {
+    if (typeof window === 'undefined') return false
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  }, [])
 
   const startAnimation = useCallback(() => {
     const track = trackRef.current

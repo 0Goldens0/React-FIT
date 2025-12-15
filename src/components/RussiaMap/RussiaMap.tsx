@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState, useEffect, useRef } from 'react';
-import './RussiaMap.css';
+
+import { getAssetPath } from '../../utils/paths'
 
 interface RegionalCenter {
   id: string;
@@ -106,7 +109,7 @@ const RussiaMap: React.FC = () => {
 
   useEffect(() => {
     // Загружаем SVG файл
-    fetch(`${import.meta.env.BASE_URL}img/svg.svg`)
+    fetch(getAssetPath('img/svg.svg'))
       .then(response => response.text())
       .then(data => {
         // Удаляем все title элементы из SVG

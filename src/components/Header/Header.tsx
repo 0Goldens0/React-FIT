@@ -1,163 +1,273 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Menu, X } from 'lucide-react'
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Menu, X, ChevronDown, Phone } from 'lucide-react'
 import { getAssetPath } from '../../utils/paths'
-import { scrollController } from '../../utils/scrollController'
-import './Header.css'
 
 const Header = () => {
+  const headerRef = useRef<HTMLElement | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState('home')
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  
+  const pathname = usePathname()
 
-  // Отслеживание скролла для изменения стилей хедера
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY
-      setIsScrolled(scrollTop > 50)
+    const applyHeaderHeight = () => {
+      const height = headerRef.current?.offsetHeight ?? 80
+      document.documentElement.style.setProperty('--header-height', `${height}px`)
     }
 
+    applyHeaderHeight()
+    window.addEventListener('resize', applyHeaderHeight)
+    return () => window.removeEventListener('resize', applyHeaderHeight)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Функция для определения активной секции с улучшенной логикой
-  const updateActiveSection = useCallback(() => {
-    const sections = ['home', 'stats', 'about', 'brands', 'timeline', 'map', 'services', 'contact']
-    const scrollPosition = window.scrollY
-    const windowHeight = window.innerHeight
-    
-    // Находим секцию которая больше всего видна на экране
-    let currentSection = 'home'
-    let maxVisibility = 0
-    
-    sections.forEach(sectionId => {
-      const element = document.getElementById(sectionId)
-      if (!element) return
-      
-      const rect = element.getBoundingClientRect()
-      const headerHeight = 80
-      
-      // Корректируем позицию с учетом хедера
-      const top = rect.top + scrollPosition - headerHeight
-      const bottom = rect.bottom + scrollPosition - headerHeight
-      
-      // Определяем видимость секции
-      let visibility = 0
-      if (top <= scrollPosition + headerHeight && bottom >= scrollPosition + headerHeight) {
-        const visibleTop = Math.max(scrollPosition + headerHeight, top)
-        const visibleBottom = Math.min(scrollPosition + windowHeight, bottom)
-        visibility = (visibleBottom - visibleTop) / windowHeight
-      }
-      
-      if (visibility > maxVisibility) {
-        maxVisibility = visibility
-        currentSection = sectionId
-      }
-    })
-    
-    setActiveSection(currentSection)
-  }, [])
-
-  // Отслеживание активной секции с debounce
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout
-    
-    const handleScroll = () => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(updateActiveSection, 50)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    updateActiveSection() // Вызываем сразу для установки начального состояния
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      clearTimeout(timeoutId)
-    }
-  }, [updateActiveSection])
-
-  // Улучшенная плавная прокрутка к секции с использованием scrollController
-  const handleNavClick = useCallback((href: string) => {
-    const targetId = href.replace('#', '')
-    const targetElement = document.getElementById(targetId)
-    
-    if (!targetElement) {
-      console.warn(`Element with id "${targetId}" not found`)
-      return
-    }
-    
-    // Закрываем мобильное меню сразу
     setIsMenuOpen(false)
-    
-    // Контролируемые секции (управляются через scrollController)
-    const controlledSections = ['home', 'about', 'brands', 'timeline']
-    const sectionIndex = controlledSections.indexOf(targetId)
-    
-    if (sectionIndex >= 0) {
-      // Используем scrollController для контролируемых секций
-      scrollController.scrollToSection(sectionIndex, true)
-    } else {
-      // Для остальных секций используем стандартный scrollIntoView с центрированием
-      // И отключаем scrollController
-      scrollController.leaveControlledArea()
-      
-      targetElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'nearest'
-      })
-    }
-    
-    // После завершания анимации обновляем активную секцию
-    setTimeout(updateActiveSection, 1000)
-  }, [updateActiveSection])
+    setOpenDropdown(null)
+  }, [pathname])
 
-  const menuItems = [
-    { href: '#home', label: 'Главная', id: 'home' },
-    { href: '#about', label: 'О компании', id: 'about' },
-    { href: '#brands', label: 'Бренды', id: 'brands' },
-    { href: '#timeline', label: 'История', id: 'timeline' },
-    { href: '#map', label: 'География', id: 'map' },
-    { href: '#services', label: 'Услуги', id: 'services' },
-    { href: '#contact', label: 'Контакты', id: 'contact' }
+  useEffect(() => {
+    const handleClickOutside = () => setOpenDropdown(null)
+    if (openDropdown) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [openDropdown])
+
+  const isActive = (path: string) => {
+    if (path === '/' && pathname === '/') return true
+    if (path !== '/' && pathname.startsWith(path)) return true
+    return false
+  }
+
+  const brands = [
+    { id: 'fit', name: 'FIT', desc: 'Основной бренд', color: '#FDB913' },
+    { id: 'cutop', name: 'CUTOP', desc: 'Режущий инструмент', color: '#2A4998' },
+    { id: 'mos', name: 'MOS', desc: 'Строительные материалы', color: '#00AEEF' },
+    { id: 'mastercolor', name: 'Master Color', desc: 'ЛКМ', color: '#0065A8' },
+    { id: 'kypc', name: 'КУРС', desc: 'Инструмент', color: '#D81515' },
+    { id: 'xbat', name: 'ХВАТ', desc: 'Крепеж и метизы', color: '#1A1A1A' }
   ]
 
   return (
-    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+    <header ref={headerRef} className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="header-content">
           {/* Логотип */}
-          <div className="logo">
+          <Link href="/" className="logo">
             <img src={getAssetPath("logo/fit-logo-clean.svg")} alt="FIT" className="logo-img" />
-          </div>
+          </Link>
 
           {/* Навигация для десктопа */}
           <nav className="nav-desktop">
-            {menuItems.map((item) => (
-              <a 
-                key={item.href}
-                href={item.href} 
-                className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-                onClick={(e) => {
+            <Link 
+              href="/" 
+              className={`nav-link ${isActive('/') ? 'active' : ''}`}
+              onClick={(e) => {
+                if (pathname === '/') {
                   e.preventDefault()
-                  e.stopPropagation()
-                  handleNavClick(item.href)
+                  const homeSection = document.getElementById('home')
+                  if (homeSection) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                }
+              }}
+            >
+              Главная
+            </Link>
+
+            <Link 
+              href="/#about" 
+              className="nav-link"
+              onClick={(e) => {
+                if (pathname === '/') {
+                  e.preventDefault()
+                  const aboutSection = document.getElementById('about')
+                  if (aboutSection) {
+                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }
+                }
+              }}
+            >
+              О компании
+            </Link>
+
+            {/* Бренды с мега-меню */}
+            <div 
+              className="nav-item-dropdown"
+              onMouseEnter={() => setOpenDropdown('brands')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <Link 
+                href="/#brands"
+                className={`nav-link has-dropdown ${isActive('/brands') ? 'active' : ''}`}
+                onClick={(e) => {
+                  if (pathname === '/') {
+                    e.preventDefault()
+                    const brandsSection = document.getElementById('brands')
+                    if (brandsSection) {
+                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }
                 }}
               >
-                {item.label}
-              </a>
-            ))}
+                Бренды
+                <ChevronDown size={14} className="dropdown-icon" />
+              </Link>
+              {openDropdown === 'brands' && (
+                <div className="mega-menu mega-menu-brands">
+                  <div className="brands-grid">
+                    {brands.map((brand) => (
+                      <Link 
+                        key={brand.id} 
+                        href={`/brands/${brand.id}`} 
+                        className="brand-card-colored"
+                        style={{
+                          borderColor: brand.color,
+                          '--brand-color': brand.color
+                        } as React.CSSProperties}
+                      >
+                        <div className="brand-name">{brand.name}</div>
+                        <div className="brand-desc">{brand.desc}</div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Услуги с dropdown */}
+            <div 
+              className="nav-item-dropdown"
+              onMouseEnter={() => setOpenDropdown('services')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <Link 
+                href="/#services"
+                className={`nav-link has-dropdown ${isActive('/services') ? 'active' : ''}`}
+                onClick={(e) => {
+                  if (pathname === '/') {
+                    e.preventDefault()
+                    const servicesSection = document.getElementById('services')
+                    if (servicesSection) {
+                      servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }
+                }}
+              >
+                Услуги
+                <ChevronDown size={14} className="dropdown-icon" />
+              </Link>
+              {openDropdown === 'services' && (
+                <div className="dropdown-menu">
+                  <Link href="/services/logistics" className="dropdown-item">
+                    Логистика
+                  </Link>
+                  <Link href="/services/honest-sign" className="dropdown-item">
+                    Честный знак
+                  </Link>
+                  <Link href="/services/packaging" className="dropdown-item">
+                    Упаковка
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            <Link href="/geography" className={`nav-link ${isActive('/geography') ? 'active' : ''}`}>
+              География
+            </Link>
+
+            {/* Информация с mega-menu */}
+            <div 
+              className="nav-item-dropdown"
+              onMouseEnter={() => setOpenDropdown('info')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <span className={`nav-link has-dropdown ${isActive('/info') || isActive('/news') || isActive('/articles') || isActive('/faq') || isActive('/privacy') || isActive('/terms') || isActive('/certificates') ? 'active' : ''}`}>
+                Информация
+                <ChevronDown size={14} className="dropdown-icon" />
+              </span>
+              {openDropdown === 'info' && (
+                <div className="mega-menu mega-menu-info">
+                  <div className="info-menu-grid">
+                    <div className="info-menu-column">
+                      <h3 className="info-menu-title">Новости и статьи</h3>
+                      <Link href="/news" className="info-menu-item">Новости компании</Link>
+                      <Link href="/articles" className="info-menu-item">Товарные статьи</Link>
+                    </div>
+                    <div className="info-menu-column">
+                      <h3 className="info-menu-title">Поддержка</h3>
+                      <Link href="/faq" className="info-menu-item">Частые вопросы</Link>
+                    </div>
+                    <div className="info-menu-column">
+                      <h3 className="info-menu-title">Документы</h3>
+                      <Link href="/privacy" className="info-menu-item">Политика конфиденциальности</Link>
+                      <Link href="/terms" className="info-menu-item">Условия использования</Link>
+                      <Link href="/certificates" className="info-menu-item">Сертификаты</Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link href="/contacts" className={`nav-link ${isActive('/contacts') ? 'active' : ''}`}>
+              Контакты
+            </Link>
           </nav>
 
-          {/* Кнопка каталога для десктопа */}
-          <a 
-            href="https://fit24.ru/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="catalog-button"
-          >
-            Каталог
-          </a>
+          {/* Правая часть */}
+          <div className="header-right">
+            <a href="tel:88005553535" className="phone-link">
+              <Phone size={18} />
+              <span>8 (800) 555-35-35</span>
+            </a>
+
+            {/* Dropdown каталога */}
+            <div 
+              className="catalog-dropdown"
+              onMouseEnter={() => setOpenDropdown('catalog')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <button className="catalog-button">
+                Каталог
+                <ChevronDown size={14} className="dropdown-icon" />
+              </button>
+              {openDropdown === 'catalog' && (
+                <div className="catalog-menu">
+                  <a 
+                    href="https://fit-emarket.ru" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="catalog-menu-item"
+                  >
+                    <strong>Для физических лиц</strong>
+                    <span className="catalog-menu-label">fit-emarket</span>
+                  </a>
+                  <a 
+                    href="https://fit24.ru" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="catalog-menu-item"
+                  >
+                    <strong>Для юридических лиц</strong>
+                    <span className="catalog-menu-label">fit24</span>
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Кнопка мобильного меню */}
           <button 
@@ -172,31 +282,178 @@ const Header = () => {
         {/* Мобильная навигация */}
         {isMenuOpen && (
           <nav className="nav-mobile">
-            {menuItems.map((item) => (
-              <a 
-                key={item.href}
-                href={item.href} 
-                className={`nav-link-mobile ${activeSection === item.id ? 'active' : ''}`}
-                onClick={(e) => {
+            <Link 
+              href="/" 
+              className={`nav-link-mobile ${isActive('/') ? 'active' : ''}`}
+              onClick={(e) => {
+                if (pathname === '/') {
                   e.preventDefault()
-                  e.stopPropagation()
-                  handleNavClick(item.href)
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }
+                setIsMenuOpen(false)
+              }}
+            >
+              Главная
+            </Link>
+
+            <Link 
+              href="/#about" 
+              className="nav-link-mobile"
+              onClick={(e) => {
+                if (pathname === '/') {
+                  e.preventDefault()
+                  const aboutSection = document.getElementById('about')
+                  if (aboutSection) {
+                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }
+                }
+                setIsMenuOpen(false)
+              }}
+            >
+              О компании
+            </Link>
+            
+            <div className="mobile-submenu-section">
+              <Link 
+                href="/#brands" 
+                className="mobile-submenu-title clickable"
+                onClick={(e) => {
+                  if (pathname === '/') {
+                    e.preventDefault()
+                    const brandsSection = document.getElementById('brands')
+                    if (brandsSection) {
+                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }
+                  setIsMenuOpen(false)
                 }}
               >
-                {item.label}
-              </a>
-            ))}
+                Бренды
+              </Link>
+              {brands.map((brand) => (
+                <Link 
+                  key={brand.id}
+                  href={`/brands/${brand.id}`} 
+                  className={`nav-link-mobile submenu-item ${isActive(`/brands/${brand.id}`) ? 'active' : ''}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {brand.name}
+                </Link>
+              ))}
+            </div>
             
-            {/* Кнопка каталога в мобильном меню */}
-            <a 
-              href="https://fit24.ru/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="catalog-button-mobile"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Каталог
-            </a>
+            <div className="mobile-submenu-section">
+              <Link 
+                href="/#services" 
+                className="mobile-submenu-title clickable"
+                onClick={(e) => {
+                  if (pathname === '/') {
+                    e.preventDefault()
+                    const servicesSection = document.getElementById('services')
+                    if (servicesSection) {
+                      servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }
+                  setIsMenuOpen(false)
+                }}
+              >
+                Услуги
+              </Link>
+              <Link 
+                href="/services/logistics" 
+                className={`nav-link-mobile submenu-item ${isActive('/services/logistics') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Логистика
+              </Link>
+              <Link 
+                href="/services/honest-sign" 
+                className={`nav-link-mobile submenu-item ${isActive('/services/honest-sign') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Честный знак
+              </Link>
+              <Link 
+                href="/services/packaging" 
+                className={`nav-link-mobile submenu-item ${isActive('/services/packaging') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Упаковка
+              </Link>
+            </div>
+            
+            <Link href="/geography" className={`nav-link-mobile ${isActive('/geography') ? 'active' : ''}`}>
+              География
+            </Link>
+            
+            <div className="mobile-submenu-section">
+              <div className="mobile-submenu-title">Информация</div>
+              <Link 
+                href="/news" 
+                className={`nav-link-mobile submenu-item ${isActive('/news') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Новости
+              </Link>
+              <Link 
+                href="/articles" 
+                className={`nav-link-mobile submenu-item ${isActive('/articles') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Статьи
+              </Link>
+              <Link 
+                href="/faq" 
+                className={`nav-link-mobile submenu-item ${isActive('/faq') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                FAQ
+              </Link>
+              <Link 
+                href="/privacy" 
+                className={`nav-link-mobile submenu-item ${isActive('/privacy') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Политика
+              </Link>
+              <Link 
+                href="/terms" 
+                className={`nav-link-mobile submenu-item ${isActive('/terms') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Условия
+              </Link>
+              <Link 
+                href="/certificates" 
+                className={`nav-link-mobile submenu-item ${isActive('/certificates') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Сертификаты
+              </Link>
+            </div>
+            
+            <Link href="/contacts" className={`nav-link-mobile ${isActive('/contacts') ? 'active' : ''}`}>
+              Контакты
+            </Link>
+            
+            <div className="catalog-links-mobile">
+              <a 
+                href="https://fit-emarket.ru" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="catalog-button-mobile"
+              >
+                Каталог (физ. лица)
+              </a>
+              <a 
+                href="https://fit24.ru" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="catalog-button-mobile"
+              >
+                Каталог (юр. лица)
+              </a>
+            </div>
           </nav>
         )}
       </div>

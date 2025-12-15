@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+'use client'
+
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { getAssetPath } from '../../utils/paths'
 import { scrollController } from '../../utils/scrollController'
 import { performanceOptimizer } from '../../utils/performanceOptimizer'
-import '../../assets/css/brand-journey.css'
 
 interface Brand {
   id: string
@@ -14,368 +15,380 @@ interface Brand {
   parallaxFgColor: string
 }
 
-// Интерфейс для продукта
 interface BrandProduct {
-  name: string;
-  article: string;
-  image: string;
-  price: string;
-  category: string;
+  name: string
+  article: string
+  image: string
+  price: string
+  category: string
 }
 
-// Типизация объекта brandProducts
-interface BrandProductsMap {
-  [key: string]: BrandProduct[];
-}
+type BrandProductsMap = Record<string, BrandProduct[]>
 
-// Данные по брендам
+/* ===== ДАННЫЕ БРЕНДОВ ===== */
 const brandsData: Brand[] = [
   {
     id: 'fit',
     displayName: 'FIT',
-    description: 'Появление торговой марки в 2003 году дало мощный импульс развитию компании и обеспечило устойчивый рост продаж. FIT – это оптимальное сочетание цены и качества. Наш ассортимент — это единая экосистема решений: от ручного и электроинструмента до оснастки, крепежа и систем хранения. Такой подход позволяет решать любые задачи — от масштабного строительства до точечного ремонта.',
+    description:
+      'Появление торговой марки в 2003 году дало мощный импульс развитию компании и обеспечило устойчивый рост продаж. FIT – это оптимальное сочетание цены и качества. Наш ассортимент — это единая экосистема решений: от ручного и электроинструмента до оснастки, крепежа и систем хранения. Такой подход позволяет решать любые задачи — от масштабного строительства до точечного ремонта.',
     logo: getAssetPath('logo/fit-logo-clean.svg'),
     primaryColor: '#FDB913',
     parallaxBgColor: '#004A4E',
-    parallaxFgColor: '#002F3A'
+    parallaxFgColor: '#002F3A',
   },
   {
     id: 'cutop',
     displayName: 'CUTOP',
-    description: 'Продукция бренда — профессиональная и промышленная оснастка для электроинструмента. Бренд использует самые передовые технологии производства и  предлагает готовые решения для работы с высокими нагрузками и сверхтвердыми материалами. Продукция CUTOP обеспечивает максимальную точность, увеличенный ресурс и безопасность при выполнении ответственных задач.',
+    description:
+      'Продукция бренда — профессиональная и промышленная оснастка для электроинструмента. Бренд использует самые передовые технологии производства и  предлагает готовые решения для работы с высокими нагрузками и сверхтвердыми материалами. Продукция CUTOP обеспечивает максимальную точность, увеличенный ресурс и безопасность при выполнении ответственных задач.',
     logo: getAssetPath('logo/brands/Cutop-CMYK.svg'),
     primaryColor: '#2A4998',
     parallaxBgColor: '#2A4998',
-    parallaxFgColor: '#FFFFFF'
+    parallaxFgColor: '#FFFFFF',
   },
   {
     id: 'mos',
     displayName: 'MOS',
-    description: 'Бренд закрывает потребности бизнеса в удовлетворении спроса на продукцию в низком ценовом сегменте. MOS — разумный выбор для дома и мастерской. Доступные ручные инструменты и хозяйственные товары решают базовые задачи, сохраняя достойное качество без переплат.',
+    description:
+      'Бренд закрывает потребности бизнеса в удовлетворении спроса на продукцию в низком ценовом сегменте. MOS — разумный выбор для дома и мастерской. Доступные ручные инструменты и хозяйственные товары решают базовые задачи, сохраняя достойное качество без переплат.',
     logo: getAssetPath('logo/brands/MOS-CMYK.svg'),
     primaryColor: '#00AEEF',
     parallaxBgColor: '#00AEEF',
-    parallaxFgColor: '#FFFFFF'
+    parallaxFgColor: '#FFFFFF',
   },
   {
     id: 'mastercolor',
     displayName: 'MASTER COLOR',
-    description: 'Master Color - профессиональный бренд товарной категории «малярно-штукатурный инструмент». Предлагает комплексные решения для профессиональной и бытовой отделки: от подготовки поверхностей до нанесения покрытий и защиты рабочей зоны. Каждый инструмент Master Color обеспечивает безупречный результат на всех этапах работ.',
+    description:
+      'Master Color - профессиональный бренд товарной категории «малярно-штукатурный инструмент». Предлагает комплексные решения для профессиональной и бытовой отделки: от подготовки поверхностей до нанесения покрытий и защиты рабочей зоны. Каждый инструмент Master Color обеспечивает безупречный результат на всех этапах работ.',
     logo: getAssetPath('logo/brands/Master_Color_logo-1.svg'),
     primaryColor: '#0065A8',
     parallaxBgColor: '#0065A8',
-    parallaxFgColor: '#FFFFFF'
+    parallaxFgColor: '#FFFFFF',
   },
   {
     id: 'kypc',
     displayName: 'КУРС',
-    description: 'Разработан для занятия ниши среднего ценового сегмента.КУРС — практичные решения для повседневных задач. Ручные инструменты, оснастка и хозяйственные товары сочетают доступность и надежность, помогая справляться с ремонтом и обслуживанием дома.',
+    description:
+      'Разработан для занятия ниши среднего ценового сегмента.КУРС — практичные решения для повседневных задач. Ручные инструменты, оснастка и хозяйственные товары сочетают доступность и надежность, помогая справляться с ремонтом и обслуживанием дома.',
     logo: getAssetPath('logo/brands/Kurs-CMYK.svg'),
     primaryColor: '#D81515',
     parallaxBgColor: '#D81515',
-    parallaxFgColor: '#FFFFFF'
+    parallaxFgColor: '#FFFFFF',
   },
   {
     id: 'xbat',
     displayName: 'ХВАТ',
-    description: 'Бренд с говорящим названием! ХВАТ - специализированный бренд, который фокусируется на узком сегменте рынка - крепёж и сопутствующие товары для бытового и профессионального применения. Прочные, устойчивые к нагрузкам и долговечные решения для надежной фиксации, крепления и энергоснабжения.',
+    description:
+      'Бренд с говорящим названием! ХВАТ - специализированный бренд, который фокусируется на узком сегменте рынка - крепёж и сопутствующие товары для бытового и профессионального применения. Прочные, устойчивые к нагрузкам и долговечные решения для надежной фиксации, крепления и энергоснабжения.',
     logo: getAssetPath('logo/brands/Xbat-CMYK.svg'),
     primaryColor: '#1A1A1A',
     parallaxBgColor: '#1A1A1A',
-    parallaxFgColor: '#FFFFFF'
-  }
+    parallaxFgColor: '#FFFFFF',
+  },
 ]
 
-// Данные о продуктах брендов
+/* ===== ДАННЫЕ ТОВАРОВ ===== */
 const brandProducts: BrandProductsMap = {
   fit: [
-    { name: "Дрель-Шуруповерт аккумуляторная", article: "79905", image: getAssetPath("img/fit/79905.webp"), price: "3 828.00 ₽", category: "Электроинструмент" },
-    { name: "Перфоратор монтажный аккумуляторный", article: "79910", image: getAssetPath("img/fit/79910.webp"), price: "11 880.00 ₽", category: "Электроинструмент" },
-    { name: "Шлифмашина угловая аккумуляторная", article: "79912", image: getAssetPath("img/fit/79912.webp"), price: "6 220.00 ₽", category: "Электроинструмент" },
-    { name: "Пила дисковая циркулярная", article: "79920", image: getAssetPath("img/fit/79920.webp"), price: "7 425.00 ₽", category: "Электроинструмент" }
+    { name: 'Дрель-Шуруповерт аккумуляторная', article: '79905', image: getAssetPath('img/fit/79905.webp'), price: '3 828.00 ₽', category: 'Электроинструмент' },
+    { name: 'Перфоратор монтажный аккумуляторный', article: '79910', image: getAssetPath('img/fit/79910.webp'), price: '11 880.00 ₽', category: 'Электроинструмент' },
+    { name: 'Шлифмашина угловая аккумуляторная', article: '79912', image: getAssetPath('img/fit/79912.webp'), price: '6 220.00 ₽', category: 'Электроинструмент' },
+    { name: 'Пила дисковая циркулярная', article: '79920', image: getAssetPath('img/fit/79920.webp'), price: '7 425.00 ₽', category: 'Электроинструмент' },
   ],
   kypc: [
-    { name: "Тачка строительная КУРС", article: "77607", image: getAssetPath("img/kurs/77607.webp"), price: "3 590 ₽", category: "Садовый инструмент" },
-    { name: "Кисть ОПТИМА", article: "00811", image: getAssetPath("img/kurs/00811.webp"), price: "2 790 ₽", category: "Отделочный инструмент" },
-    { name: "Гвоздодер с изолированной ручкоЙ КУРС", article: "46913", image: getAssetPath("img/kurs/46913.webp"), price: "4 190 ₽", category: "Столярный инструмент" },
-    { name: "Киянка резиновая КУРС", article: "45390", image: getAssetPath("img/kurs/45390.webp"), price: "3 290 ₽", category: "Столярный инструмент" }
+    { name: 'Тачка строительная КУРС', article: '77607', image: getAssetPath('img/kurs/77607.webp'), price: '3 590 ₽', category: 'Садовый инструмент' },
+    { name: 'Кисть ОПТИМА', article: '00811', image: getAssetPath('img/kurs/00811.webp'), price: '2 790 ₽', category: 'Отделочный инструмент' },
+    { name: 'Гвоздодер с изолированной ручкоЙ КУРС', article: '46913', image: getAssetPath('img/kurs/46913.webp'), price: '4 190 ₽', category: 'Столярный инструмент' },
+    { name: 'Киянка резиновая КУРС', article: '45390', image: getAssetPath('img/kurs/45390.webp'), price: '3 290 ₽', category: 'Столярный инструмент' },
   ],
   mos: [
-    { name: "КИСТЬ ФЛЕЙЦЕВАЯ MOS", article: "00701", image: getAssetPath("img/mos/00701.webp"), price: "1 990 ₽", category: "Отделочный инструмент" },
-    { name: "РУЛЕТКА MOS ", article: "16983", image: getAssetPath("img/mos/16983.webp"), price: "499 ₽", category: "Измерительный инструмент" },
-    { name: "ДИСК ОТРЕЗНОЙ АЛМАЗНЫЙ MOS", article: "37201", image: getAssetPath("img/mos/37201.webp"), price: "690 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "КЛЮЧ РАЗВОДНОЙ MOS", article: "70091", image: getAssetPath("img/mos/70091.webp"), price: "890 ₽", category: "Сантехнический инструмент" }
+    { name: 'КИСТЬ ФЛЕЙЦЕВАЯ MOS', article: '00701', image: getAssetPath('img/mos/00701.webp'), price: '1 990 ₽', category: 'Отделочный инструмент' },
+    { name: 'РУЛЕТКА MOS ', article: '16983', image: getAssetPath('img/mos/16983.webp'), price: '499 ₽', category: 'Измерительный инструмент' },
+    { name: 'ДИСК ОТРЕЗНОЙ АЛМАЗНЫЙ MOS', article: '37201', image: getAssetPath('img/mos/37201.webp'), price: '690 ₽', category: 'Абразивно-шлифовальный инструмент' },
+    { name: 'КЛЮЧ РАЗВОДНОЙ MOS', article: '70091', image: getAssetPath('img/mos/70091.webp'), price: '890 ₽', category: 'Сантехнический инструмент' },
   ],
   xbat: [
-    { name: "РЕМЕНЬ БАГАЖНЫЙ ХВАТ", article: "77-253", image: getAssetPath("img/xbat/77-253.webp"), price: "149 ₽", category: "Инструмент автомобильный" },
-    { name: "НАБОР КРЕПЕЖА УНИВЕРСАЛЬНЫЙ ХВАТ", article: "20000", image: getAssetPath("img/xbat/20000.webp"), price: "189 ₽", category: "Крепеж и крепежный инструмент" },
-    { name: "АНКЕРНЫЙ БОЛТ С ПОЛНЫМ КРЮКОМ ХВАТ", article: "26654", image: getAssetPath("img/xbat/26654.webp"), price: "590 ₽", category: "Крепёж" },
-    { name: "ГЕНЕРАТОР ДИЗЕЛЬНЫЙ ХВАТ", article: "KM7500DE", image: getAssetPath("img/xbat/KM7500DE.webp"), price: "249 ₽", category: "Генератор" }
+    { name: 'РЕМЕНЬ БАГАЖНЫЙ ХВАТ', article: '77-253', image: getAssetPath('img/xbat/77-253.webp'), price: '149 ₽', category: 'Инструмент автомобильный' },
+    { name: 'НАБОР КРЕПЕЖА УНИВЕРСАЛЬНЫЙ ХВАТ', article: '20000', image: getAssetPath('img/xbat/20000.webp'), price: '189 ₽', category: 'Крепеж и крепежный инструмент' },
+    { name: 'АНКЕРНЫЙ БОЛТ С ПОЛНЫМ КРЮКОМ ХВАТ', article: '26654', image: getAssetPath('img/xbat/26654.webp'), price: '590 ₽', category: 'Крепёж' },
+    { name: 'ГЕНЕРАТОР ДИЗЕЛЬНЫЙ ХВАТ', article: 'KM7500DE', image: getAssetPath('img/xbat/KM7500DE.webp'), price: '249 ₽', category: 'Генератор' },
   ],
   cutop: [
-    { name: "ШУРУПОВЕРТ CUTOP e-profi", article: "01-884", image: getAssetPath("img/cutop/01-884.webp"), price: "190 ₽", category: "Электроинструмент" },
-    { name: "РОФЕССИОНАЛЬНЫЙ ОТРЕЗНОЙ АЛМАЗНЫЙ ДИСК CUTOP", article: "73-419", image: getAssetPath("img/cutop/73-419-02 (2).webp"), price: "210 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "КОРЩЕТКИ РУЧНЫЕ CUTOP profi", article: "82-547", image: getAssetPath("img/cutop/82-547.webp"), price: "990 ₽", category: "Абразивно-шлифовальный инструмент" },
-    { name: "НАБОР БИТ В ПЛАСТИКОВОМ БОКСЕ CUTOP profi", article: "83-869", image: getAssetPath("img/cutop/83-869.webp"), price: "1 590 ₽", category: "Слесарный инструмент" }
+    { name: 'ШУРУПОВЕРТ CUTOP e-profi', article: '01-884', image: getAssetPath('img/cutop/01-884.webp'), price: '190 ₽', category: 'Электроинструмент' },
+    { name: 'РОФЕССИОНАЛЬНЫЙ ОТРЕЗНОЙ АЛМАЗНЫЙ ДИСК CUTOP', article: '73-419', image: getAssetPath('img/cutop/73-419-02 (2).webp'), price: '210 ₽', category: 'Абразивно-шлифовальный инструмент' },
+    { name: 'КОРЩЕТКИ РУЧНЫЕ CUTOP profi', article: '82-547', image: getAssetPath('img/cutop/82-547.webp'), price: '990 ₽', category: 'Абразивно-шлифовальный инструмент' },
+    { name: 'НАБОР БИТ В ПЛАСТИКОВОМ БОКСЕ CUTOP profi', article: '83-869', image: getAssetPath('img/cutop/83-869.webp'), price: '1 590 ₽', category: 'Слесарный инструмент' },
   ],
   mastercolor: [
-    { name: "КИСТЬ ФЛЕЙЦЕВАЯ Master Color 25 мм", article: "30-0011", image: getAssetPath("img/mc/30-0011.webp"), price: "250 ₽", category: "Отделочный инструмент" },
-    { name: "РОЛИК Master Color 180мм", article: "30-0844", image: getAssetPath("img/mc/30-0844.webp"), price: "390 ₽", category: "Отделочный инструмент" },
-    { name: "МАЛЯРНАЯ ЛЕНТА Master Color", article: "30-6412", image: getAssetPath("img/mc/30-6412.webp"), price: "290 ₽", category: "Отделочный инструмент" },
-    { name: "ПРОФЕССИОНАЛЬНАЯ РАБОЧАЯ ОДЕЖДА Master Color", article: "30-8042", image: getAssetPath("img/mc/30-8042.webp"), price: "990 ₽", category: "Отделочный инструмент" }
-  ]
-};
+    { name: 'КИСТЬ ФЛЕЙЦЕВАЯ Master Color 25 мм', article: '30-0011', image: getAssetPath('img/mc/30-0011.webp'), price: '250 ₽', category: 'Отделочный инструмент' },
+    { name: 'РОЛИК Master Color 180мм', article: '30-0844', image: getAssetPath('img/mc/30-0844.webp'), price: '390 ₽', category: 'Отделочный инструмент' },
+    { name: 'МАЛЯРНАЯ ЛЕНТА Master Color', article: '30-6412', image: getAssetPath('img/mc/30-6412.webp'), price: '290 ₽', category: 'Отделочный инструмент' },
+    { name: 'ПРОФЕССИОНАЛЬНАЯ РАБОЧАЯ ОДЕЖДА Master Color', article: '30-8042', image: getAssetPath('img/mc/30-8042.webp'), price: '990 ₽', category: 'Отделочный инструмент' },
+  ],
+}
 
 const Brands = () => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const sectionRef = useRef<HTMLElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
-  const [productCarouselIndices, setProductCarouselIndices] = useState<{ [key: string]: number }>({})
-  const productCarouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
-  const carouselIntervals = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
-  const [cardWidth, setCardWidth] = useState<number>(140) // Ширина карточки (минимум 140px)
-  const cardGap = 15 // Gap между карточками
+  const lowEnd = useMemo(() => performanceOptimizer.isLowEnd(), [])
+  const cardGap = 15
 
-  // Проверка на мобильное устройство
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 992)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+  const [cardWidth, setCardWidth] = useState<number>(140)
+  const [productCarouselIndices, setProductCarouselIndices] = useState<Record<string, number>>({})
+
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const sectionRef = useRef<HTMLElement | null>(null)
+
+  const productCarouselRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
+  // ВАЖНО: без window. чтобы TS сам выбрал правильный тип (DOM или Node)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const snapTimeoutsRef = useRef<Record<string, ReturnType<typeof setTimeout> | null>>({})
+
+  // Берём ровно те товары, которые реально показываем (4)
+  const visibleProductsByBrand = useMemo(() => {
+    const map: Record<string, BrandProduct[]> = {}
+    for (const brand of brandsData) {
+      map[brand.id] = (brandProducts[brand.id] ?? []).slice(0, 4)
     }
-    
+    return map
+  }, [])
+
+  /* ===== MOBILED DETECT ===== */
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 992)
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Автоматическая карусель товаров на мобильных
-  useEffect(() => {
-    if (!isMobile) {
-      // Очищаем все интервалы на десктопе
-      Object.values(carouselIntervals.current).forEach(interval => {
-        if (interval) clearInterval(interval)
-      })
-      carouselIntervals.current = {}
-      return
-    }
-
-    // Инициализируем индексы для всех брендов
-    const initialIndices: { [key: string]: number } = {}
-    brandsData.forEach(brand => {
-      initialIndices[brand.id] = 0
-    })
-    setProductCarouselIndices(initialIndices)
-
-    // Создаем интервал для каждого бренда
-    brandsData.forEach(brand => {
-      carouselIntervals.current[brand.id] = setInterval(() => {
-        setProductCarouselIndices(prev => {
-          const currentIdx = prev[brand.id] || 0
-          const nextIdx = currentIdx + 1
-
-          // Переключаемся на следующую карточку
-          return { ...prev, [brand.id]: nextIdx }
-        })
-      }, 3000) // Переключение каждые 3 секунды
-    })
-
-    return () => {
-      // Очищаем все интервалы при размонтировании
-      Object.values(carouselIntervals.current).forEach(interval => {
-        if (interval) clearInterval(interval)
-      })
-      carouselIntervals.current = {}
-    }
-  }, [isMobile])
-
-  // Отдельный эффект для сброса индекса на начало (бесконечная карусель)
-  useEffect(() => {
-    if (!isMobile) return
-
-    brandsData.forEach(brand => {
-      const currentIdx = productCarouselIndices[brand.id]
-      const productsCount = brandProducts[brand.id]?.length || 4
-
-      // Если достигли конца оригинальных карточек (показываем первый дубль)
-      if (currentIdx === productsCount) {
-        const carousel = productCarouselRefs.current[brand.id]
-        if (carousel) {
-          // Ждем завершения анимации
-          setTimeout(() => {
-            // Отключаем transition для мгновенного перехода
-            carousel.style.transition = 'none'
-            
-            // Сбрасываем на начало
-            setProductCarouselIndices(prev => ({ ...prev, [brand.id]: 0 }))
-            
-            // Включаем transition обратно (или оставляем выключенным на слабых устройствах)
-            setTimeout(() => {
-              carousel.style.transition = performanceOptimizer.isLowEnd() 
-                ? 'none' 
-                : 'transform 0.5s ease-in-out'
-            }, 50)
-          }, 500) // После завершения анимации (0.5s)
-        }
-      }
-    })
-  }, [productCarouselIndices, isMobile])
-
-  // Вычисляем ширину карточки на основе контейнера
+  /* ===== CARD WIDTH (MOBILE) ===== */
   useEffect(() => {
     if (!isMobile) return
 
     const updateCardWidth = () => {
-      // Находим любой контейнер .journey-brand-products
-      const container = document.querySelector('.journey-brand-products') as HTMLElement
-      if (container) {
-        const containerWidth = container.offsetWidth
-        // Рассчитываем ширину для 2 карточек: (ширина контейнера - gap) / 2
-        // Уменьшаем до 60% для узких карточек (по размеру изображения)
-        const calculatedWidth = ((containerWidth - cardGap) / 2) * 0.6
-        // Гарантируем минимальную ширину 140px
-        const finalWidth = Math.max(calculatedWidth, 140)
-        setCardWidth(finalWidth)
-      }
+      const active = sectionRef.current?.querySelector('.brand-section.active .journey-brand-products') as HTMLElement | null
+      const fallback = sectionRef.current?.querySelector('.journey-brand-products') as HTMLElement | null
+      const el = active ?? fallback
+      if (!el) return
+
+      const containerWidth = el.offsetWidth
+      const calculatedWidth = ((containerWidth - cardGap) / 2) * 0.6
+      setCardWidth(Math.max(calculatedWidth, 140))
     }
 
     updateCardWidth()
     window.addEventListener('resize', updateCardWidth)
-
-    return () => {
-      window.removeEventListener('resize', updateCardWidth)
-    }
+    return () => window.removeEventListener('resize', updateCardWidth)
   }, [isMobile])
 
-  // Слушаем события от ScrollController
+  /* ===== SYNC EVENT (если надо) ===== */
   useEffect(() => {
     const handleBrandScrollUpdate = (e: Event) => {
-      const customEvent = e as CustomEvent<{ index: number }>;
-      setCurrentIndex(customEvent.detail.index);
-    };
-
-    window.addEventListener('brandScrollUpdate', handleBrandScrollUpdate);
-
-    return () => {
-      window.removeEventListener('brandScrollUpdate', handleBrandScrollUpdate);
-    };
+      const customEvent = e as CustomEvent<{ index: number }>
+      setCurrentIndex(customEvent.detail.index)
+    }
+    window.addEventListener('brandScrollUpdate', handleBrandScrollUpdate)
+    return () => window.removeEventListener('brandScrollUpdate', handleBrandScrollUpdate)
   }, [])
 
-  const handleDotClick = (index: number) => {
-    if (index === currentIndex) return
-    setCurrentIndex(index)
-    
-    // Отправляем событие для синхронизации с ScrollController
-    const event = new CustomEvent('brandScrollUpdate', {
-      detail: { index }
-    });
-    window.dispatchEvent(event);
-  }
+  const handleDotClick = useCallback(
+    (index: number) => {
+      if (index === currentIndex) return
+      setCurrentIndex(index)
+      window.dispatchEvent(new CustomEvent('brandScrollUpdate', { detail: { index } }))
+    },
+    [currentIndex]
+  )
 
-  // Навигация к предыдущему бренду
-  const goToPrevBrand = () => {
+  const goToPrevBrand = useCallback(() => {
     const newIndex = currentIndex > 0 ? currentIndex - 1 : brandsData.length - 1
     handleDotClick(newIndex)
-  }
+  }, [currentIndex, handleDotClick])
 
-  // Навигация к следующему бренду
-  const goToNextBrand = () => {
+  const goToNextBrand = useCallback(() => {
     const newIndex = currentIndex < brandsData.length - 1 ? currentIndex + 1 : 0
     handleDotClick(newIndex)
-  }
+  }, [currentIndex, handleDotClick])
 
-  // Навигация к секции "О компании"
-  const navigateToAbout = () => {
-    scrollController.scrollToSection(1, true) // About - индекс 1
-  }
+  const navigateToAbout = useCallback(() => {
+    scrollController.scrollToSection(1, true)
+  }, [])
 
-  // Навигация к секции "История"
-  const navigateToTimeline = () => {
-    scrollController.scrollToSection(3, true) // Timeline - индекс 3
-  }
+  const navigateToTimeline = useCallback(() => {
+    scrollController.scrollToSection(3, true)
+  }, [])
+
+  /* ===== MOBILE AUTO SLIDE (ONE INTERVAL) ===== */
+  useEffect(() => {
+    // чистим snap-таймауты
+    Object.values(snapTimeoutsRef.current).forEach((t) => t && clearTimeout(t))
+    snapTimeoutsRef.current = {}
+
+    if (!isMobile) {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+      intervalRef.current = null
+      setProductCarouselIndices({})
+      return
+    }
+
+    // init indices
+    const initial: Record<string, number> = {}
+    for (const brand of brandsData) initial[brand.id] = 0
+    setProductCarouselIndices(initial)
+
+    if (intervalRef.current) clearInterval(intervalRef.current)
+
+    intervalRef.current = setInterval(() => {
+      setProductCarouselIndices((prev) => {
+        const next = { ...prev }
+        for (const brand of brandsData) {
+          const visibleCount = visibleProductsByBrand[brand.id]?.length ?? 0
+          if (visibleCount === 0) continue
+
+          // идём 0..visibleCount (visibleCount = первый дубль), дальше snap в 0
+          const cur = prev[brand.id] ?? 0
+          const cap = visibleCount
+          next[brand.id] = cur >= cap ? cap : cur + 1
+        }
+        return next
+      })
+    }, 3000)
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+      intervalRef.current = null
+
+      Object.values(snapTimeoutsRef.current).forEach((t) => t && clearTimeout(t))
+      snapTimeoutsRef.current = {}
+    }
+  }, [isMobile, visibleProductsByBrand])
+
+  /* ===== SNAP BACK WHEN REACHED “DUPLICATE FIRST” ===== */
+  useEffect(() => {
+    if (!isMobile) return
+
+    for (const brand of brandsData) {
+      const visibleCount = visibleProductsByBrand[brand.id]?.length ?? 0
+      if (!visibleCount) continue
+
+      const idx = productCarouselIndices[brand.id] ?? 0
+      if (idx !== visibleCount) continue
+
+      const carousel = productCarouselRefs.current[brand.id]
+      if (!carousel) continue
+
+      const old = snapTimeoutsRef.current[brand.id]
+      if (old) clearTimeout(old)
+
+      snapTimeoutsRef.current[brand.id] = setTimeout(() => {
+        carousel.style.transition = 'none'
+        setProductCarouselIndices((prev) => ({ ...prev, [brand.id]: 0 }))
+
+        setTimeout(() => {
+          carousel.style.transition = lowEnd ? 'none' : 'transform 0.5s ease-in-out'
+        }, 50)
+      }, lowEnd ? 0 : 520)
+    }
+  }, [productCarouselIndices, isMobile, lowEnd, visibleProductsByBrand, cardWidth])
 
   return (
-    <section 
-      className="brands" 
-      id="brands"
-      ref={sectionRef}
-    >
-      <div 
-        className="brand-journey-container" 
+    <section className="brands" id="brands" ref={sectionRef}>
+      <div
+        className="brand-journey-container"
         ref={containerRef}
-        style={{ 
+        style={{
           transform: `translate3d(-${currentIndex * 100}vw, 0, 0)`,
-          WebkitTransform: `translate3d(-${currentIndex * 100}vw, 0, 0)`
+          WebkitTransform: `translate3d(-${currentIndex * 100}vw, 0, 0)`,
         }}
       >
-        {brandsData.map((brand, index) => (
-          <section 
-            key={brand.id} 
-            className={`brand-section ${index === currentIndex ? 'active' : ''}`}
-            id={`brand-${brand.id}`}
-          >
-            <div className="parallax-bg" style={{ 
-              backgroundImage: `url('https://placehold.co/1920x1080/${brand.parallaxBgColor.substring(1)}/${brand.parallaxFgColor.substring(1)}?text=${brand.displayName}&font=Inter')` 
-            }}></div>
-            
-            <div className="brand-content">
-              <div className="brand-logo-journey">
-                <img src={brand.logo} alt={`Логотип ${brand.id}`} />
+        {brandsData.map((brand, index) => {
+          const visible = visibleProductsByBrand[brand.id] ?? []
+          const duplicated = [...visible, ...visible]
+          const shift = (productCarouselIndices[brand.id] ?? 0) * (cardWidth + cardGap)
+          const bgText = encodeURIComponent(brand.displayName)
+
+          return (
+            <section
+              key={brand.id}
+              className={`brand-section ${index === currentIndex ? 'active' : ''}`}
+              id={`brand-${brand.id}`}
+            >
+              <div
+                className="parallax-bg"
+                style={{
+                  backgroundImage: `url('https://placehold.co/1920x1080/${brand.parallaxBgColor.substring(1)}/${brand.parallaxFgColor.substring(1)}?text=${bgText}&font=Inter')`,
+                }}
+              />
+
+              <div className="brand-content">
+                <div className="brand-logo-journey">
+                  <img src={brand.logo} alt={`Логотип ${brand.id}`} />
+                </div>
+                <p className="brand-description">{brand.description}</p>
               </div>
-              <p className="brand-description">{brand.description}</p>
-            </div>
-            
-            <div className="journey-brand-products">
-              {isMobile ? (
-                /* Карусель на мобильных с обёрткой */
-                <div 
-                  className="product-carousel-track"
-                  ref={(el) => { productCarouselRefs.current[brand.id] = el }}
-                  style={{
-                    transform: `translateX(-${(productCarouselIndices[brand.id] || 0) * (cardWidth + cardGap)}px)`,
-                    transition: performanceOptimizer.isLowEnd() ? 'none' : 'transform 0.5s ease-in-out'
-                  }}
-                >
-                  {/* Дублируем карточки для бесконечной карусели */}
-                  {[...(brandProducts[brand.id]?.slice(0, 4) || []), ...(brandProducts[brand.id]?.slice(0, 4) || [])].map((product: BrandProduct, idx: number) => (
-                    <div 
-                      key={`${product.article}-${idx}`} 
-                      className="journey-product-card product-card-slider-item"
-                      style={{ width: `${cardWidth}px`, minWidth: `${cardWidth}px` }}
-                    >
-                  <div className="journey-product-card-image-container">
-                    <img src={product.image} alt={product.name} />
+
+              <div className="journey-brand-products">
+                {isMobile ? (
+                  <div
+                    className="product-carousel-track"
+                    ref={(el) => {
+                      productCarouselRefs.current[brand.id] = el
+                    }}
+                    style={{
+                      transform: `translateX(-${shift}px)`,
+                      transition: lowEnd ? 'none' : 'transform 0.5s ease-in-out',
+                    }}
+                  >
+                    {duplicated.map((product, idx2) => (
+                      <div
+                        key={`${product.article}-${idx2}`}
+                        className="journey-product-card product-card-slider-item"
+                        style={{ width: `${cardWidth}px`, minWidth: `${cardWidth}px` }}
+                      >
+                        <div className="journey-product-card-image-container">
+                          <img src={product.image} alt={product.name} />
+                        </div>
+                        <div className="product-info-container">
+                          <div className="product-category">{product.category}</div>
+                          <h4 className="product-name" style={{ textTransform: 'none' }}>
+                            {product.name}
+                          </h4>
+                          <div className="product-article">Артикул: {product.article}</div>
+                          <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>
+                            Подробнее
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="product-info-container">
-                    <div className="product-category">{product.category}</div>
-                    <h4 className="product-name" style={{ textTransform: 'none' }}>{product.name}</h4>
-                    <div className="product-article">Артикул: {product.article}</div>
-                    <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>Подробнее</button>
-                  </div>
-                </div>
-              ))}
-                </div>
-              ) : (
-                /* Обычное отображение на десктопе */
-                brandProducts[brand.id]?.slice(0, 4).map((product: BrandProduct) => (
-                  <div key={product.article} className="journey-product-card product-card-slider-item">
-                    <div className="journey-product-card-image-container">
-                      <img src={product.image} alt={product.name} />
+                ) : (
+                  visible.map((product) => (
+                    <div key={product.article} className="journey-product-card product-card-slider-item">
+                      <div className="journey-product-card-image-container">
+                        <img src={product.image} alt={product.name} />
+                      </div>
+                      <div className="product-info-container">
+                        <div className="product-category">{product.category}</div>
+                        <h4 className="product-name" style={{ textTransform: 'none' }}>
+                          {product.name}
+                        </h4>
+                        <div className="product-article">Артикул: {product.article}</div>
+                        <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>
+                          Подробнее
+                        </button>
+                      </div>
                     </div>
-                    <div className="product-info-container">
-                      <div className="product-category">{product.category}</div>
-                      <h4 className="product-name" style={{ textTransform: 'none' }}>{product.name}</h4>
-                      <div className="product-article">Артикул: {product.article}</div>
-                      <button className="product-detail-btn" style={{ backgroundColor: brand.primaryColor }}>Подробнее</button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </section>
-        ))}
+                  ))
+                )}
+              </div>
+            </section>
+          )
+        })}
       </div>
-      
+
       <div className="navigation-dots">
         {brandsData.map((brand, index) => (
           <button
@@ -383,14 +396,14 @@ const Brands = () => {
             className={`dot ${index === currentIndex ? 'active' : ''}`}
             onClick={() => handleDotClick(index)}
             aria-label={`Перейти к бренду ${brand.id}`}
-            style={{ 
+            style={{
               borderColor: index === currentIndex ? brand.primaryColor : 'rgba(255, 255, 255, 0.3)',
-              background: index === currentIndex ? brand.primaryColor : 'rgba(255, 255, 255, 0.2)'
+              background: index === currentIndex ? brand.primaryColor : 'rgba(255, 255, 255, 0.2)',
             }}
           />
         ))}
       </div>
-      
+
       <div className="scroll-indicator">
         <span>Прокручивайте</span>
         <svg viewBox="0 0 24 24">
@@ -400,11 +413,10 @@ const Brands = () => {
         <span>или используйте навигацию</span>
       </div>
 
-      {/* Стрелки навигации: на десктопе - между секциями, на мобильных - между брендами */}
-      <button 
+      <button
         className={`section-nav-arrow ${isMobile ? 'arrow-left' : 'arrow-up'}`}
         onClick={isMobile ? goToPrevBrand : navigateToAbout}
-        aria-label={isMobile ? "Предыдущий бренд" : "К разделу О компании"}
+        aria-label={isMobile ? 'Предыдущий бренд' : 'К разделу О компании'}
       >
         {isMobile ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -416,11 +428,11 @@ const Brands = () => {
           </svg>
         )}
       </button>
-      
-      <button 
+
+      <button
         className={`section-nav-arrow ${isMobile ? 'arrow-right' : 'arrow-down'}`}
         onClick={isMobile ? goToNextBrand : navigateToTimeline}
-        aria-label={isMobile ? "Следующий бренд" : "К разделу История"}
+        aria-label={isMobile ? 'Следующий бренд' : 'К разделу История'}
       >
         {isMobile ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
