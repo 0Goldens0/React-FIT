@@ -223,7 +223,7 @@ const Contact = () => {
     
     // Сброс формы через 4 секунды
     setTimeout(() => {
-        setFormData({ name: '', email: '', company: '', message: '', honeypot: '' })
+        setFormData({ name: '', email: '', company: '', city: '', message: '', honeypot: '' })
       setIsSubmitted(false)
         setIsPrivacyAccepted(false)
         setErrors({})
