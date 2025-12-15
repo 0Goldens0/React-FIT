@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
+import { getAssetPath } from '../utils/paths'
 
 type FAQItem = {
   id: number
@@ -106,7 +107,7 @@ const FAQPage = () => {
               <a href="tel:88005553535" className="faq-button primary">
                 8 (800) 555-35-35
               </a>
-              <a href="/contacts" className="faq-button secondary">
+              <a href={getAssetPath('/contacts')} className="faq-button secondary">
                 Связаться с нами
               </a>
             </div>
