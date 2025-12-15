@@ -147,6 +147,13 @@ section#brands.brands {
     z-index: 100;
   }
   
+  /* Скрываем точки на планшетах и мобилках */
+  @media (max-width: 1024px) {
+    .navigation-dots {
+      display: none;
+    }
+  }
+  
   .dot {
     width: 12px;
     height: 12px;
@@ -191,6 +198,13 @@ section#brands.brands {
     padding: 0.5rem 1rem;
     border-radius: 2rem;
     backdrop-filter: blur(4px);
+  }
+  
+  /* Скрываем подсказку на планшетах и мобилках */
+  @media (max-width: 1024px) {
+    .scroll-indicator {
+      display: none;
+    }
   }
   
   .scroll-indicator svg {

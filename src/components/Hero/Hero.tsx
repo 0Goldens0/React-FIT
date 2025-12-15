@@ -131,7 +131,7 @@ const Hero = () => {
   }, [animateCounter])
 
   const scrollToBrands = useCallback(() => {
-    document.getElementById('brands')?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById('brands')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }, [])
 
   const scrollToContact = useCallback(() => {

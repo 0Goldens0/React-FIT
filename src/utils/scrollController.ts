@@ -769,6 +769,11 @@ export class ScrollController {
 
     let targetPosition: number;
 
+    // Учитываем фиксированный хедер (чтобы секция не “уезжала” под него)
+    const headerEl = document.querySelector('.header') as HTMLElement | null;
+    const headerOffset = headerEl ? headerEl.offsetHeight : 0;
+    const viewportHeight = Math.max(0, window.innerHeight - headerOffset);
+
     // Если переходим к Hero (первая секция), скроллим до самого верха страницы
     if (section.id === 'home') {
       targetPosition = 0;
@@ -778,17 +783,20 @@ export class ScrollController {
       const absoluteTop = window.scrollY + rect.top;
       
       // Проверяем, является ли секция полноэкранной (100vh)
-      const isFullscreen = rect.height >= window.innerHeight * 0.95;
+      const isFullscreen = rect.height >= viewportHeight * 0.95;
       
       if (isFullscreen) {
-        // Для полноэкранных секций - к началу
-        targetPosition = absoluteTop;
+        // Для полноэкранных секций - к началу, но под фиксированный хедер
+        targetPosition = absoluteTop - headerOffset;
       } else {
-        // Для неполноэкранных секций - центрирование
-        const offset = (window.innerHeight - rect.height) / 2;
-        targetPosition = absoluteTop - offset;
+        // Для неполноэкранных секций - центрирование в видимой области (без хедера)
+        const offset = (viewportHeight - rect.height) / 2;
+        targetPosition = absoluteTop - headerOffset - offset;
       }
     }
+
+    // Не уходим в отрицательные значения
+    targetPosition = Math.max(0, targetPosition);
 
     if (smooth) {
       // Используем плавную анимацию с той же кривой, что в слайдере брендов

@@ -70,7 +70,7 @@ setupEmail();
 // API endpoint для отправки контактной формы (с защитой от спама)
 app.post('/api/contact', contactLimiter, async (req, res) => {
   try {
-    const { name, email, company, message } = req.body;
+    const { name, email, company, city, message } = req.body;
 
     if (!transporter) {
       throw new Error('Email транспортер еще не готов, подождите...');
@@ -288,6 +288,13 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
                   <div class="info-value">${company}</div>
                 </div>
                 ` : ''}
+                
+                ${city ? `
+                <div class="info-row">
+                  <div class="info-label">📍 Город:</div>
+                  <div class="info-value">${city}</div>
+                </div>
+                ` : ''}
               </div>
 
               <!-- Message -->
@@ -338,6 +345,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
 👤 Имя: ${name}
 📧 Email: ${email}
 ${company ? `🏢 Компания: ${company}` : ''}
+${city ? `📍 Город: ${city}` : ''}
 
 💬 СООБЩЕНИЕ:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
