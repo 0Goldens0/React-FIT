@@ -1,0 +1,142 @@
+{
+  "kind": "singleType",
+  "collectionName": "logistics_pages",
+  "info": {
+    "singularName": "logistics-page",
+    "pluralName": "logistics-pages",
+    "displayName": "Логистика",
+    "description": "Страница «Логистика»"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "heroBadge": {
+      "type": "string",
+      "default": "ЛОГИСТИКА FIT"
+    },
+    "heroTitle": {
+      "type": "string",
+      "default": "Система, которая"
+    },
+    "heroTitleHighlight": {
+      "type": "string",
+      "default": "работает для вас"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroStats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "logistics.stat-item"
+    },
+    "warehouseSectionTitle": {
+      "type": "string",
+      "default": "Складская сеть федерального масштаба"
+    },
+    "warehouseSectionContent": {
+      "type": "blocks"
+    },
+    "warehouseSectionImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "distributionBadgeNew": {
+      "type": "string",
+      "default": "NEW"
+    },
+    "distributionBadgeText": {
+      "type": "string",
+      "default": "Флагманский проект"
+    },
+    "distributionTitle": {
+      "type": "string",
+      "default": "Новый распределительный центр"
+    },
+    "distributionTitleHighlight": {
+      "type": "string",
+      "default": "«ПНК Белый Раст»"
+    },
+    "distributionDescription": {
+      "type": "text"
+    },
+    "distributionSpecs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "logistics.spec-item"
+    },
+    "distributionFeatures": {
+      "type": "component",
+      "repeatable": true,
+      "component": "logistics.feature-tag"
+    },
+    "distributionImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "wmsCards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "logistics.wms-card"
+    },
+    "speedTitle": {
+      "type": "string",
+      "default": "Скорость, на которую можно опираться"
+    },
+    "speedDescription": {
+      "type": "text"
+    },
+    "warehouses": {
+      "type": "component",
+      "repeatable": true,
+      "component": "logistics.warehouse"
+    },
+    "ctaTitle": {
+      "type": "string",
+      "default": "«Мы делаем всё, чтобы ваш бизнес работал без остановок»"
+    },
+    "ctaText": {
+      "type": "text"
+    },
+    "ctaButtonText": {
+      "type": "string",
+      "default": "Стать партнёром"
+    },
+    "ctaButtonUrl": {
+      "type": "string",
+      "default": "/contacts"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "canonicalUrl": {
+      "type": "string"
+    }
+  }
+}
+
+

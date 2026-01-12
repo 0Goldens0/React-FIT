@@ -2,57 +2,100 @@
 
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
-
-const brandData: Record<string, { 
-  name: string
-  color: string
-  description: string
-  features: string[]
-}> = {
-  fit: {
-    name: 'FIT',
-    color: '#FDB913',
-    description: 'Появление торговой марки в 2003 году дало мощный импульс развитию компании и обеспечило устойчивый рост продаж. FIT – это оптимальное сочетание цены и качества.',
-    features: ['Ручной инструмент', 'Электроинструмент', 'Оснастка', 'Системы хранения']
-  },
-  cutop: {
-    name: 'CUTOP',
-    color: '#2A4998',
-    description: 'Продукция бренда — профессиональная и промышленная оснастка для электроинструмента.',
-    features: ['Высокие нагрузки', 'Сверхтвердые материалы', 'Максимальная точность', 'Безопасность']
-  },
-  mos: {
-    name: 'MOS',
-    color: '#00AEEF',
-    description: 'MOS — разумный выбор для дома и мастерской. Доступные ручные инструменты и хозяйственные товары.',
-    features: ['Низкий ценовой сегмент', 'Базовый функционал', 'Достойное качество', 'Без переплат']
-  },
-  mastercolor: {
-    name: 'Master Color',
-    color: '#0065A8',
-    description: 'Профессиональный бренд товарной категории «малярно-штукатурный инструмент».',
-    features: ['Подготовка поверхностей', 'Нанесение покрытий', 'Защита рабочей зоны', 'Профессиональные решения']
-  },
-  kypc: {
-    name: 'КУРС',
-    color: '#D81515',
-    description: 'КУРС — практичные решения для повседневных задач. Средний ценовой сегмент.',
-    features: ['Ручные инструменты', 'Оснастка', 'Хозяйственные товары', 'Доступность и надежность']
-  },
-  xbat: {
-    name: 'ХВАТ',
-    color: '#1A1A1A',
-    description: 'Специализированный бренд крепежа и сопутствующих товаров для бытового и профессионального применения.',
-    features: ['Крепеж', 'Прочность', 'Устойчивость к нагрузкам', 'Долговечность']
-  }
-}
+import BrandSlide from '../components/Brands/BrandSlide'
+import { brandProducts, getBrandById } from '../components/Brands/brandsData'
+import { fetchCmsBrand, extractMediaUrl } from '../utils/cms'
+import { useEffect, useMemo, useState } from 'react'
+import { getAssetPath } from '../utils/paths'
 
 type BrandPageProps = {
   brandId: string
 }
 
 export default function BrandPage({ brandId }: BrandPageProps) {
-  const brand = brandData[brandId] ?? null
+  const fallbackBrand = getBrandById(brandId)
+  const [cmsBrand, setCmsBrand] = useState<any>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchCmsBrand(brandId)
+      .then((b) => {
+        if (cancelled) return
+        setCmsBrand(b)
+      })
+      .catch(() => {
+        // ignore: we fall back to local brand data
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [brandId])
+
+  const brand = useMemo(() => {
+    // Prefer CMS if present; fallback to hardcoded so the page never breaks.
+    if (cmsBrand && typeof cmsBrand === 'object') {
+      const logoUrl = extractMediaUrl(cmsBrand.logo)
+      return {
+        id: cmsBrand.brandId ?? brandId,
+        displayName: cmsBrand.displayName ?? fallbackBrand?.displayName ?? brandId,
+        description: cmsBrand.description ?? fallbackBrand?.description ?? '',
+        logo: logoUrl ?? fallbackBrand?.logo ?? '',
+        primaryColor: cmsBrand.primaryColor ?? fallbackBrand?.primaryColor ?? '#FFFFFF',
+        buttonTextColor: cmsBrand.buttonTextColor ?? fallbackBrand?.buttonTextColor,
+        parallaxBgColor: cmsBrand.parallaxBgColor ?? fallbackBrand?.parallaxBgColor ?? '#0a0a0f',
+        parallaxFgColor: cmsBrand.parallaxFgColor ?? fallbackBrand?.parallaxFgColor ?? '#FFFFFF',
+        catalogB2cUrl: cmsBrand.catalogB2cUrl ?? 'https://fit-emarket.ru',
+        catalogB2bUrl: cmsBrand.catalogB2bUrl ?? 'https://fit24.ru',
+      }
+    }
+    return fallbackBrand
+      ? { ...fallbackBrand, catalogB2cUrl: 'https://fit-emarket.ru', catalogB2bUrl: 'https://fit24.ru' }
+      : null
+  }, [brandId, cmsBrand, fallbackBrand])
+
+  const products = useMemo(() => {
+    // Prefer CMS popular products if present; fallback to hardcoded map.
+    const cmsProducts = Array.isArray(cmsBrand?.popularProducts) ? cmsBrand.popularProducts : null
+    if (cmsProducts && cmsProducts.length > 0) {
+      const hardList = brandProducts[brandId] ?? []
+      const normalize = (s: string) =>
+        s
+          .toLowerCase()
+          .replace(/\s+/g, ' ')
+          .replace(/[^\p{L}\p{N}\s\-]+/gu, '')
+          .trim()
+
+      const fallbackByArticle = new Map(hardList.map((p) => [String(p.article || '').trim(), p]))
+      const fallbackByName = new Map(hardList.map((p) => [normalize(String(p.name || '')), p]))
+
+      return cmsProducts
+        .slice()
+        .sort((a: any, b: any) => (Number(a?.order ?? 0) - Number(b?.order ?? 0)))
+        .slice(0, 4)
+        .map((p: any) => {
+          const article = String(p?.article ?? '').trim()
+          const cmsName = String(p?.name ?? '').trim()
+          const hard =
+            (article ? fallbackByArticle.get(article) : undefined) ||
+            (cmsName ? fallbackByName.get(normalize(cmsName)) : undefined)
+
+          const imgFromCms = extractMediaUrl(p?.image)
+          const imgFromHard = hard?.image
+          // Always attempt a deterministic local-asset fallback by article when image is missing.
+          // This is what the old frontend used for most brands (e.g. FIT: img/fit/{article}.webp).
+          const imgGuess = article ? getAssetPath(`img/${brandId}/${article}.webp`) : ''
+
+          return {
+            name: String(p?.name ?? hard?.name ?? ''),
+            article,
+            image: imgFromCms ?? imgFromHard ?? imgGuess,
+            price: String(p?.price ?? hard?.price ?? ''),
+            category: String(p?.category ?? hard?.category ?? ''),
+          }
+        })
+    }
+    return (brandProducts[brandId] ?? []).slice(0, 4)
+  }, [brandId, cmsBrand])
 
   if (!brand) {
     return (
@@ -70,63 +113,27 @@ export default function BrandPage({ brandId }: BrandPageProps) {
   return (
     <div className="brand-page">
       <Header />
-      
-      <main className="brand-content">
-        <div 
-          className="brand-hero"
-          style={{ 
-            background: `linear-gradient(135deg, ${brand.color}15 0%, ${brand.color}05 100%)`,
-            borderColor: brand.color
-          }}
-        >
-          <h1 
-            className="brand-title"
-            style={{ color: brand.color }}
-          >
-            {brand.name}
-          </h1>
-          <p className="brand-description">{brand.description}</p>
-        </div>
 
-        <section className="brand-features">
-          <h2>Особенности бренда</h2>
-          <div className="features-grid">
-            {brand.features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="feature-card"
-                style={{ borderColor: `${brand.color}40` }}
-              >
-                <div 
-                  className="feature-icon"
-                  style={{ background: `${brand.color}20` }}
-                >
-                  ✓
-                </div>
-                <h3>{feature}</h3>
-              </div>
-            ))}
-          </div>
-        </section>
+      <BrandSlide brand={brand as any} products={products as any} standalone />
 
+      <main className="brand-page-content">
         <section className="brand-cta">
-          <h2>Узнать больше о продукции {brand.name}</h2>
           <div className="cta-buttons">
-            <a 
-              href="https://fit-emarket.ru" 
-              target="_blank" 
+            <a
+              href={(brand as any).catalogB2cUrl || 'https://fit-emarket.ru'}
+              target="_blank"
               rel="noopener noreferrer"
               className="cta-button"
-              style={{ background: brand.color }}
+              style={{ background: brand.primaryColor, color: brand.buttonTextColor || '#FFFFFF' }}
             >
               Каталог для физ. лиц
             </a>
-            <a 
-              href="https://fit24.ru" 
-              target="_blank" 
+            <a
+              href={(brand as any).catalogB2bUrl || 'https://fit24.ru'}
+              target="_blank"
               rel="noopener noreferrer"
               className="cta-button"
-              style={{ background: brand.color }}
+              style={{ background: brand.primaryColor, color: brand.buttonTextColor || '#FFFFFF' }}
             >
               Каталог для юр. лиц
             </a>

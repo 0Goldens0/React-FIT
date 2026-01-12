@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_honest_sign_bullet_items",
+  "info": {
+    "displayName": "Bullet item",
+    "description": "Single bullet/list item for Honest Sign page"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
+

@@ -1,0 +1,135 @@
+{
+  "kind": "singleType",
+  "collectionName": "honest_sign_pages",
+  "info": {
+    "singularName": "honest-sign-page",
+    "pluralName": "honest-sign-pages",
+    "displayName": "Честный знак",
+    "description": "Страница «Честный знак»"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "heroBadge": {
+      "type": "string",
+      "default": "КАЧЕСТВО И КОНТРОЛЬ"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "identityTitle": {
+      "type": "string",
+      "default": "Единая фирменная айдентика"
+    },
+    "identityContent": {
+      "type": "blocks"
+    },
+    "identityImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "packagingTitle": {
+      "type": "string",
+      "default": "Продуманная фирменная упаковка"
+    },
+    "packagingIntro": {
+      "type": "text"
+    },
+    "packagingCards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "honest-sign.packaging-card"
+    },
+    "packagingBrandsNote": {
+      "type": "text"
+    },
+    "packagingImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "honestSignTitle": {
+      "type": "string",
+      "default": "Маркировка «Честный ЗНАК»"
+    },
+    "honestSignContent": {
+      "type": "text"
+    },
+    "honestSignListIntro": {
+      "type": "string",
+      "default": "Маркировка обеспечивает:"
+    },
+    "honestSignBenefits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "honest-sign.bullet-item"
+    },
+    "honestSignClosing": {
+      "type": "text"
+    },
+    "honestSignImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "visualMaterialsTitle": {
+      "type": "string",
+      "default": "Достоверные визуальные материалы"
+    },
+    "visualMaterialsIntro": {
+      "type": "text"
+    },
+    "visualMaterialsItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "honest-sign.bullet-item"
+    },
+    "visualMaterialsClosing": {
+      "type": "text"
+    },
+    "visualMaterialsGallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "finalTitle": {
+      "type": "string",
+      "default": "Прозрачность и доверие"
+    },
+    "finalText": {
+      "type": "text"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    }
+  }
+}

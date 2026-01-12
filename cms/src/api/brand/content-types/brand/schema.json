@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "brands",
+  "info": {
+    "singularName": "brand",
+    "pluralName": "brands",
+    "displayName": "Бренды (страницы брендов)",
+    "description": "Контент страницы бренда: лого, описание, цвета, популярные товары и каталог"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "brandId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "displayName": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "navSubtitle": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "primaryColor": {
+      "type": "string"
+    },
+    "buttonTextColor": {
+      "type": "string"
+    },
+    "parallaxBgColor": {
+      "type": "string"
+    },
+    "parallaxFgColor": {
+      "type": "string"
+    },
+    "catalogB2cUrl": {
+      "type": "string"
+    },
+    "catalogB2bUrl": {
+      "type": "string"
+    },
+    "popularProducts": {
+      "type": "component",
+      "repeatable": true,
+      "component": "brand.popular-product"
+    },
+    "catalogCategories": {
+      "type": "component",
+      "repeatable": true,
+      "component": "brand.catalog-category"
+    }
+  }
+}
+
+

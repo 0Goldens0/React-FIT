@@ -54,9 +54,33 @@
   margin-top: 16px;
 }
 
+.footer-links-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 10px auto 25px;
+}
+
+.footer-links-title {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.footer-links-divider {
+  width: min(520px, 92%);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  margin: 6px 0 2px;
+}
+
 .footer-social-row {
   justify-content: center;
-  margin: 10px auto 25px;
+  margin: 0;
 }
 
 .social-item {
@@ -88,6 +112,11 @@
   width: 22px;
   height: 22px;
   filter: none; /* оригинальные цвета */
+}
+
+.footer-marketplaces .social-link img {
+  width: 26px;
+  height: 26px;
 }
 
 .social-link:hover {
@@ -231,6 +260,10 @@
 
   .footer-social {
     justify-content: center;
+  }
+
+  .footer-links-divider {
+    width: min(420px, 92%);
   }
   
   .footer-bottom {

@@ -1,11 +1,15 @@
 'use client'
 
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Calendar, Tag } from 'lucide-react'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import { articles } from '../data/articles'
+import { CmsBlocks } from '../components/CmsBlocks/CmsBlocks'
+import { extractMediaUrl, fetchCmsArticleBySlug } from '../utils/cms'
+import { formatArticleCategory } from '../utils/articleCategories'
 import './ArticleDetailPage.css'
 
 interface ArticleDetailPageProps {
@@ -14,7 +18,44 @@ interface ArticleDetailPageProps {
 
 const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
   const router = useRouter()
-  const article = articles.find(a => a.id === id)
+  const fallback = useMemo(() => articles.find((a) => a.id === id), [id])
+  const [cmsArticle, setCmsArticle] = useState<{
+    title: string
+    slug: string
+    category: string
+    date?: string
+    description?: string
+    content?: unknown | null
+    coverUrl?: string
+  } | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchCmsArticleBySlug(id)
+      .then((res) => {
+        if (!res) return
+        const coverUrl = extractMediaUrl((res as any).coverImage)
+        if (!cancelled) {
+          setCmsArticle({
+            title: res.title,
+            slug: res.slug,
+            category: res.category || 'other',
+            date: res.publishedDate || undefined,
+            description: res.excerpt || undefined,
+            content: res.content || null,
+            coverUrl,
+          })
+        }
+      })
+      .catch(() => {
+        // keep fallback
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  const article = cmsArticle || (fallback ? { ...fallback, slug: fallback.id } : null)
 
   if (!article) {
     return (
@@ -73,9 +114,9 @@ const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
   }
 
   // Находим похожие статьи (той же категории, кроме текущей)
-  const relatedArticles = articles
-    .filter(a => a.id !== article.id && a.category === article.category)
-    .slice(0, 3)
+  const relatedArticles = fallback
+    ? articles.filter((a) => a.id !== fallback.id && a.category === fallback.category).slice(0, 3)
+    : []
 
   return (
     <div className="article-detail-page">
@@ -108,16 +149,18 @@ const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
               <div className="article-meta-info">
                 <span className="article-category-badge">
                   <Tag size={16} />
-                  {article.category}
+                  {formatArticleCategory((article as any).category)}
                 </span>
-                <span className="article-date-badge">
-                  <Calendar size={16} />
-                  {new Date(article.date).toLocaleDateString('ru-RU', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </span>
+                {article.date ? (
+                  <span className="article-date-badge">
+                    <Calendar size={16} />
+                    {new Date(article.date).toLocaleDateString('ru-RU', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </span>
+                ) : null}
               </div>
 
               <h1 className="article-main-title">{article.title}</h1>
@@ -127,10 +170,29 @@ const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
               )}
             </header>
 
-            <div 
-              className="article-body"
-              dangerouslySetInnerHTML={{ __html: parseContent(article.content) }}
-            />
+            {'coverUrl' in (article as any) && (article as any).coverUrl ? (
+              <div className="article-cover-image-container">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={(article as any).coverUrl}
+                  alt={article.title}
+                  className="article-cover-image"
+                />
+              </div>
+            ) : null}
+
+            <div className="article-body">
+              {(() => {
+                const content = (article as any).content
+                if (Array.isArray(content)) {
+                  return <CmsBlocks content={content} />
+                }
+                if (typeof content === 'string' && content.trim()) {
+                  return <div dangerouslySetInnerHTML={{ __html: parseContent(content) }} />
+                }
+                return null
+              })()}
+            </div>
           </motion.article>
 
           {/* Блок похожих статей */}

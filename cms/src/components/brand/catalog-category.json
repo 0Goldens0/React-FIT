@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_brand_catalog_categories",
+  "info": {
+    "displayName": "Категория (каталог бренда)",
+    "description": "1-й уровень каталога бренда"
+  },
+  "options": {},
+  "attributes": {
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subcategories": {
+      "type": "component",
+      "repeatable": true,
+      "component": "brand.catalog-subcategory"
+    }
+  }
+}
+
+

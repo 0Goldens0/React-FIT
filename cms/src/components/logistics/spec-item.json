@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_logistics_spec_items",
+  "info": {
+    "displayName": "Характеристика (Белый Раст)",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+
+
+
+
+

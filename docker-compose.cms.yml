@@ -1,0 +1,83 @@
+services:
+  cms-db:
+    image: postgres:16-alpine
+    container_name: fit_cms_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fit_cms
+      POSTGRES_USER: fit_cms
+      POSTGRES_PASSWORD: fit_cms
+    ports:
+      - "5433:5432"
+    volumes:
+      - fit_cms_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fit_cms -d fit_cms"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  cms:
+    # Strapi 5 admin dev build is stable on Node 18/20 LTS. Node 22 can break Vite/SWC deps.
+    image: node:20-bookworm-slim
+    container_name: fit_cms
+    working_dir: /srv/app
+    restart: unless-stopped
+    depends_on:
+      cms-db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: 1337
+      CLIENT_URL: http://localhost:3000
+      PREVIEW_SECRET: dev-preview-secret-change-me
+
+      # Strapi secrets (dev defaults are also present in config files)
+      APP_KEYS: dev-app-key-1,dev-app-key-2,dev-app-key-3,dev-app-key-4
+      API_TOKEN_SALT: dev-api-token-salt
+      ADMIN_JWT_SECRET: dev-admin-jwt-secret
+      TRANSFER_TOKEN_SALT: dev-transfer-token-salt
+      ENCRYPTION_KEY: dev-encryption-key
+      JWT_SECRET: dev-jwt-secret
+
+      # DB connection (Strapi runs in container; DB in cms-db)
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: cms-db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: fit_cms
+      DATABASE_USERNAME: fit_cms
+      DATABASE_PASSWORD: fit_cms
+      DATABASE_SCHEMA: public
+      DATABASE_SSL: "false"
+
+      # Frontend origin(s)
+      CORS_ORIGINS: http://localhost:3000
+      # Dev: allow all origins so the frontend fetch is never blocked by CORS
+      CORS_ALLOW_ALL: "true"
+    volumes:
+      - ./cms:/srv/app
+      - cms_node_modules:/srv/app/node_modules
+      - cms_uploads:/srv/app/public/uploads
+      # Allow Strapi bootstrap to import product images from the frontend repo.
+      - ./public/img:/srv/site-img:ro
+      # Allow Strapi bootstrap to import brand logos from the frontend repo.
+      - ./public/logo:/srv/site-logo:ro
+    ports:
+      - "1337:1337"
+    command: >
+      sh -lc "if [ ! -f ./.deps_ready ]; then
+                apt-get update -y &&
+                apt-get install -y --no-install-recommends ca-certificates python3 make g++ &&
+                rm -rf /var/lib/apt/lists/* &&
+                touch ./.deps_ready;
+              fi &&
+              npm install --no-audit --no-fund --no-package-lock &&
+              npm run develop"
+
+volumes:
+  fit_cms_pgdata:
+  cms_node_modules:
+  cms_uploads:
+
+

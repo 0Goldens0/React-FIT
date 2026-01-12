@@ -1,6 +1,7 @@
 import BrandPage from '../../../screens/BrandPage'
 
-export const dynamicParams = false
+// Allow new brands from CMS (and Strapi preview URLs) to resolve without rebuilding the frontend.
+export const dynamicParams = true
 
 export async function generateStaticParams() {
   // Keep in sync with BrandPage brandData keys

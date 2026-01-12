@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_pages",
+  "info": {
+    "singularName": "home-page",
+    "pluralName": "home-pages",
+    "displayName": "Главная",
+    "description": "Контент главной страницы"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "clientServiceTitle": {
+      "type": "string"
+    },
+    "clientServiceSubtitle": {
+      "type": "blocks"
+    },
+    "clientServiceCards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.client-service-card"
+    }
+  }
+}
+

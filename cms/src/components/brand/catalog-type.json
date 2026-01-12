@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_brand_catalog_types",
+  "info": {
+    "displayName": "Тип товара (каталог бренда)",
+    "description": "3-й уровень каталога бренда"
+  },
+  "options": {},
+  "attributes": {
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}
+
+

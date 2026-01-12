@@ -1,0 +1,71 @@
+{
+  "kind": "singleType",
+  "collectionName": "marketing_activity_pages",
+  "info": {
+    "singularName": "marketing-activity-page",
+    "pluralName": "marketing-activity-pages",
+    "displayName": "Маркетинговая активность",
+    "description": "Информационная страница о маркетинговой активности и поддержке партнёров"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "blocks"
+    },
+    "sections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "marketing-activity.section"
+    },
+    "ctaTitle": {
+      "type": "string"
+    },
+    "ctaText": {
+      "type": "blocks"
+    },
+    "ctaButtonText": {
+      "type": "string"
+    },
+    "ctaButtonUrl": {
+      "type": "string"
+    },
+    "magazineTitle": {
+      "type": "string"
+    },
+    "magazinePdf": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["files"]
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "canonicalUrl": {
+      "type": "string"
+    }
+  }
+}
+
+

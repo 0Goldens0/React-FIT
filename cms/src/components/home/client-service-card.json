@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_home_client_service_cards",
+  "info": {
+    "displayName": "Карточка клиентского сервиса",
+    "description": "Карточка (front/back) для секции «Клиентский сервис» на главной"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "frontText": {
+      "type": "string"
+    },
+    "backText": {
+      "type": "blocks"
+    },
+    "iconName": {
+      "type": "enumeration",
+      "enum": ["dashboard", "monitor", "user", "zap", "flag", "truck", "settings", "social"]
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}
+

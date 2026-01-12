@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_logistics_stat_items",
+  "info": {
+    "displayName": "Цифра (Hero)",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["default", "highlight", "highlightAlt"],
+      "default": "default"
+    }
+  }
+}
+
+
+
+
+

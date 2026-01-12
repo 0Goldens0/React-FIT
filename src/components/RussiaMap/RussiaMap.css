@@ -130,10 +130,7 @@
   z-index: 100; /* А сами точки - НАД всем */
 }
 
-/* Когда появляется подсказка, скрываем точку */
-.regional-center.label-visible .center-dot {
-  display: none;
-}
+/* Важно: не скрываем точку при показе подписи, иначе hover "срывается" и подпись начинает мигать */
 
 .center-dot {
   position: absolute; /* Добавляем, чтобы можно было центрировать */
@@ -160,8 +157,9 @@
   background: #FFB800;
   border-color: #FFFFFF;
   box-shadow: 0 2px 12px rgba(255, 184, 0, 0.6);
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
 }
 
 .regional-center.main-center .center-dot:hover {
@@ -364,8 +362,9 @@
   }
   
   .regional-center.main-center .center-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
   }
   
   .region-info {
@@ -395,8 +394,9 @@
   }
   
   .regional-center.main-center .center-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
+    border-width: 2px;
   }
   
   .center-label {
@@ -408,6 +408,160 @@
     font-size: 9px;
     padding: 3px 5px;
   }
+}
+
+/* Popup with branch contacts (highlighted cities) */
+.center-popupAnchor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  pointer-events: auto;
+}
+
+.center-popupAnchor[data-popup-mode="region"] {
+  /* Region-hover popup should disappear when the mouse leaves the region.
+     Prevent "hovering the popup" from keeping it open. */
+  pointer-events: none;
+}
+
+.center-popupAnchor.popup-top {
+  transform: translate(-50%, calc(-100% - 16px));
+}
+
+.center-popupAnchor.popup-bottom {
+  transform: translate(-50%, 16px);
+}
+
+.center-popupAnchor.popup-left {
+  transform: translate(calc(-100% - 16px), -50%);
+}
+
+.center-popupAnchor.popup-right {
+  transform: translate(16px, -50%);
+}
+
+.center-popup {
+  background: linear-gradient(135deg, rgba(23, 23, 25, 0.97) 0%, rgba(45, 45, 48, 0.97) 100%);
+  border: 2px solid #FFB800;
+  border-radius: 14px;
+  padding: 12px 12px 10px;
+  width: 280px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  transform-origin: center;
+  animation: centerPopupIn 160ms ease-out;
+}
+
+@keyframes centerPopupIn {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .center-popup {
+    animation: none;
+  }
+}
+
+.center-popupHeader {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 184, 0, 0.25);
+}
+
+.center-popupAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 184, 0, 0.12);
+  border: 1px solid rgba(255, 184, 0, 0.45);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.center-popupAvatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.center-popupAvatarText {
+  color: #FFB800;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.center-popupHeaderText {
+  min-width: 0;
+}
+
+.center-popupCity {
+  color: #FFB800;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.center-popupTitle {
+  color: #CCCCCC;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.center-popupName {
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.center-popupBody {
+  padding-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.center-popupRow {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 8px;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.center-popupRow:hover {
+  color: #FFB800;
+}
+
+.center-popupRowStatic:hover {
+  color: #FFFFFF;
+}
+
+.center-popupRowLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.center-popupRowValue {
+  color: #FFFFFF;
+  word-break: break-word;
 }
 
 /* Стили для SVG элементов */

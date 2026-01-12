@@ -10,7 +10,7 @@ const ContactsPage = () => {
     <div className="contacts-page-wrapper compact-contact-page">
       <Header />
       <main className="contacts-main-content">
-        <Contact />
+      <Contact />
       </main>
       <Footer />
     </div>

@@ -34,6 +34,7 @@ export class ScrollController {
   private isMobileDevice: boolean = false; // Флаг мобильного устройства
   private resizeHandler: (() => void) | null = null; // Обработчик resize
   private handleScrollBound: (() => void) | null = null; // Стабильная ссылка для add/removeEventListener(scroll)
+  private controlledReenterThresholdRatio: number = 0.5; // Центр ВИДИМОЙ области: re-enter when timeline center is at/under this ratio
   
   // Колбэки
   private onSectionChange?: (index: number, section: ScrollSection) => void;
@@ -232,9 +233,61 @@ export class ScrollController {
    * Обработка обычного скролла для отслеживания текущей секции
    */
   private handleScroll() {
-    // Просто обновляем текущую секцию для правильной подсветки в навигации
-    // НЕ включаем контроллер автоматически при обычном скролле
+    // Синхронизируем "зону контроля" по положению Timeline:
+    // - ниже центра Timeline (ее центр выше центра экрана) -> контроль выключен (нативный скролл)
+    // - на центре или выше -> контроль включен
+    this.syncControlledAreaByTimelineCenter();
+    // Обновляем текущую секцию только когда мы в контролируемой зоне
     this.updateCurrentSection();
+  }
+
+  /**
+   * Выключаем/включаем контроллер на основе положения секции Timeline относительно центра экрана.
+   * Требование: если мы хоть чуть ниже центра истории — контроллер должен быть выключен,
+   * а включаться обратно только когда пользователь вернулся к центру или выше.
+   */
+  private syncControlledAreaByTimelineCenter() {
+    const lastSection = this.sections[this.sections.length - 1]; // Timeline
+    if (!lastSection) return;
+
+    const rect = lastSection.element.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || 0;
+    if (!viewportHeight) return;
+
+    // We must decide "below center of timeline" in DOCUMENT space, not viewport space.
+    // Otherwise, when timeline and next section are both visible, controller can still intercept wheel.
+    const timelineTopDoc = window.scrollY + rect.top;
+    const timelineCenterDoc = timelineTopDoc + rect.height / 2;
+
+    // Account for fixed header: visible area starts below header.
+    const cssHeader = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue('--header-height') || '0'
+    );
+    const headerH = Number.isFinite(cssHeader) && cssHeader > 0 ? cssHeader : 80;
+    const visibleTopDoc = window.scrollY + headerH;
+    const visibleHeight = Math.max(0, viewportHeight - headerH);
+    const viewportCenterDoc = visibleTopDoc + visibleHeight * this.controlledReenterThresholdRatio;
+    const epsilon = 8;
+
+    // If viewport center is BELOW timeline center => user has scrolled past timeline midpoint -> disable controller
+    const shouldBeOutside = viewportCenterDoc > (timelineCenterDoc + epsilon);
+
+    if (shouldBeOutside) {
+      if (!this.hasLeftControlledArea) {
+        this.hasLeftControlledArea = true;
+        document.documentElement.classList.add('smooth-scroll');
+        // Keep index pinned to last controlled section to avoid snapping back to brands.
+        this.currentSectionIndex = this.sections.length - 1;
+      }
+      return;
+    }
+
+    // Otherwise we are at timeline center or above -> allow controller
+    if (this.hasLeftControlledArea) {
+      this.hasLeftControlledArea = false;
+      document.documentElement.classList.remove('smooth-scroll');
+      this.currentSectionIndex = this.sections.length - 1;
+    }
   }
 
   /**
@@ -284,14 +337,33 @@ export class ScrollController {
    * Отключить ScrollController (например, при открытии модального окна)
    */
   public disable() {
+    // Disable handling, but also reset transient state so we don't get stuck
+    // in "scrolling" mode after an interruption (e.g. opening a modal).
     this.isEnabled = false;
+    this.isScrolling = false;
+    this.isHorizontallyScrolling = false;
+    this.wheelThrottle = 0;
+    this.lastScrollTime = 0;
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = null;
+    }
   }
 
   /**
    * Включить ScrollController
    */
   public enable() {
+    // Re-enable and resync current section after an interruption.
+    // Also return to the controlled area mode.
     this.isEnabled = true;
+    this.isScrolling = false;
+    this.isHorizontallyScrolling = false;
+    this.wheelThrottle = 0;
+    this.lastScrollTime = 0;
+    this.hasLeftControlledArea = false;
+    document.documentElement.classList.remove('smooth-scroll');
+    this.updateCurrentSection();
   }
 
   /**
@@ -302,6 +374,17 @@ export class ScrollController {
     if (!this.isEnabled) {
       return;
     }
+
+    // Если мы ниже центра Timeline — не перехватываем wheel (нативный скролл).
+    // При возврате к центру/выше — контроллер включится обратно.
+    this.syncControlledAreaByTimelineCenter();
+    if (this.hasLeftControlledArea) {
+      return;
+    }
+
+    // Внутри контролируемой зоны — пересчитываем текущую секцию перед обработкой wheel.
+    // Это убирает "залипание" на брендах на границе brands -> timeline.
+    this.updateCurrentSection();
     
     // Проверяем, находимся ли мы в секции брендов ПЕРВЫМ ДЕЛОМ
     const currentSection = this.sections[this.currentSectionIndex];
@@ -372,40 +455,8 @@ export class ScrollController {
       return;
     }
     
-    // Если контроллер выключен, проверяем, находимся ли мы в пределах Timeline
-    if (this.hasLeftControlledArea) {
-      const lastSection = this.sections[this.sections.length - 1]; // Timeline
-      if (lastSection) {
-        const rect = lastSection.element.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        
-        // Проверяем, находится ли Timeline в видимой области
-        const timelineVisible = rect.top < viewportHeight && rect.bottom > 0;
-        const timelineVisibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-        const timelineVisibilityRatio = timelineVisibleHeight / viewportHeight;
-        
-        // Если Timeline занимает 50%+ экрана, включаем контроллер обратно
-        if (timelineVisible && timelineVisibilityRatio >= 0.5) {
-          this.hasLeftControlledArea = false;
-          document.documentElement.classList.remove('smooth-scroll');
-          this.currentSectionIndex = this.sections.length - 1;
-          // НЕ возвращаемся из функции — продолжаем обработку скролла
-        } else {
-          // Все еще вне Timeline, пропускаем событие
-          return;
-        }
-      } else {
-        return;
-      }
-    }
-    
-    // Если мы на последней контролируемой секции (Timeline) и скроллим вниз
-    // Устанавливаем флаг и разрешаем обычный браузерный скролл
-    if (this.currentSectionIndex === this.sections.length - 1 && scrollDown) {
-      this.hasLeftControlledArea = true;
-      document.documentElement.classList.add('smooth-scroll');
-      return;
-    }
+    // NOTE: leaving/entering the controlled area is now handled exclusively by
+    // syncControlledAreaByTimelineCenter() (based on timeline midpoint in document space).
     
     // Если мы за пределами контролируемых секций
     if (!currentSection || this.currentSectionIndex >= this.sections.length) {
@@ -634,10 +685,9 @@ export class ScrollController {
       return;
     }
     
-    // Проверяем, вышли ли мы за пределы контролируемых секций
-    if (this.hasLeftControlledArea) {
-      return; // Позволяем нативный скролл
-    }
+    // Проверяем, вышли ли мы за пределы контролируемых секций (по центру Timeline)
+    this.syncControlledAreaByTimelineCenter();
+    if (this.hasLeftControlledArea) return; // Позволяем нативный скролл
     
     if (this.isScrolling) {
       e.preventDefault();
@@ -733,6 +783,8 @@ export class ScrollController {
   public leaveControlledArea() {
     this.hasLeftControlledArea = true;
     document.documentElement.classList.add('smooth-scroll');
+    // Treat as being "past" the last controlled section so vertical snapping won't trigger.
+    this.currentSectionIndex = this.sections.length - 1;
   }
 
   /**
@@ -769,10 +821,13 @@ export class ScrollController {
 
     let targetPosition: number;
 
-    // Учитываем фиксированный хедер (чтобы секция не “уезжала” под него)
+    // Учитываем фиксированный хедер (и body padding-top на его высоту)
     const headerEl = document.querySelector('.header') as HTMLElement | null;
-    const headerOffset = headerEl ? headerEl.offsetHeight : 0;
-    const viewportHeight = Math.max(0, window.innerHeight - headerOffset);
+    const cssHeaderHeight =
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 0;
+    const headerOffset = headerEl?.getBoundingClientRect().height || cssHeaderHeight || 0;
+    const viewportHeight = window.innerHeight;
+    const usableHeight = Math.max(0, viewportHeight - headerOffset);
 
     // Если переходим к Hero (первая секция), скроллим до самого верха страницы
     if (section.id === 'home') {
@@ -781,17 +836,34 @@ export class ScrollController {
       // Для контролируемых секций используем точное позиционирование
       const rect = section.element.getBoundingClientRect();
       const absoluteTop = window.scrollY + rect.top;
-      
-      // Проверяем, является ли секция полноэкранной (100vh)
-      const isFullscreen = rect.height >= viewportHeight * 0.95;
-      
-      if (isFullscreen) {
-        // Для полноэкранных секций - к началу, но под фиксированный хедер
-        targetPosition = absoluteTop - headerOffset;
+
+      // "About" is a special case: the section is >= 100vh + padding, so centering the whole
+      // section does not center the actual content. We center the main card instead.
+      if (section.id === 'about') {
+        const focusEl = section.element.querySelector('.content-container') as HTMLElement | null;
+        if (focusEl) {
+          const focusRect = focusEl.getBoundingClientRect();
+          const focusAbsTop = window.scrollY + focusRect.top;
+          const verticalPadding = Math.max(0, (usableHeight - focusRect.height) / 2);
+          targetPosition = focusAbsTop - headerOffset - verticalPadding;
+        } else {
+          // Fallback: align section start below header
+          targetPosition = absoluteTop - headerOffset;
+        }
       } else {
-        // Для неполноэкранных секций - центрирование в видимой области (без хедера)
-        const offset = (viewportHeight - rect.height) / 2;
-        targetPosition = absoluteTop - headerOffset - offset;
+      
+        // Проверяем, является ли секция полноэкранной (учитываем область под хедером)
+        const isFullscreen = rect.height >= usableHeight * 0.95;
+      
+        if (isFullscreen) {
+          // Для полноэкранных секций - к началу, но под фиксированный хедер
+          targetPosition = absoluteTop - headerOffset;
+        } else {
+          // Для неполноэкранных секций - центрирование в области под хедером
+          // (если секция выше окна — центрировать нельзя, тогда просто к началу)
+          const verticalPadding = Math.max(0, (usableHeight - rect.height) / 2);
+          targetPosition = absoluteTop - headerOffset - verticalPadding;
+        }
       }
     }
 
@@ -822,24 +894,34 @@ export class ScrollController {
    * Обновление текущей секции на основе позиции скролла
    */
   private updateCurrentSection() {
-    // Если мы вышли из контролируемой области, НЕ обновляем индекс
-    if (this.hasLeftControlledArea) {
-      return;
-    }
-    
-    const scrollPosition = window.scrollY + window.innerHeight / 2;
-    
+    if (!this.sections || this.sections.length === 0) return;
+
+    const vh = window.innerHeight || 0;
+    if (!vh) return;
+    const viewportCenter = vh / 2;
+
+    // Выбираем секцию, центр которой ближе всего к центру экрана.
+    // Это устойчиво к большим секциям/анимациям и убирает "залипание" на брендах.
+    let bestIdx = this.currentSectionIndex;
+    let bestDist = Number.POSITIVE_INFINITY;
+
     for (let i = 0; i < this.sections.length; i++) {
       const section = this.sections[i];
       const rect = section.element.getBoundingClientRect();
-      const sectionTop = window.scrollY + rect.top;
-      const sectionBottom = sectionTop + rect.height;
-      
-      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-        this.currentSectionIndex = i;
-        break;
+
+      // Приоритезируем секции, которые пересекают viewport
+      const intersects = rect.bottom > 0 && rect.top < vh;
+      if (!intersects) continue;
+
+      const center = rect.top + rect.height / 2;
+      const dist = Math.abs(center - viewportCenter);
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestIdx = i;
       }
     }
+
+    this.currentSectionIndex = bestIdx;
   }
 
   /**

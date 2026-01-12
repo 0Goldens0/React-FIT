@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_logistics_feature_tags",
+  "info": {
+    "displayName": "Тег (фича)",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+
+
+
+
+

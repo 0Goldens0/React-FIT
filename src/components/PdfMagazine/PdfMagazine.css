@@ -1,0 +1,348 @@
+.pdf-mag {
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(10px);
+}
+
+.pdf-mag__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(245, 247, 250, 0.95), rgba(255, 255, 255, 0.9));
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pdf-mag__titleMain {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.pdf-mag__titleSub {
+  margin-top: 2px;
+  color: rgba(15, 23, 42, 0.62);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.pdf-mag__controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.pdf-mag__btn {
+  appearance: none;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  background: rgba(255, 255, 255, 0.85);
+  color: #0f172a;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+  user-select: none;
+}
+
+.pdf-mag__btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(15, 23, 42, 0.26);
+}
+
+.pdf-mag__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pdf-mag__btn.is-active {
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border-color: rgba(255, 184, 0, 0.35);
+}
+
+.pdf-mag__btn.is-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pdf-mag__pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.pdf-mag__pageInput {
+  width: 74px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.pdf-mag__pagerSep,
+.pdf-mag__pagerTotal {
+  font-weight: 800;
+  color: rgba(15, 23, 42, 0.8);
+  font-size: 13px;
+}
+
+.pdf-mag__zoom {
+  font-weight: 800;
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.82);
+  min-width: 54px;
+  text-align: center;
+}
+
+.pdf-mag__stage {
+  position: relative;
+  padding: 10px 12px;
+  min-height: 0;
+  /* Fixed viewer window: zoom happens inside with scroll, not by stretching layout */
+  height: clamp(520px, 78vh, 920px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: radial-gradient(1200px 500px at 50% 0%, rgba(148, 163, 184, 0.16), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(248, 250, 252, 0.65));
+}
+
+.pdf-mag__stage.is-zoomed {
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+.pdf-mag__stage.is-lens {
+  cursor: zoom-in;
+}
+
+.pdf-mag__lens {
+  position: absolute;
+  z-index: 6;
+  width: 230px;
+  height: 230px;
+  border-radius: 999px;
+  overflow: hidden;
+  pointer-events: none;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.25),
+    0 0 0 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(2px);
+}
+
+.pdf-mag__lens.is-hidden {
+  opacity: 0;
+}
+
+.pdf-mag__lens.is-visible {
+  opacity: 1;
+}
+
+.pdf-mag__lensCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pdf-mag__stage:fullscreen {
+  padding: 8px 10px;
+  height: 100vh;
+  background: radial-gradient(1400px 700px at 50% 0%, rgba(148, 163, 184, 0.18), transparent 62%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.90), rgba(15, 23, 42, 0.86));
+  overflow: auto;
+}
+
+.pdf-mag__stage:fullscreen .pdf-mag__spread {
+  min-height: calc(100vh - 16px);
+  align-items: center;
+}
+
+.pdf-mag__sideBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  background: rgba(255, 255, 255, 0.78);
+  color: rgba(15, 23, 42, 0.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  transition: transform 120ms ease, background 120ms ease, opacity 120ms ease, filter 120ms ease;
+  backdrop-filter: blur(8px);
+}
+
+.pdf-mag__sideBtn:hover {
+  transform: translateY(-50%) scale(1.04);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.pdf-mag__sideBtn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
+.pdf-mag__sideBtn--left {
+  left: 10px;
+}
+
+.pdf-mag__sideBtn--right {
+  right: 10px;
+}
+
+.pdf-mag__loading,
+.pdf-mag__error {
+  padding: 20px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: rgba(15, 23, 42, 0.8);
+  font-weight: 700;
+}
+
+.pdf-mag__error {
+  color: #b42318;
+  border-color: rgba(180, 35, 24, 0.25);
+}
+
+.pdf-mag__spread {
+  display: flex;
+  justify-content: center;
+  min-height: 100%;
+  align-items: center;
+  perspective: 1200px;
+}
+
+.pdf-mag__spreadInner {
+  display: grid;
+  gap: 18px;
+  align-items: start;
+  justify-items: center;
+}
+
+.pdf-mag__spread.is-two .pdf-mag__spreadInner {
+  grid-template-columns: 1fr 1fr;
+}
+
+.pdf-mag__spread.is-one .pdf-mag__spreadInner {
+  grid-template-columns: 1fr;
+}
+
+.pdf-mag__page {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow:
+    0 16px 50px rgba(0, 0, 0, 0.16),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.pdf-mag__page--left {
+  transform-origin: right center;
+}
+
+.pdf-mag__page--right {
+  transform-origin: left center;
+}
+
+.pdf-mag__canvasWrap {
+  position: relative;
+}
+
+.pdf-mag__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pdf-mag__canvasLoading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  color: rgba(15, 23, 42, 0.78);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.pdf-mag__pageNum {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.74);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.pdf-mag.is-fullscreen {
+  border-radius: 0;
+  height: 100%;
+}
+
+@media (max-width: 980px) {
+  .pdf-mag__topbar {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .pdf-mag__stage {
+    padding: 10px;
+    height: clamp(420px, 75vh, 720px);
+  }
+  .pdf-mag__controls {
+    gap: 8px;
+  }
+  .pdf-mag__btn {
+    padding: 8px 10px;
+  }
+  .pdf-mag__pageInput {
+    width: 62px;
+  }
+
+  .pdf-mag__sideBtn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .pdf-mag__lens {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+

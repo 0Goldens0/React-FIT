@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_logistics_wms_cards",
+  "info": {
+    "displayName": "Карточка (WMS/проекты)",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string",
+      "required": true
+    },
+    "iconVariant": {
+      "type": "enumeration",
+      "enum": ["green", "yellow"],
+      "default": "green"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    },
+    "tags": {
+      "type": "component",
+      "repeatable": true,
+      "component": "logistics.feature-tag"
+    }
+  }
+}
+
+
+
+
+

@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import { getAssetPath } from '../utils/paths'
+import { CmsBlocks } from '../components/CmsBlocks/CmsBlocks'
+import { fetchCmsFaqs } from '../utils/cms'
 
 type FAQItem = {
   id: number
@@ -57,6 +59,43 @@ const faqData: FAQItem[] = [
 
 const FAQPage = () => {
   const [openItems, setOpenItems] = useState<number[]>([])
+  const [cmsFaq, setCmsFaq] = useState<Array<{ id: number; question: string; answer?: unknown | null }>>([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetchCmsFaqs()
+      .then((res) => {
+        const items = res.map((f) => ({
+          id: f.id,
+          question: f.question,
+          answer: f.answer ?? null,
+        }))
+        if (!cancelled) setCmsFaq(items)
+      })
+      .catch(() => {
+        // keep fallback
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const items = useMemo(() => {
+    if (cmsFaq.length > 0) {
+      const localByQuestion = new Map(faqData.map((f) => [f.question, f.answer] as const))
+      return cmsFaq.map((f) => {
+        const a = (f as any).answer
+        const isEmptyBlocks = Array.isArray(a) && a.length === 0
+        const isEmptyString = typeof a === 'string' && a.trim().length === 0
+        const isMissing = a == null || isEmptyBlocks || isEmptyString
+        return {
+          ...f,
+          answer: isMissing ? (localByQuestion.get(f.question) ?? 'Ответ скоро появится.') : a,
+        }
+      })
+    }
+    return faqData.map((f) => ({ id: f.id, question: f.question, answer: f.answer }))
+  }, [cmsFaq])
 
   const toggleItem = (id: number) => {
     setOpenItems((prev) =>
@@ -78,7 +117,7 @@ const FAQPage = () => {
           </div>
 
           <div className="faq-list">
-            {faqData.map((item) => (
+            {items.map((item) => (
               <div
                 key={item.id}
                 className={`faq-item ${openItems.includes(item.id) ? 'open' : ''}`}
@@ -94,7 +133,13 @@ const FAQPage = () => {
                   />
                 </button>
                 <div className="faq-answer-wrapper">
-                  <div className="faq-answer">{item.answer}</div>
+                  <div className="faq-answer">
+                    {typeof (item as any).answer === 'string' ? (
+                      (item as any).answer
+                    ) : (
+                      <CmsBlocks content={(item as any).answer} />
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

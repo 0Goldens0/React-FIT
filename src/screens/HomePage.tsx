@@ -52,6 +52,9 @@ const HomePage = () => {
             // Используем ScrollController для контролируемых секций
             scrollController.scrollToSection(index, true)
           } else {
+            // Для секций НИЖЕ Timeline — выходим из контролируемой зоны, иначе при скролле вверх
+            // контроллер может "подхватывать" и прыгать назад к брендам.
+            scrollController.leaveControlledArea()
             // Для остальных секций - обычный smooth scroll с центрированием
             element.scrollIntoView({ behavior: 'smooth', block: 'center' })
           }

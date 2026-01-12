@@ -158,47 +158,59 @@ section#brands.brands {
     transform: scale(2);
 }
 
-/* Белый цвет логотипов для КУРС и ХВАТ */
+/* Увеличение остальных логотипов (CUTOP, MOS, MASTER COLOR) */
+#brand-cutop .brand-logo-journey img,
+#brand-mos .brand-logo-journey img,
+#brand-mastercolor .brand-logo-journey img {
+    transform: scale(1.6);
+}
+
+/* Белый цвет логотипов для КУРС и ХВАТ + увеличение */
 #brand-kypc .brand-logo-journey img,
 #brand-xbat .brand-logo-journey img {
+    transform: scale(1.6);
     filter: brightness(0) invert(1);
 }
 
 /* Неон только для ХВАТ */
 #brand-xbat.active .brand-logo-journey img {
+    transform: scale(1.6);
     filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
 }
 
 /* КУРС остается без неона */
 #brand-kypc.active .brand-logo-journey img {
+    transform: scale(1.6);
     filter: brightness(0) invert(1);
 }
 
-/* Обводка по контуру для CUTOP и MASTER COLOR */
+/* Обводка по контуру для CUTOP, MOS и MASTER COLOR (тонкая) */
 #brand-cutop .brand-logo-journey img,
+#brand-mos .brand-logo-journey img,
 #brand-mastercolor .brand-logo-journey img {
     filter: 
-        drop-shadow(0.3px 0 0 #fff)
-        drop-shadow(-0.3px 0 0 #fff)
-        drop-shadow(0 0.3px 0 #fff)
-        drop-shadow(0 -0.3px 0 #fff)
-        drop-shadow(0.21px 0.21px 0 #fff)
-        drop-shadow(-0.21px -0.21px 0 #fff)
-        drop-shadow(0.21px -0.21px 0 #fff)
-        drop-shadow(-0.21px 0.21px 0 #fff);
+        drop-shadow(0.05px 0 0 #fff)
+        drop-shadow(-0.05px 0 0 #fff)
+        drop-shadow(0 0.05px 0 #fff)
+        drop-shadow(0 -0.05px 0 #fff)
+        drop-shadow(0.0px 0.0px 0 #fff)
+        drop-shadow(-0.0px -0.0px 0 #fff)
+        drop-shadow(0.0px -0.0px 0 #fff)
+        drop-shadow(-0.0px 0.0px 0 #fff)
 }
 
 #brand-cutop.active .brand-logo-journey img,
+#brand-mos.active .brand-logo-journey img,
 #brand-mastercolor.active .brand-logo-journey img {
     filter: 
-        drop-shadow(0.3px 0 0 #fff)
-        drop-shadow(-0.3px 0 0 #fff)
-        drop-shadow(0 0.3px 0 #fff)
-        drop-shadow(0 -0.3px 0 #fff)
-        drop-shadow(0.21px 0.21px 0 #fff)
-        drop-shadow(-0.21px -0.21px 0 #fff)
-        drop-shadow(0.21px -0.21px 0 #fff)
-        drop-shadow(-0.21px 0.21px 0 #fff)
+        drop-shadow(0.05px 0 0 #fff)
+        drop-shadow(-0.05px 0 0 #fff)
+        drop-shadow(0 0.05px 0 #fff)
+        drop-shadow(0 -0.05px 0 #fff)
+        drop-shadow(0.0px 0.0px 0 #fff)
+        drop-shadow(-0.0px -0.0px 0 #fff)
+        drop-shadow(0.0px -0.0px 0 #fff)
+        drop-shadow(-0.0px 0.0px 0 #fff)
         drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
 }
 
@@ -626,7 +638,7 @@ section#brands.brands {
     transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), 
                 box-shadow 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), 
                 border-color 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-    height: 380px; /* Фиксированная высота для всех карточек */
+    height: 425px; /* Фиксированная высота для всех карточек */
     min-height: 380px;
 }
 

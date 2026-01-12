@@ -188,13 +188,14 @@ export const timelinePeriods: TimelinePeriod[] = [
         year: "2016",
         events: [
           "Появление собственного склада в Екатеринбурге",
-          "Запуск брендов MOS, Хват, Master Color"
+          "Появление собственного склада в Краснодаре",
+          "Запуск брендов MOS, Хват, Master Color",
         ]
       }
     ],
     facts: [
       { number: "5", text: "Новых брендов" },
-      { number: "2", text: "Собственных склада" },
+      { number: "3", text: "Собственных склада" },
       { number: "100+", text: "Брендированных ТС" }
     ]
   },
@@ -215,7 +216,6 @@ export const timelinePeriods: TimelinePeriod[] = [
       {
         year: "2018",
         events: [
-          "Появление собственного склада в Краснодаре",
           "Открытие первого собственного Распределительного Центра (РЦ) в Москве",
           "Создание отдела КАМов"
         ]
@@ -230,7 +230,7 @@ export const timelinePeriods: TimelinePeriod[] = [
     ],
     facts: [
       { number: "1", text: "РЦ в Москве" },
-      { number: "3", text: "Новых склада" },
+      { number: "2", text: "Новых склада" },
       { number: "1", text: "WMS-система" }
     ]
   },
@@ -280,12 +280,19 @@ export const timelinePeriods: TimelinePeriod[] = [
         events: [
           "Покупка и запуск нового крупного РЦ в Московской области"
         ]
+      },
+      {
+        year: "2025",
+        events: [
+          "Создание нового собственного многофункционального склада в Краснодаре",
+        ]
       }
     ],
     facts: [
       { number: "1", text: "Отдел ИИ" },
       { number: "1", text: "Новый РЦ" },
-      { number: "30+", text: "Лет на рынке" }
+      { number: "1", text: "Новый склад" },
+      { number: "29", text: "Лет на рынке" }
     ]
   }
 ]

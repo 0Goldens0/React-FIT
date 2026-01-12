@@ -27,46 +27,77 @@ const Footer = () => {
             <p className="footer-text">1000+ клиентов</p>
           </div>
         </div>
-        
-        <div className="footer-social footer-social-row">
-          <div className="social-item">
-            <a className="social-link" href="https://vk.com/fitinstrument" target="_blank" rel="noopener noreferrer" aria-label="VK">
-              <img src={getAssetPath('socialmedia/vk.svg')} alt="VK" />
-            </a>
-            <div className="qr-popup">
-              <img src={getAssetPath('socialmedia/qr/vk.svg')} alt="VK QR" />
+
+        <div className="footer-links-stack">
+          <div className="footer-links-title">Мы в соцсетях</div>
+          <div className="footer-social footer-social-row">
+            <div className="social-item">
+              <a className="social-link" href="https://vk.com/fitinstrument" target="_blank" rel="noopener noreferrer" aria-label="VK">
+                <img src={getAssetPath('socialmedia/vk.svg')} alt="VK" />
+              </a>
+              <div className="qr-popup">
+                <img src={getAssetPath('socialmedia/qr/vk.svg')} alt="VK QR" />
+              </div>
+            </div>
+            <div className="social-item">
+              <a className="social-link" href="https://t.me/fit_instrument" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                <img src={getAssetPath('socialmedia/telegram.svg')} alt="Telegram" />
+              </a>
+              <div className="qr-popup">
+                <img src={getAssetPath('socialmedia/qr/tg.svg')} alt="Telegram QR" />
+              </div>
+            </div>
+            <div className="social-item">
+              <a className="social-link" href="https://zen.yandex.ru/id/622b0a7200613963284db98c" target="_blank" rel="noopener noreferrer" aria-label="Dzen">
+                <img src={getAssetPath('socialmedia/dzen.svg')} alt="Dzen" />
+              </a>
+              <div className="qr-popup">
+                <img src={getAssetPath('socialmedia/qr/dzen.svg')} alt="Dzen QR" />
+              </div>
+            </div>
+            <div className="social-item">
+              <a className="social-link" href="https://rutube.ru/channel/24203564/" target="_blank" rel="noopener noreferrer" aria-label="RuTube">
+                <img src={getAssetPath('socialmedia/rutube.svg')} alt="RuTube" />
+              </a>
+              <div className="qr-popup">
+                <img src={getAssetPath('socialmedia/qr/rutube.svg')} alt="RuTube QR" />
+              </div>
+            </div>
+            <div className="social-item">
+              <a className="social-link" href="https://www.youtube.com/@fit-8949/featured" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                <img src={getAssetPath('socialmedia/youtube.svg')} alt="YouTube" />
+              </a>
+              <div className="qr-popup">
+                <img src={getAssetPath('socialmedia/qr/youtube.svg')} alt="YouTube QR" />
+              </div>
             </div>
           </div>
-          <div className="social-item">
-            <a className="social-link" href="https://t.me/fit_instrument" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-              <img src={getAssetPath('socialmedia/telegram.svg')} alt="Telegram" />
-            </a>
-            <div className="qr-popup">
-              <img src={getAssetPath('socialmedia/qr/tg.svg')} alt="Telegram QR" />
+
+          <div className="footer-links-divider" aria-hidden="true" />
+
+          <div className="footer-links-title">Мы на маркетплейсах</div>
+          <div className="footer-social footer-social-row footer-marketplaces">
+            <div className="social-item">
+              <a
+                className="social-link"
+                href="https://www.wildberries.ru/seller/209765"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Wildberries"
+              >
+                <img src={getAssetPath('img/wildberries-sign-logo.svg')} alt="Wildberries" />
+              </a>
             </div>
-          </div>
-          <div className="social-item">
-            <a className="social-link" href="https://zen.yandex.ru/id/622b0a7200613963284db98c" target="_blank" rel="noopener noreferrer" aria-label="Dzen">
-              <img src={getAssetPath('socialmedia/dzen.svg')} alt="Dzen" />
-            </a>
-            <div className="qr-popup">
-              <img src={getAssetPath('socialmedia/qr/dzen.svg')} alt="Dzen QR" />
-            </div>
-          </div>
-          <div className="social-item">
-            <a className="social-link" href="https://rutube.ru/channel/24203564/" target="_blank" rel="noopener noreferrer" aria-label="RuTube">
-              <img src={getAssetPath('socialmedia/rutube.svg')} alt="RuTube" />
-            </a>
-            <div className="qr-popup">
-              <img src={getAssetPath('socialmedia/qr/rutube.svg')} alt="RuTube QR" />
-            </div>
-          </div>
-          <div className="social-item">
-            <a className="social-link" href="https://www.youtube.com/@fit-8949/featured" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-              <img src={getAssetPath('socialmedia/youtube.svg')} alt="YouTube" />
-            </a>
-            <div className="qr-popup">
-              <img src={getAssetPath('socialmedia/qr/youtube.svg')} alt="YouTube QR" />
+            <div className="social-item">
+              <a
+                className="social-link"
+                href="https://www.ozon.ru/seller/finch-industrial-tools-156929/?ysclid=mjmw06ozg0918904267"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ozon"
+              >
+                <img src={getAssetPath('img/ozon-icon-logo.svg')} alt="Ozon" />
+              </a>
             </div>
           </div>
         </div>

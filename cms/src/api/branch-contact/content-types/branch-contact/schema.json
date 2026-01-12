@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "branch_contacts",
+  "info": {
+    "singularName": "branch-contact",
+    "pluralName": "branch-contacts",
+    "displayName": "Коммерческие директора (филиалы)",
+    "description": "Контакты филиалов и коммерческих директоров для попапов на странице «География»"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "cityId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "cityName": {
+      "type": "string",
+      "required": true
+    },
+    "regionCode": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "address": {
+      "type": "string",
+      "required": true
+    },
+    "directorName": {
+      "type": "string",
+      "required": true
+    },
+    "directorTitle": {
+      "type": "string",
+      "required": true
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
+
+

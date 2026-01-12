@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_honest_sign_packaging_cards",
+  "info": {
+    "displayName": "Packaging card",
+    "description": "Card for 'Продуманная фирменная упаковка' section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    },
+    "badge": {
+      "type": "string"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}
+

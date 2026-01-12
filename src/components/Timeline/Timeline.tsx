@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useEffect, useMemo, useState, useRef, useCallback, memo, type TouchEvent } from 'react'
+import { createPortal } from 'react-dom'
 import { scrollController } from '../../utils/scrollController'
 import { performanceOptimizer } from '../../utils/performanceOptimizer'
 import { timelinePeriods, TimelinePeriod } from '../../data/timelinePeriods'
@@ -11,6 +12,7 @@ const getTransitionSpeed = () => performanceOptimizer.isLowEnd() ? '0.3s' : '0.5
 const Timeline = memo(() => {
   const [currentItem, setCurrentItem] = useState<TimelinePeriod | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   // Отключаем автопрокрутку на слабых устройствах для экономии ресурсов
   const [isAutoPlay, setIsAutoPlay] = useState(!performanceOptimizer.isLowEnd())
   const wasAutoPlayActiveRef = useRef<boolean>(true) // Сохраняем состояние перед открытием модалки
@@ -29,6 +31,10 @@ const Timeline = memo(() => {
   const isTouchDevice = useMemo(() => {
     if (typeof window === 'undefined') return false
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  }, [])
+
+  useEffect(() => {
+    setIsMounted(true)
   }, [])
 
   const startAnimation = useCallback(() => {
@@ -250,12 +256,13 @@ const Timeline = memo(() => {
       // СОХРАНЯЕМ текущую позицию скролла в ref
       scrollPositionRef.current = window.scrollY
       
-      // БЛОКИРУЕМ СКРОЛЛ СТРАНИЦЫ - надежный метод
+      // Блокируем скролл страницы без прыжка (без position: fixed)
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
       document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow = 'hidden'
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${scrollPositionRef.current}px`
-      document.body.style.width = '100%'
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`
+      }
       
       // Отключаем scrollController
       scrollController.disable()
@@ -266,16 +273,9 @@ const Timeline = memo(() => {
         track.style.willChange = 'transform'
       }
       
-      // РАЗБЛОКИРУЕМ СКРОЛЛ СТРАНИЦЫ - ВАЖЕН ПОРЯДОК!
-      // 1. Сначала убираем position: fixed и связанные стили
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
       document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
-      
-      // 2. ЗАТЕМ восстанавливаем позицию скролла из ref
-      window.scrollTo(0, scrollPositionRef.current)
+      document.body.style.paddingRight = ''
       
       // Включаем scrollController обратно
       scrollController.enable()
@@ -288,9 +288,7 @@ const Timeline = memo(() => {
     return () => {
       document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
+      document.body.style.paddingRight = ''
       scrollController.enable()
       isAnimationActiveRef.current = false
       if (animationRef.current) {
@@ -482,7 +480,61 @@ const Timeline = memo(() => {
     }
   }, [])
 
+  const modalNode = (
+    <div
+      className={`timeline-fullscreen ${isModalOpen ? 'active' : ''}`}
+      onClick={() => {
+        if (isModalOpen) closeModal()
+      }}
+    >
+      <div className="timeline-fullscreen-content" onClick={(e) => e.stopPropagation()}>
+        {currentItem && (
+          <div className="timeline-fullscreen-inner">
+            <div className="timeline-fullscreen-header">
+              <div className="timeline-fullscreen-year">{currentItem.years}</div>
+              <h2 className="timeline-fullscreen-title">{currentItem.title}</h2>
+            </div>
+
+            <div className="timeline-fullscreen-body">
+              <div className="timeline-fullscreen-text">
+                <div className="timeline-fullscreen-description">{currentItem.description}</div>
+
+                {currentItem.keyEvents && currentItem.keyEvents.length > 0 && (
+                  <div className="timeline-key-events">
+                    <h4>Ключевые события:</h4>
+                    {currentItem.keyEvents.map((yearBlock, blockIndex) => (
+                      <div key={blockIndex} className="timeline-year-block">
+                        <h5 className="timeline-event-year">{yearBlock.year}</h5>
+                        <ul>
+                          {yearBlock.events.map((event, index) => (
+                            <li key={index}>{event}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="timeline-fullscreen-facts">
+              {currentItem.facts.map((fact, index) => (
+                <div key={index} className="timeline-fact">
+                  <div className="timeline-fact-number">{fact.number}</div>
+                  <div className="timeline-fact-text">{fact.text}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <button className="timeline-fullscreen-close" onClick={closeModal}></button>
+      </div>
+    </div>
+  )
+
   return (
+    <>
     <section className="timeline-section" id="timeline">
       <div className="timeline-bg"></div>
       <div className="container">
@@ -556,61 +608,9 @@ const Timeline = memo(() => {
           ▶
         </button>
       </div>
-
-      {/* Полноэкранное модальное окно */}
-      <div 
-        className={`timeline-fullscreen ${isModalOpen ? 'active' : ''}`}
-        onClick={() => {
-          if (isModalOpen) closeModal()
-        }}
-      >
-        <div className="timeline-fullscreen-content" onClick={(e) => e.stopPropagation()}>
-          {currentItem && (
-            <div className="timeline-fullscreen-inner">
-              <div className="timeline-fullscreen-header">
-                <div className="timeline-fullscreen-year">{currentItem.years}</div>
-                <h2 className="timeline-fullscreen-title">{currentItem.title}</h2>
-              </div>
-              
-              <div className="timeline-fullscreen-body">
-                <div className="timeline-fullscreen-text">
-                  <div className="timeline-fullscreen-description">
-                    {currentItem.description}
-                  </div>
-                  
-                  {currentItem.keyEvents && currentItem.keyEvents.length > 0 && (
-                    <div className="timeline-key-events">
-                      <h4>Ключевые события:</h4>
-                      {currentItem.keyEvents.map((yearBlock, blockIndex) => (
-                        <div key={blockIndex} className="timeline-year-block">
-                          <h5 className="timeline-event-year">{yearBlock.year}</h5>
-                          <ul>
-                            {yearBlock.events.map((event, index) => (
-                              <li key={index}>{event}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="timeline-fullscreen-facts">
-                {currentItem.facts.map((fact, index) => (
-                  <div key={index} className="timeline-fact">
-                    <div className="timeline-fact-number">{fact.number}</div>
-                    <div className="timeline-fact-text">{fact.text}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          <button className="timeline-fullscreen-close" onClick={closeModal}></button>
-        </div>
-      </div>
     </section>
+    {isMounted ? createPortal(modalNode, document.body) : null}
+    </>
   )
 })
 

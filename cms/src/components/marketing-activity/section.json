@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_marketing_activity_sections",
+  "info": {
+    "displayName": "Секция маркетинговой активности",
+    "description": "Секция для страницы «Маркетинговая активность»"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": ["textLeft", "textRight"],
+      "default": "textLeft"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}
+
+

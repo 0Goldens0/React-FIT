@@ -1,16 +1,26 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown, Phone } from 'lucide-react'
 import { getAssetPath } from '../../utils/paths'
+import { scrollController } from '../../utils/scrollController'
+import { fetchCmsBrandsList } from '../../utils/cms'
+
+type BrandNavItem = {
+  id: string
+  name: string
+  color: string
+  subtitle?: string | null
+}
 
 const Header = () => {
   const headerRef = useRef<HTMLElement | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [cmsBrands, setCmsBrands] = useState<BrandNavItem[] | null>(null)
   
   const pathname = usePathname()
 
@@ -52,14 +62,60 @@ const Header = () => {
     return false
   }
 
-  const brands = [
-    { id: 'fit', name: 'FIT', desc: 'Основной бренд', color: '#FDB913' },
-    { id: 'cutop', name: 'CUTOP', desc: 'Режущий инструмент', color: '#2A4998' },
-    { id: 'mos', name: 'MOS', desc: 'Строительные материалы', color: '#00AEEF' },
-    { id: 'mastercolor', name: 'Master Color', desc: 'ЛКМ', color: '#0065A8' },
-    { id: 'kypc', name: 'КУРС', desc: 'Инструмент', color: '#D81515' },
-    { id: 'xbat', name: 'ХВАТ', desc: 'Крепеж и метизы', color: '#1A1A1A' }
+  const fallbackBrands: BrandNavItem[] = [
+    { id: 'fit', name: 'FIT', subtitle: 'Основной бренд', color: '#FDB913' },
+    { id: 'cutop', name: 'CUTOP', subtitle: 'Режущий инструмент', color: '#2A4998' },
+    { id: 'mos', name: 'MOS', subtitle: 'Строительные материалы', color: '#00AEEF' },
+    { id: 'mastercolor', name: 'Master Color', subtitle: 'ЛКМ', color: '#0065A8' },
+    { id: 'kypc', name: 'КУРС', subtitle: 'Инструмент', color: '#D81515' },
+    { id: 'xbat', name: 'ХВАТ', subtitle: 'Крепеж и метизы', color: '#1A1A1A' },
   ]
+
+  useEffect(() => {
+    let cancelled = false
+    // Pull brand list from CMS (published by default, draft when preview=1&status=draft is present in URL).
+    fetchCmsBrandsList()
+      .then((list) => {
+        if (cancelled) return
+
+        // If CMS items are missing navSubtitle (e.g. Strapi not restarted/migrated yet),
+        // fall back to the old hardcoded short labels so the menu stays consistent.
+        const fallbackById = new Map(fallbackBrands.map((b) => [b.id, b]))
+
+        const mapped = list
+          .map((b) => {
+            const id = String((b as any)?.brandId || '').trim()
+            if (!id) return null
+            const name = String((b as any)?.displayName || id).trim()
+            const cmsSubtitle = String((b as any)?.navSubtitle || '').trim()
+            const fallbackSubtitle = fallbackById.get(id)?.subtitle || null
+            const subtitle = cmsSubtitle || fallbackSubtitle
+
+            const cmsColor = String((b as any)?.primaryColor || '').trim()
+            const fallbackColor = fallbackById.get(id)?.color || '#FFFFFF'
+            const color = cmsColor || fallbackColor
+
+            return { id, name, subtitle, color }
+          })
+          .filter(Boolean) as BrandNavItem[]
+        setCmsBrands(mapped.length > 0 ? mapped : [])
+      })
+      .catch(() => {
+        if (cancelled) return
+        setCmsBrands([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const brands = useMemo<BrandNavItem[]>(() => {
+    // null = not loaded yet → keep fallback to avoid menu flicker
+    if (cmsBrands === null) return fallbackBrands
+    // [] = loaded but empty/failed → fallback
+    if (cmsBrands.length === 0) return fallbackBrands
+    return cmsBrands
+  }, [cmsBrands])
 
   return (
     <header ref={headerRef} className={`header ${isScrolled ? 'scrolled' : ''}`}>
@@ -134,13 +190,14 @@ const Header = () => {
                         key={brand.id} 
                         href={`/brands/${brand.id}`} 
                         className="brand-card-colored"
+                        aria-label={brand.name}
                         style={{
                           borderColor: brand.color,
                           '--brand-color': brand.color
                         } as React.CSSProperties}
                       >
                         <div className="brand-name">{brand.name}</div>
-                        <div className="brand-desc">{brand.desc}</div>
+                        {brand.subtitle ? <div className="brand-desc">{brand.subtitle}</div> : null}
                       </Link>
                     ))}
                   </div>
@@ -162,6 +219,7 @@ const Header = () => {
                     e.preventDefault()
                     const servicesSection = document.getElementById('services')
                     if (servicesSection) {
+                      scrollController.leaveControlledArea()
                       servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     }
                   }
@@ -192,7 +250,7 @@ const Header = () => {
               onMouseEnter={() => setOpenDropdown('info')}
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              <span className={`nav-link has-dropdown ${isActive('/info') || isActive('/news') || isActive('/articles') || isActive('/faq') || isActive('/privacy') || isActive('/terms') || isActive('/certificates') ? 'active' : ''}`}>
+              <span className={`nav-link has-dropdown ${isActive('/info') || isActive('/news') || isActive('/articles') || isActive('/faq') || isActive('/privacy') || isActive('/terms') || isActive('/certificates') || isActive('/marketing-activity') ? 'active' : ''}`}>
                 Информация
                 <ChevronDown size={14} className="dropdown-icon" />
               </span>
@@ -203,6 +261,7 @@ const Header = () => {
                       <h3 className="info-menu-title">Новости и статьи</h3>
                       <Link href="/news" className="info-menu-item">Новости компании</Link>
                       <Link href="/articles" className="info-menu-item">Товарные статьи</Link>
+                      <Link href="/marketing-activity/" prefetch={false} className="info-menu-item">Маркетинговая активность</Link>
                     </div>
                     <div className="info-menu-column">
                       <h3 className="info-menu-title">Поддержка</h3>
@@ -332,6 +391,7 @@ const Header = () => {
                   key={brand.id}
                   href={`/brands/${brand.id}`} 
                   className={`nav-link-mobile submenu-item ${isActive(`/brands/${brand.id}`) ? 'active' : ''}`}
+                  aria-label={brand.name}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {brand.name}
@@ -348,6 +408,7 @@ const Header = () => {
                     e.preventDefault()
                     const servicesSection = document.getElementById('services')
                     if (servicesSection) {
+                      scrollController.leaveControlledArea()
                       servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     }
                   }
@@ -399,6 +460,14 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 FAQ
+              </Link>
+              <Link
+                href="/marketing-activity/"
+                prefetch={false}
+                className={`nav-link-mobile submenu-item ${isActive('/marketing-activity') ? 'active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Маркетинговая активность
               </Link>
               <Link 
                 href="/privacy" 

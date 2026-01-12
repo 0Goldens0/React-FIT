@@ -8,11 +8,14 @@
 @import "../screens/HomePage.css";
 @import "../screens/BrandPage.css";
 @import "../screens/FAQPage.css";
+@import "../screens/NewsPage.css";
+@import "../screens/NewsDetailPage.css";
 @import "../screens/InfoPage.css";
 @import "../screens/LogisticsPage.css";
 
 /* Shared / assets */
 @import "../assets/css/brand-journey.css";
+@import "../assets/css/brand-catalog-inline.css";
 @import "../assets/css/services.css";
 
 /* Components */
@@ -20,6 +23,8 @@
 @import "../components/Hero/Hero.css";
 @import "../components/About/About.css";
 @import "../components/Brands/Brands.css";
+@import "../components/BrandCategoriesCatalog/BrandCategoriesCatalog.css";
+@import "../components/PdfMagazine/PdfMagazine.css";
 @import "../components/Timeline/Timeline.css";
 @import "../components/Services/Services.css";
 @import "../components/RussiaMap/RussiaMap.css";

@@ -1,0 +1,48 @@
+/* Стили для каталога внутри секции бренда */
+.brand-catalog-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1400px;
+  margin: 30px auto 0;
+  padding: 0 20px;
+}
+
+.brand-catalog-title {
+  text-align: center;
+  font-size: 38px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+}
+
+.brand-catalog-subtitle {
+  text-align: center;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .brand-catalog-title {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  
+  .brand-catalog-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+}
+
+/* Убираем ограничение высоты для standalone секции */
+.brand-section.standalone {
+  height: auto !important;
+  min-height: auto !important;
+  flex-direction: column !important;
+  padding-bottom: 60px !important;
+}
+

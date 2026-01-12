@@ -1,0 +1,38 @@
+{
+  "collectionName": "components_brand_popular_products",
+  "info": {
+    "displayName": "Популярный товар (бренд)",
+    "description": "Карточка товара для секции «Популярные товары» на странице бренда"
+  },
+  "options": {},
+  "attributes": {
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "article": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "price": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}
+
+

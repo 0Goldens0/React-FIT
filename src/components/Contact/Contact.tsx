@@ -436,17 +436,17 @@ const Contact = () => {
 
                   <div className="form-row">
                     <div className={`floating-input-group ${errors.company && touched.company ? 'error' : ''}`}>
-                      <input
-                        type="text"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleChange}
-                        onFocus={() => setFocusedField('company')}
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      onFocus={() => setFocusedField('company')}
                         onBlur={handleBlur}
-                        className={focusedField === 'company' || formData.company ? 'focused' : ''}
-                      />
-                      <label>
-                        <Building size={18} />
+                      className={focusedField === 'company' || formData.company ? 'focused' : ''}
+                    />
+                    <label>
+                      <Building size={18} />
                         Компания *
                       </label>
                       <div className="input-border"></div>
@@ -468,8 +468,8 @@ const Contact = () => {
                       <label>
                         <MapPin size={18} />
                         Город *
-                      </label>
-                      <div className="input-border"></div>
+                    </label>
+                    <div className="input-border"></div>
                       {errors.city && touched.city && (
                         <span className="error-message">{errors.city}</span>
                       )}

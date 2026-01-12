@@ -270,18 +270,17 @@
 
 .timeline-fullscreen-content {
     position: relative;
-    width: 90%;
-    max-width: 1400px;
-    /* Используем динамическую переменную --vh */
-    height: calc(var(--vh, 1vh) * 90);
+    width: 100vw;
+    max-width: none;
+    height: 100vh;
     background: rgba(17, 17, 17, 0.95);
-    border-radius: 20px;
+    border-radius: 0;
     overflow: hidden;
     opacity: 0;
     transform: scale(0.95) translateY(20px);
     transition: opacity 0.4s ease, transform 0.4s ease;
     box-shadow: 0 0 100px rgba(255, 184, 0, 0.1);
-    padding: 50px;
+    padding: clamp(18px, 4vw, 50px);
     overflow-y: auto;
 }
 
@@ -740,8 +739,7 @@
     }
 
     .timeline-fullscreen-content {
-        /* Используем динамическую переменную --vh */
-        height: calc(var(--vh, 1vh) * 80);
+        height: 100vh;
     }
     
     /* Safari/MacOS - такая же высота как на 1399px */
@@ -772,8 +770,9 @@
     }
     
     .timeline-fullscreen-content {
-        width: 92%;
-        padding: 35px;
+        width: 100vw;
+        height: 100vh;
+        padding: clamp(16px, 4vw, 35px);
     }
     
     .timeline-fullscreen-year {
@@ -893,10 +892,9 @@
     }
     
     .timeline-fullscreen-content {
-        width: clamp(95%, 100% - 20px, 98%);
-        /* Используем динамическую переменную --vh */
-        height: calc(var(--vh, 1vh) * 75);
-        padding: clamp(18px, 5vw, 30px);
+        width: 100vw;
+        height: 100vh;
+        padding: clamp(14px, 5vw, 28px);
     }
     
     .timeline-fullscreen-header {
@@ -1074,9 +1072,9 @@
     }
     
     .timeline-fullscreen-content {
-        width: 98%;
-        padding: 20px;
-        height: calc(var(--vh, 1vh) * 96);
+        width: 100vw;
+        height: 100vh;
+        padding: 16px;
     }
     
     .timeline-fullscreen-header {

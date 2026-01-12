@@ -1,8 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react'
 
 import { getAssetPath } from '../../utils/paths'
+import { branchContactsByCityId, type BranchContact } from '../../data/branchContacts'
+import { extractMediaUrl, fetchCmsBranchContacts, type CmsBranchContact } from '../../utils/cms'
 
 interface RegionalCenter {
   id: string;
@@ -11,6 +13,24 @@ interface RegionalCenter {
   y: number;
   region: string;
   isMainCenter?: boolean; // Основные региональные центры
+}
+
+function getInitials(name: string) {
+  const parts = name
+    .replace(/\(.*?\)/g, '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+  const first = parts[0]?.[0] ?? ''
+  const second = parts[1]?.[0] ?? ''
+  const out = `${first}${second}`.toUpperCase()
+  return out || 'FIT'
+}
+
+function sanitizeTel(phone: string) {
+  // Keep digits and leading plus for tel:
+  const cleaned = phone.replace(/[^\d+]/g, '')
+  return cleaned.startsWith('+') ? cleaned : `+${cleaned}`
 }
 
 // Координаты региональных центров взяты из оригинального SVG файла
@@ -100,12 +120,105 @@ const regionalCenters: RegionalCenter[] = [
 ];
 
 const RussiaMap: React.FC = () => {
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [hoveredCity, setHoveredCity] = useState<string | null>(null);
   const [svgContent, setSvgContent] = useState<string>('');
   const svgRef = useRef<HTMLDivElement>(null);
+  const [activeCityId, setActiveCityId] = useState<string | null>(null)
+  const [activePopupMode, setActivePopupMode] = useState<'region' | 'city' | null>(null)
+  const closePopupTimeoutRef = useRef<number | null>(null)
+  const lastRegionUnderCursorRef = useRef<string | null>(null)
+  const [cmsContacts, setCmsContacts] = useState<CmsBranchContact[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetchCmsBranchContacts()
+      .then((items) => {
+        if (!cancelled) setCmsContacts(items)
+      })
+      .catch(() => {
+        // keep fallback
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const contactByCityId = useMemo<Record<string, BranchContact>>(() => {
+    if (!cmsContacts || cmsContacts.length === 0) return branchContactsByCityId
+
+    const map: Record<string, BranchContact> = {}
+    for (const c of cmsContacts) {
+      if (!c?.cityId) continue
+      if (c.isActive === false) continue
+      map[c.cityId] = {
+        cityId: c.cityId,
+        cityName: c.cityName,
+        regionCode: c.regionCode,
+        phone: c.phone,
+        email: c.email,
+        address: c.address,
+        directorName: c.directorName,
+        directorTitle: c.directorTitle,
+        avatarUrl: extractMediaUrl((c as any).avatar),
+      }
+    }
+    // If CMS is misconfigured and returned nothing, fallback to local map
+    return Object.keys(map).length > 0 ? map : branchContactsByCityId
+  }, [cmsContacts])
+
+  const highlightedCenters = useMemo(() => {
+    // Popups must be only for cities that have a YELLOW dot (main center) + contacts.
+    return regionalCenters.filter((c) => c.isMainCenter && Boolean(contactByCityId[c.id]))
+  }, [contactByCityId])
+
+  const regionToHighlightedCityId = useMemo(() => {
+    const map = new Map<string, string>()
+    highlightedCenters.forEach((c) => {
+      map.set(c.region, c.id)
+    })
+    return map
+  }, [highlightedCenters])
+
+  const clearCloseTimer = useCallback(() => {
+    if (closePopupTimeoutRef.current) {
+      window.clearTimeout(closePopupTimeoutRef.current)
+      closePopupTimeoutRef.current = null
+    }
+  }, [])
+
+  const closePopupImmediate = useCallback(() => {
+    clearCloseTimer()
+    setActiveCityId(null)
+    setActivePopupMode(null)
+  }, [clearCloseTimer])
+
+  const openPopupForCity = useCallback(
+    (cityId: string, mode: 'region' | 'city') => {
+      clearCloseTimer()
+      setActiveCityId(cityId)
+      setActivePopupMode(mode)
+    },
+    [clearCloseTimer]
+  )
+
+  const scheduleClosePopup = useCallback((expectedCityId?: string) => {
+    clearCloseTimer()
+    closePopupTimeoutRef.current = window.setTimeout(() => {
+      if (!expectedCityId) {
+        setActiveCityId(null)
+        setActivePopupMode(null)
+        return
+      }
+      setActiveCityId((prev) => (prev === expectedCityId ? null : prev))
+      setActivePopupMode((prev) => (activeCityId === expectedCityId ? null : prev))
+    }, 120)
+  }, [activeCityId, clearCloseTimer])
+
+  const activeContact = useMemo<BranchContact | null>(() => {
+    if (!activeCityId) return null
+    return contactByCityId[activeCityId] || null
+  }, [activeCityId, contactByCityId])
 
   useEffect(() => {
     // Загружаем SVG файл
@@ -122,75 +235,100 @@ const RussiaMap: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (svgContent && svgRef.current) {
-      // Удаляем все title элементы и атрибуты из SVG
-      const allElements = svgRef.current.querySelectorAll('*');
-      allElements.forEach(el => {
-        el.removeAttribute('title');
-      });
-      
-      // Удаляем все <title> элементы
-      const titleElements = svgRef.current.querySelectorAll('title');
-      titleElements.forEach(title => title.remove());
-      
-      // Добавляем интерактивность к SVG элементам
-      const paths = svgRef.current.querySelectorAll('path[data-code]');
-      
-      paths.forEach(path => {
-        const regionCode = path.getAttribute('data-code');
-        
-        if (regionCode) {
-          // Находим город для этого региона
-          const center = regionalCenters.find(c => c.region === regionCode);
-          
-          // Обновляем стили на основе состояния
-          const pathEl = path as SVGPathElement;
-          if (selectedRegion === regionCode) {
-            pathEl.style.fill = '#FFB800';
-            pathEl.style.strokeWidth = '2';
-          } else if (hoveredRegion === regionCode) {
-            pathEl.style.fill = '#2D2D30';
-            pathEl.style.strokeWidth = '1.5';
-          } else {
-            pathEl.style.fill = '#1F1F23';
-            pathEl.style.strokeWidth = '0.7';
-          }
+    if (!svgContent || !svgRef.current) return
 
-          // Добавляем обработчики событий
-          const handleClick = () => {
-            if (center) {
-            setSelectedRegion(regionCode === selectedRegion ? null : regionCode);
-              setSelectedCity(selectedCity === center.id ? null : center.id);
-            }
-          };
+    // Remove all <title> nodes/attributes from injected SVG
+    const allElements = svgRef.current.querySelectorAll('*')
+    allElements.forEach((el) => {
+      el.removeAttribute('title')
+    })
+    const titleElements = svgRef.current.querySelectorAll('title')
+    titleElements.forEach((title) => title.remove())
+  }, [svgContent])
 
-          const handleMouseEnter = () => {
-            setHoveredRegion(regionCode);
-          };
+  useEffect(() => {
+    if (!svgContent || !svgRef.current) return
+    const root = svgRef.current
 
-          const handleMouseLeave = () => {
-            setHoveredRegion(null);
-          };
+    // Delegate hover detection to the container to avoid "stuck" hover when moving between adjacent paths.
+    const handlePointerMove = (e: PointerEvent) => {
+      const target = e.target as Element | null
+      const pathEl = target?.closest?.('path[data-code]') as SVGPathElement | null
+      const regionCode = pathEl?.getAttribute('data-code') || null
 
-          path.addEventListener('click', handleClick);
-          path.addEventListener('mouseenter', handleMouseEnter);
-          path.addEventListener('mouseleave', handleMouseLeave);
+      if (regionCode === lastRegionUnderCursorRef.current) return
+      lastRegionUnderCursorRef.current = regionCode
 
-          // Cleanup
-          return () => {
-            path.removeEventListener('click', handleClick);
-            path.removeEventListener('mouseenter', handleMouseEnter);
-            path.removeEventListener('mouseleave', handleMouseLeave);
-          };
-        }
-      });
+      setHoveredRegion(regionCode)
+
+      if (!regionCode) {
+        if (activePopupMode === 'region') closePopupImmediate()
+        return
+      }
+
+      const cityIdForPopup = regionToHighlightedCityId.get(regionCode) || null
+      if (cityIdForPopup) {
+        openPopupForCity(cityIdForPopup, 'region')
+      } else {
+        // Hovered a region without a yellow-dot popup: close any region-popup immediately.
+        if (activePopupMode === 'region') closePopupImmediate()
+      }
     }
-  }, [svgContent, selectedRegion, hoveredRegion, selectedCity]);
+
+    const handlePointerLeave = () => {
+      lastRegionUnderCursorRef.current = null
+      setHoveredRegion(null)
+      if (activePopupMode === 'region') closePopupImmediate()
+    }
+
+    root.addEventListener('pointermove', handlePointerMove)
+    root.addEventListener('pointerleave', handlePointerLeave)
+
+    return () => {
+      root.removeEventListener('pointermove', handlePointerMove)
+      root.removeEventListener('pointerleave', handlePointerLeave)
+    }
+  }, [
+    activePopupMode,
+    closePopupImmediate,
+    openPopupForCity,
+    regionToHighlightedCityId,
+    svgContent,
+  ])
+
+  useEffect(() => {
+    if (!svgContent || !svgRef.current) return
+
+    // Update region fills based on hover/selection (no re-binding handlers)
+    const paths = Array.from(svgRef.current.querySelectorAll('path[data-code]'))
+    for (const path of paths) {
+      const regionCode = path.getAttribute('data-code')
+      if (!regionCode) continue
+      const pathEl = path as SVGPathElement
+      if (hoveredRegion === regionCode) {
+        pathEl.style.fill = '#2D2D30'
+        pathEl.style.strokeWidth = '1.5'
+      } else {
+        pathEl.style.fill = '#1F1F23'
+        pathEl.style.strokeWidth = '0.7'
+      }
+    }
+  }, [hoveredRegion, svgContent])
 
   const handleCenterClick = (center: RegionalCenter) => {
-    setSelectedRegion(center.region === selectedRegion ? null : center.region);
-    setSelectedCity(selectedCity === center.id ? null : center.id);
+    const hasContact = Boolean(center.isMainCenter && contactByCityId[center.id])
+    if (!hasContact) return
+    if (activeCityId === center.id && activePopupMode === 'city') {
+      closePopupImmediate()
+      return
+    }
+    openPopupForCity(center.id, 'city')
   };
+
+  const activeCenter = useMemo(() => {
+    if (!activeContact) return null
+    return regionalCenters.find((c) => c.id === activeContact.cityId) || null
+  }, [activeContact])
 
   return (
     <section className="russia-map-section" id="map">
@@ -200,21 +338,94 @@ const RussiaMap: React.FC = () => {
         <p>85 регионов с региональными центрами</p>
       </div>
 
-      <div className="map-wrapper">
+      <div
+        className="map-wrapper"
+        onMouseLeave={() => {
+          setHoveredRegion(null)
+          // Ensure region-hover highlight/popup never sticks when leaving the map.
+          if (activePopupMode === 'region') closePopupImmediate()
+        }}
+      >
         <div 
           ref={svgRef}
           className="svg-container"
           dangerouslySetInnerHTML={{ __html: svgContent }}
         />
+
+        {activeContact && activeCenter ? (() => {
+          const percentX = (activeCenter.x / 1000) * 100
+          const percentY = (activeCenter.y / 600) * 100
+          let posClass = 'popup-top'
+          if (percentX < 18) posClass = 'popup-right'
+          else if (percentX > 82) posClass = 'popup-left'
+          else if (percentY < 18) posClass = 'popup-bottom'
+
+          const initials = getInitials(activeContact.directorName)
+          const tel = sanitizeTel(activeContact.phone)
+
+          return (
+            <div
+              className={`center-popupAnchor ${posClass}`}
+              style={{ left: `${percentX}%`, top: `${percentY}%` }}
+              data-popup-mode={activePopupMode || undefined}
+              onMouseEnter={() => {
+                // For region-hover popups we do NOT keep it open outside the region.
+                if (activePopupMode === 'region') return
+                openPopupForCity(activeContact.cityId, 'city')
+              }}
+              onMouseLeave={() => {
+                if (activePopupMode === 'region') return
+                scheduleClosePopup(activeContact.cityId)
+              }}
+              role="dialog"
+              aria-label={`Контакты филиала: ${activeContact.cityName}`}
+            >
+              <div className="center-popup">
+                <div className="center-popupHeader">
+                  <div className="center-popupAvatar" aria-hidden="true">
+                    {activeContact.avatarUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={activeContact.avatarUrl} alt="" className="center-popupAvatarImg" />
+                    ) : (
+                      <span className="center-popupAvatarText">{initials}</span>
+                    )}
+                  </div>
+                  <div className="center-popupHeaderText">
+                    <div className="center-popupCity">{activeContact.cityName}</div>
+                    <div className="center-popupTitle">{activeContact.directorTitle}</div>
+                    <div className="center-popupName">{activeContact.directorName}</div>
+                  </div>
+                </div>
+
+                <div className="center-popupBody">
+                  <a className="center-popupRow" href={`tel:${tel}`}>
+                    <span className="center-popupRowLabel">Тел:</span>
+                    <span className="center-popupRowValue">{activeContact.phone}</span>
+                  </a>
+                  <a className="center-popupRow" href={`mailto:${activeContact.email}`}>
+                    <span className="center-popupRowLabel">Email:</span>
+                    <span className="center-popupRowValue">{activeContact.email}</span>
+                  </a>
+                  <div className="center-popupRow center-popupRowStatic">
+                    <span className="center-popupRowLabel">Адрес:</span>
+                    <span className="center-popupRowValue">{activeContact.address}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })() : null}
         
         {svgContent && (
           <div className="centers-overlay">
             {regionalCenters.map(center => {
-              const isHovered = hoveredRegion === center.region;
-              const isSelected = selectedCity === center.id;
               const isCityHovered = hoveredCity === center.id;
               const isMainCenter = center.isMainCenter || false;
-              const shouldShowLabel = isHovered || isSelected || isCityHovered;
+              const hasContact = Boolean(center.isMainCenter && contactByCityId[center.id])
+              // For RED dots (non-main centers): show city label ONLY when hovering the dot,
+              // never when hovering the whole region.
+              // For YELLOW dots (main centers with contacts): popup is used instead of label.
+              const shouldShowLabel = !hasContact && isCityHovered
               
               // Определяем позицию метки относительно краев
               const percentX = (center.x / 1000) * 100;
@@ -235,7 +446,7 @@ const RussiaMap: React.FC = () => {
               return (
               <div
                 key={center.id}
-                  className={`regional-center ${selectedRegion === center.region ? 'selected' : ''} ${shouldShowLabel ? 'label-visible' : ''} ${isMainCenter ? 'main-center' : ''}`}
+                  className={`regional-center ${shouldShowLabel ? 'label-visible' : ''} ${isMainCenter ? 'main-center' : ''} ${hasContact ? 'has-contact' : ''}`}
                 style={{
                     left: `${percentX}%`,
                     top: `${percentY}%`,
@@ -243,8 +454,14 @@ const RussiaMap: React.FC = () => {
                     zIndex: shouldShowLabel ? 101 : 100 /* Поднимаем активную метку наверх */
                 }}
                 onClick={() => handleCenterClick(center)}
-                onMouseEnter={() => setHoveredCity(center.id)}
-                onMouseLeave={() => setHoveredCity(null)}
+                onMouseEnter={() => {
+                  setHoveredCity(center.id)
+                  if (hasContact) openPopupForCity(center.id, 'city')
+                }}
+                onMouseLeave={() => {
+                  setHoveredCity(null)
+                  if (hasContact && activePopupMode === 'city') scheduleClosePopup(center.id)
+                }}
               >
                 <div className="center-dot" />
                   {shouldShowLabel && (
