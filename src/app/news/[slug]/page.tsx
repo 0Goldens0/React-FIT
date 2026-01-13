@@ -3,9 +3,11 @@ import { extractMediaUrl, fetchCmsCompanyNewsBySlug } from '../../../utils/cms'
 import type { Metadata } from 'next'
 
 // For GitHub Pages static export, we don't have CMS data at build time.
-// Return empty array so no news detail pages are pre-rendered (they'll 404 without CMS).
+// We need to return at least one param to satisfy Next.js static export requirements,
+// even though this page won't actually exist (will 404 without CMS).
 export async function generateStaticParams() {
-  return []
+  // Return a dummy param to satisfy Next.js - actual news pages require CMS
+  return [{ slug: '_placeholder' }]
 }
 
 export default async function Page({
