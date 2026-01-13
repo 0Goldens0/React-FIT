@@ -1,10 +1,7 @@
 import BrandPage from '../../../screens/BrandPage'
 
-// Allow new brands from CMS (and Strapi preview URLs) to resolve without rebuilding the frontend.
-// NOTE: dynamicParams is not compatible with "output: export", so we disable it for GitHub Pages.
-// For GitHub Pages static export, only the brands in generateStaticParams will work.
-export const dynamicParams = process.env.GITHUB_ACTIONS !== 'true'
-
+// NOTE: For GitHub Pages static export, only the brands listed in generateStaticParams will work.
+// On production server with Next.js server, all dynamic brands from CMS work normally.
 export async function generateStaticParams() {
   // Keep in sync with BrandPage brandData keys
   return ['fit', 'cutop', 'mos', 'mastercolor', 'kypc', 'xbat'].map((brandId) => ({ brandId }))
