@@ -1,0 +1,186 @@
+.wrap {
+  position: relative;
+  min-height: calc(var(--vh, 1vh) * 100 - var(--header-height));
+  padding: 48px 0 80px;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 184, 0, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 80% 35%, rgba(255, 255, 255, 0.04) 0%, transparent 55%),
+    radial-gradient(circle at 25% 80%, rgba(255, 184, 0, 0.06) 0%, transparent 55%),
+    linear-gradient(135deg, rgba(15, 15, 17, 1) 0%, rgba(31, 31, 34, 1) 100%);
+  filter: saturate(1.05);
+}
+
+.grid {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    linear-gradient(rgba(255, 184, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 184, 0, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(900px) rotateX(55deg) translateY(-10%);
+  opacity: 0.25;
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.35) 0 1px, transparent 2px),
+    radial-gradient(circle at 35% 60%, rgba(255,255,255,0.25) 0 1px, transparent 2px),
+    radial-gradient(circle at 55% 25%, rgba(255,255,255,0.28) 0 1px, transparent 2px),
+    radial-gradient(circle at 75% 70%, rgba(255,255,255,0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 90% 40%, rgba(255,255,255,0.30) 0 1px, transparent 2px);
+  opacity: 0.7;
+  animation: floatStars 8s ease-in-out infinite;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 184, 0, 0.18);
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(18px);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 184, 0, 0.25);
+  background: rgba(255, 184, 0, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.title {
+  margin: 18px 0 10px;
+  font-size: 44px;
+  line-height: 1.08;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary) 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  margin: 0 0 18px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 16px;
+  line-height: 1.65;
+  max-width: 56ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hint {
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+}
+
+.art {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  padding: 18px;
+  overflow: hidden;
+}
+
+.art::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 40% 30%, rgba(255, 184, 0, 0.10), transparent 55%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 18px 35px rgba(0, 0, 0, 0.55));
+}
+
+.pulse {
+  transform-origin: 50% 50%;
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+.spinSlow {
+  transform-origin: 0 0;
+  animation: spin 9s linear infinite;
+}
+
+.spinFast {
+  transform-origin: 0 0;
+  animation: spin 5.5s linear infinite reverse;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.03); opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes floatStars {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 992px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+  .title {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: 28px 0 60px;
+  }
+  .title {
+    font-size: 34px;
+  }
+  .card {
+    padding: 20px;
+  }
+}
+
