@@ -38,6 +38,12 @@ jobs:
             echo "✅ API routes removed (will not be in deployed static build)"
           fi
 
+      - name: Clean Next.js cache
+        run: |
+          echo "🧹 Cleaning Next.js cache..."
+          rm -rf .next
+          echo "✅ Cache cleaned"
+
       - name: Build (static export)
         run: npm run build
 
