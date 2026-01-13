@@ -2,6 +2,12 @@ import NewsDetailPage from '../../../screens/NewsDetailPage'
 import { extractMediaUrl, fetchCmsCompanyNewsBySlug } from '../../../utils/cms'
 import type { Metadata } from 'next'
 
+// For GitHub Pages static export, we don't have CMS data at build time.
+// Return empty array so no news detail pages are pre-rendered (they'll 404 without CMS).
+export async function generateStaticParams() {
+  return []
+}
+
 export default async function Page({
   params,
 }: {
