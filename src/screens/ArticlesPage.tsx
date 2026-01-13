@@ -35,7 +35,7 @@ const ArticlesPage = () => {
             category: a.category || 'other',
             date: a.publishedDate || '',
             description: a.excerpt || '',
-            coverUrl: extractMediaUrl((a as any).coverImage),
+            coverUrl: extractMediaUrl(a.coverImage),
           }))
           .filter((a) => a.slug)
         if (!cancelled) setCmsItems(items)

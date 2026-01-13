@@ -84,14 +84,15 @@ const Header = () => {
 
         const mapped = list
           .map((b) => {
-            const id = String((b as any)?.brandId || '').trim()
+            const brandObj = b && typeof b === 'object' ? (b as Record<string, unknown>) : {}
+            const id = String(brandObj.brandId || '').trim()
             if (!id) return null
-            const name = String((b as any)?.displayName || id).trim()
-            const cmsSubtitle = String((b as any)?.navSubtitle || '').trim()
+            const name = String(brandObj.displayName || id).trim()
+            const cmsSubtitle = String(brandObj.navSubtitle || '').trim()
             const fallbackSubtitle = fallbackById.get(id)?.subtitle || null
             const subtitle = cmsSubtitle || fallbackSubtitle
 
-            const cmsColor = String((b as any)?.primaryColor || '').trim()
+            const cmsColor = String(brandObj.primaryColor || '').trim()
             const fallbackColor = fallbackById.get(id)?.color || '#FFFFFF'
             const color = cmsColor || fallbackColor
 

@@ -17,7 +17,7 @@ const PdfMagazine = dynamic(
 
 type FallbackSection = {
   title: string
-  content: any
+  content: unknown
   layout: 'textLeft' | 'textRight'
 }
 
@@ -126,8 +126,8 @@ export default function MarketingActivityPage() {
     if (cmsSections.length > 0) {
       return cmsSections
         .slice()
-        .sort((a: any, b: any) => (Number(a.order ?? 0) || 0) - (Number(b.order ?? 0) || 0))
-        .map((s: any) => ({
+        .sort((a, b) => (Number(a.order ?? 0) || 0) - (Number(b.order ?? 0) || 0))
+        .map((s) => ({
           title: s.title,
           content: s.content,
           layout: (s.layout === 'textRight' ? 'textRight' : 'textLeft') as 'textLeft' | 'textRight',

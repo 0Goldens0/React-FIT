@@ -4,7 +4,7 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import BrandSlide from '../components/Brands/BrandSlide'
 import { brandProducts, getBrandById } from '../components/Brands/brandsData'
-import { fetchCmsBrand, extractMediaUrl } from '../utils/cms'
+import { fetchCmsBrand, extractMediaUrl, type CmsBrand } from '../utils/cms'
 import { useEffect, useMemo, useState } from 'react'
 import { getAssetPath } from '../utils/paths'
 
@@ -12,9 +12,18 @@ type BrandPageProps = {
   brandId: string
 }
 
+interface CmsPopularProduct {
+  order?: number
+  article?: string
+  name?: string
+  image?: unknown
+  price?: string
+  category?: string
+}
+
 export default function BrandPage({ brandId }: BrandPageProps) {
   const fallbackBrand = getBrandById(brandId)
-  const [cmsBrand, setCmsBrand] = useState<any>(null)
+  const [cmsBrand, setCmsBrand] = useState<CmsBrand | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -46,10 +55,10 @@ export default function BrandPage({ brandId }: BrandPageProps) {
         parallaxFgColor: cmsBrand.parallaxFgColor ?? fallbackBrand?.parallaxFgColor ?? '#FFFFFF',
         catalogB2cUrl: cmsBrand.catalogB2cUrl ?? 'https://fit-emarket.ru',
         catalogB2bUrl: cmsBrand.catalogB2bUrl ?? 'https://fit24.ru',
-      }
+      } as const
     }
     return fallbackBrand
-      ? { ...fallbackBrand, catalogB2cUrl: 'https://fit-emarket.ru', catalogB2bUrl: 'https://fit24.ru' }
+      ? { ...fallbackBrand, catalogB2cUrl: 'https://fit-emarket.ru' as string, catalogB2bUrl: 'https://fit24.ru' as string }
       : null
   }, [brandId, cmsBrand, fallbackBrand])
 
@@ -62,17 +71,17 @@ export default function BrandPage({ brandId }: BrandPageProps) {
         s
           .toLowerCase()
           .replace(/\s+/g, ' ')
-          .replace(/[^\p{L}\p{N}\s\-]+/gu, '')
+          .replace(/[^\p{L}\p{N}\s-]+/gu, '')
           .trim()
 
       const fallbackByArticle = new Map(hardList.map((p) => [String(p.article || '').trim(), p]))
       const fallbackByName = new Map(hardList.map((p) => [normalize(String(p.name || '')), p]))
 
-      return cmsProducts
+      return (cmsProducts as CmsPopularProduct[])
         .slice()
-        .sort((a: any, b: any) => (Number(a?.order ?? 0) - Number(b?.order ?? 0)))
+        .sort((a, b) => (Number(a?.order ?? 0) - Number(b?.order ?? 0)))
         .slice(0, 4)
-        .map((p: any) => {
+        .map((p) => {
           const article = String(p?.article ?? '').trim()
           const cmsName = String(p?.name ?? '').trim()
           const hard =
@@ -114,13 +123,13 @@ export default function BrandPage({ brandId }: BrandPageProps) {
     <div className="brand-page">
       <Header />
 
-      <BrandSlide brand={brand as any} products={products as any} standalone />
+      <BrandSlide brand={brand} products={products} standalone />
 
       <main className="brand-page-content">
         <section className="brand-cta">
           <div className="cta-buttons">
             <a
-              href={(brand as any).catalogB2cUrl || 'https://fit-emarket.ru'}
+              href={brand.catalogB2cUrl || 'https://fit-emarket.ru'}
               target="_blank"
               rel="noopener noreferrer"
               className="cta-button"
@@ -129,7 +138,7 @@ export default function BrandPage({ brandId }: BrandPageProps) {
               Каталог для физ. лиц
             </a>
             <a
-              href={(brand as any).catalogB2bUrl || 'https://fit24.ru'}
+              href={brand.catalogB2bUrl || 'https://fit24.ru'}
               target="_blank"
               rel="noopener noreferrer"
               className="cta-button"

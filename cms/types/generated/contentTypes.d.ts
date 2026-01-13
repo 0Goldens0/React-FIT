@@ -503,6 +503,7 @@ export interface ApiBrandBrand extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::brand.brand'> &
       Schema.Attribute.Private;
     logo: Schema.Attribute.Media<'images'>;
+    navSubtitle: Schema.Attribute.String;
     parallaxBgColor: Schema.Attribute.String;
     parallaxFgColor: Schema.Attribute.String;
     popularProducts: Schema.Attribute.Component<'brand.popular-product', true>;

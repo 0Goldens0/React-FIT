@@ -1,8 +1,7 @@
-import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 // Allow Strapi admin (running on localhost:1337) to embed the frontend in an iframe for Preview.
-export function middleware(_req: NextRequest) {
+export function middleware() {
   const res = NextResponse.next()
 
   // Minimal CSP to allow embedding by Strapi admin in dev.

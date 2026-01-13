@@ -6,6 +6,19 @@ const CMS_ORIGIN =
   process.env.CMS_URL?.replace(/\/+$/, '') ||
   'http://localhost:1337'
 
+// Strapi API response types for honest-sign-page
+interface StrapiHonestSignData {
+  updatedAt?: string
+  updated_at?: string
+  content?: unknown[]
+  subtitle?: string
+  localizations?: StrapiHonestSignData[]
+}
+
+interface StrapiHonestSignResponse {
+  data?: StrapiHonestSignData
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const status = searchParams.get('status')
@@ -36,13 +49,13 @@ export async function GET(request: Request) {
 
   if (contentType.includes('application/json')) {
     try {
-      const json = JSON.parse(body) as any
+      const json = JSON.parse(body) as StrapiHonestSignResponse
       const data = json?.data
       const locals = Array.isArray(data?.localizations) ? data.localizations : []
       if (data && locals.length > 0) {
         const candidates = [data, ...locals].filter(Boolean)
 
-        const score = (item: any) => {
+        const score = (item: StrapiHonestSignData) => {
           const updatedAt = Date.parse(item?.updatedAt || item?.updated_at || '') || 0
           const hasContent =
             (Array.isArray(item?.content) && item.content.length > 0) ||
@@ -54,7 +67,7 @@ export async function GET(request: Request) {
         const chosen =
           candidates
             .slice()
-            .sort((a: any, b: any) => score(b) - score(a))[0] || data
+            .sort((a, b) => score(b) - score(a))[0] || data
 
         json.data = chosen
         if (json.data && json.data.localizations) delete json.data.localizations

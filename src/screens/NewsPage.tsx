@@ -29,7 +29,7 @@ const NewsPage = () => {
           slug: n.slug,
           excerpt: n.excerpt || undefined,
           date: n.publishedDate || undefined,
-          coverUrl: extractMediaUrl((n as any).coverImage),
+          coverUrl: extractMediaUrl(n.coverImage),
         }))
         if (!cancelled) setItems(mapped)
       })

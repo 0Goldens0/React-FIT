@@ -1,5 +1,3 @@
-import type { StrapiApp } from '@strapi/strapi/admin';
-
 export default {
   config: {
     // Admin panel UI languages: make it RU-only to avoid any English in the UI
@@ -97,7 +95,7 @@ export default {
       },
     },
   },
-  bootstrap(_app: StrapiApp) {
+  bootstrap() {
     // Force Russian UI for editors: Strapi stores the chosen locale in browser storage.
     // If the user previously picked English, Strapi will keep using it.
     try {

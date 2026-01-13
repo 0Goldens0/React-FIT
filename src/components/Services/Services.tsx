@@ -24,7 +24,8 @@ const Services = () => {
       return encodeURI(trimmed)
     }
     if (value && typeof value === 'object' && 'src' in value) {
-      const src = (value as any).src
+      const valueObj = value as Record<string, unknown>
+      const src = valueObj.src
       if (typeof src === 'string' && src.trim()) return encodeURI(src.trim())
     }
     return null
@@ -379,8 +380,8 @@ const Services = () => {
                     </div>
                     <div className="service-card-back">
                       <h3 className="service-title">{card.title}</h3>
-                      {typeof (card as any).backText === 'string' ? (
-                        <p className="service-description">{(card as any).backText}</p>
+                      {typeof card.backText === 'string' ? (
+                        <p className="service-description">{card.backText}</p>
                       ) : card.backText ? (
                         <div className="service-description">
                           <CmsBlocks content={card.backText} />

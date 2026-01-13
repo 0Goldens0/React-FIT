@@ -160,7 +160,7 @@ const RussiaMap: React.FC = () => {
         address: c.address,
         directorName: c.directorName,
         directorTitle: c.directorTitle,
-        avatarUrl: extractMediaUrl((c as any).avatar),
+        avatarUrl: extractMediaUrl(c.avatar),
       }
     }
     // If CMS is misconfigured and returned nothing, fallback to local map

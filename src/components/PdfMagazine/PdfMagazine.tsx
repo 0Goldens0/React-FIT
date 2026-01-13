@@ -60,7 +60,7 @@ function PdfCanvas(props: {
 }) {
   const ref = useRef<HTMLCanvasElement | null>(null)
   const [isRendering, setIsRendering] = useState(false)
-  const renderTaskRef = useRef<any>(null)
+  const renderTaskRef = useRef<{ cancel?: () => void; promise?: Promise<unknown> } | null>(null)
 
   useEffect(() => {
     if (!props.pdf || !props.pdfjs || !ref.current) return
@@ -96,15 +96,15 @@ function PdfCanvas(props: {
         ctx.setTransform(1, 0, 0, 1, 0, 0)
         ctx.clearRect(0, 0, ref.current!.width, ref.current!.height)
 
-        const task = pageObj.render({ canvasContext: ctx as any, viewport })
+        const task = pageObj.render({ canvasContext: ctx, viewport })
         renderTaskRef.current = task
         await task.promise
         if (cancelled) return
         setIsRendering(false)
         props.onRendered?.()
-      } catch (e: any) {
+      } catch (e: unknown) {
         // pdf.js throws on cancel; ignore cancels.
-        const msg = String(e?.message || e || '')
+        const msg = String((e as Error)?.message || e || '')
         if (cancelled) return
         if (msg.toLowerCase().includes('cancel')) {
           return
@@ -240,7 +240,7 @@ export function PdfMagazine({ src, title = 'Журнал новинок', initia
       })
       .catch((e) => {
         if (cancelled) return
-        setError((e as any)?.message || 'Не удалось загрузить PDF')
+        setError((e as Error)?.message || 'Не удалось загрузить PDF')
       })
 
     return () => {

@@ -84,7 +84,7 @@ const FAQPage = () => {
     if (cmsFaq.length > 0) {
       const localByQuestion = new Map(faqData.map((f) => [f.question, f.answer] as const))
       return cmsFaq.map((f) => {
-        const a = (f as any).answer
+        const a = f.answer
         const isEmptyBlocks = Array.isArray(a) && a.length === 0
         const isEmptyString = typeof a === 'string' && a.trim().length === 0
         const isMissing = a == null || isEmptyBlocks || isEmptyString
@@ -134,10 +134,10 @@ const FAQPage = () => {
                 </button>
                 <div className="faq-answer-wrapper">
                   <div className="faq-answer">
-                    {typeof (item as any).answer === 'string' ? (
-                      (item as any).answer
+                    {typeof item.answer === 'string' ? (
+                      item.answer
                     ) : (
-                      <CmsBlocks content={(item as any).answer} />
+                      <CmsBlocks content={item.answer} />
                     )}
                   </div>
                 </div>

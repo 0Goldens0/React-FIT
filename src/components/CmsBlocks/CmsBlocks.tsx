@@ -2,6 +2,8 @@
 
 import React from 'react'
 
+type KnownBlockType = 'text' | 'link' | 'paragraph' | 'heading' | 'list' | 'list-item' | 'quote' | 'code'
+
 type BlockNode =
   | {
       type: 'text'
@@ -19,22 +21,30 @@ type BlockNode =
   | { type: 'list-item'; children?: BlockNode[] }
   | { type: 'quote'; children?: BlockNode[] }
   | { type: 'code'; children?: BlockNode[] }
-  | { type: string; children?: BlockNode[]; [key: string]: any }
+  | { type: Exclude<string, KnownBlockType>; children?: BlockNode[]; [key: string]: unknown }
 
 function renderInline(node: BlockNode, key: React.Key): React.ReactNode {
   if (node.type === 'text') {
-    let out: React.ReactNode = node.text
-    if (node.code) out = <code key={key}>{out}</code>
-    if (node.bold) out = <strong key={key}>{out}</strong>
-    if (node.italic) out = <em key={key}>{out}</em>
-    if (node.underline) out = <u key={key}>{out}</u>
-    if (node.strikethrough) out = <s key={key}>{out}</s>
+    const text = 'text' in node ? String(node.text) : ''
+    let out: React.ReactNode = text
+    const hasCode = 'code' in node && node.code
+    const hasBold = 'bold' in node && node.bold
+    const hasItalic = 'italic' in node && node.italic
+    const hasUnderline = 'underline' in node && node.underline
+    const hasStrikethrough = 'strikethrough' in node && node.strikethrough
+
+    if (hasCode) out = <code key={key}>{out}</code>
+    if (hasBold) out = <strong key={key}>{out}</strong>
+    if (hasItalic) out = <em key={key}>{out}</em>
+    if (hasUnderline) out = <u key={key}>{out}</u>
+    if (hasStrikethrough) out = <s key={key}>{out}</s>
     return out
   }
 
   if (node.type === 'link') {
+    const url = 'url' in node ? String(node.url) : '#'
     return (
-      <a key={key} href={node.url} target="_blank" rel="noopener noreferrer">
+      <a key={key} href={url} target="_blank" rel="noopener noreferrer">
         {renderChildren(node.children)}
       </a>
     )

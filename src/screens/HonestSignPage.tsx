@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import { CmsBlocks } from '../components/CmsBlocks/CmsBlocks'
-import { cmsAssetUrl, fetchCmsHonestSignPage, CmsHonestSignPage } from '../utils/cms'
+import { cmsAssetUrl, extractMediaUrl, fetchCmsHonestSignPage, CmsHonestSignPage } from '../utils/cms'
 
 const HonestSignPage = () => {
   const [page, setPage] = useState<CmsHonestSignPage | null>(null)
@@ -20,9 +20,8 @@ const HonestSignPage = () => {
     return () => { cancelled = true }
   }, [])
 
-  const extractUrl = (media: any) => {
-    const url = media?.data?.attributes?.url
-    return url ? cmsAssetUrl(url) : undefined
+  const extractUrl = (media: unknown) => {
+    return extractMediaUrl(media)
   }
 
   // --- FALLBACKS ---
@@ -200,7 +199,7 @@ const HonestSignPage = () => {
           
           <div className="hs-gallery mt-40">
             {gallery.length > 0 ? (
-              gallery.map((img: any, idx: number) => (
+              gallery.map((img, idx) => (
                 <div key={idx} className="hs-image gallery-item">
                   <img src={cmsAssetUrl(img.attributes.url)} alt="" />
                 </div>

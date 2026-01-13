@@ -41,6 +41,7 @@ const nextConfig: NextConfig = {
         '**/cms/**/build/**',
         '**/cms/**/public/uploads/**',
       ]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const existing = (config.watchOptions && (config.watchOptions as any).ignored) ?? []
       const existingArr = Array.isArray(existing) ? existing : [existing]
       // Webpack schema in Next dev expects ignored globs as non-empty strings.

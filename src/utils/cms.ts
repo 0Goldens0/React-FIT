@@ -88,14 +88,32 @@ export function cmsAssetUrl(url: string) {
   return `${base}${url.startsWith('/') ? '' : '/'}${url}`
 }
 
-export function extractMediaUrl(media: any): string | undefined {
+export function extractMediaUrl(media: unknown): string | undefined {
   // v4/v5 media relation commonly uses { data: { attributes: { url } } }
-  const url =
-    media?.data?.attributes?.url ??
-    media?.attributes?.url ??
-    media?.url ??
-    (typeof media === 'string' ? media : undefined)
-  return url ? cmsAssetUrl(url) : undefined
+  if (typeof media === 'string') return cmsAssetUrl(media)
+  if (!media || typeof media !== 'object') return undefined
+
+  const mediaObj = media as Record<string, unknown>
+
+  // Try v4/v5 nested structure: media.data.attributes.url
+  if (mediaObj.data && typeof mediaObj.data === 'object') {
+    const dataObj = mediaObj.data as Record<string, unknown>
+    if (dataObj.attributes && typeof dataObj.attributes === 'object') {
+      const attrObj = dataObj.attributes as Record<string, unknown>
+      if (typeof attrObj.url === 'string') return cmsAssetUrl(attrObj.url)
+    }
+  }
+
+  // Try media.attributes.url
+  if (mediaObj.attributes && typeof mediaObj.attributes === 'object') {
+    const attrObj = mediaObj.attributes as Record<string, unknown>
+    if (typeof attrObj.url === 'string') return cmsAssetUrl(attrObj.url)
+  }
+
+  // Try direct media.url
+  if (typeof mediaObj.url === 'string') return cmsAssetUrl(mediaObj.url)
+
+  return undefined
 }
 
 async function fetchJson<T>(path: string): Promise<T> {
@@ -356,23 +374,29 @@ export type CmsMarketingActivityPage = {
   canonicalUrl?: string | null
 }
 
-function normalizeList<T>(res: any): T[] {
-  const data = res?.data
+function normalizeList<T>(res: unknown): T[] {
+  const resObj = res as { data?: unknown }
+  const data = resObj?.data
   if (!Array.isArray(data)) return []
   // v4: [{ id, attributes: {...} }]
   if (data.length > 0 && data[0] && typeof data[0] === 'object' && 'attributes' in data[0]) {
-    return data.map((d: any) => ({ id: d.id, ...(d.attributes || {}) })) as T[]
+    return data.map((d) => {
+      const item = d as { id: number; attributes?: Record<string, unknown> }
+      return { id: item.id, ...(item.attributes || {}) } as T
+    })
   }
   // v5: [{ id, ...fields }]
   return data as T[]
 }
 
-function normalizeSingle<T>(res: any): T | null {
-  const data = res?.data
+function normalizeSingle<T>(res: unknown): T | null {
+  const resObj = res as { data?: unknown }
+  const data = resObj?.data
   if (!data) return null
   // v4: { id, attributes: {...} }
   if (typeof data === 'object' && 'attributes' in data) {
-    return ({ id: (data as any).id, ...((data as any).attributes || {}) } as unknown) as T
+    const dataObj = data as { id: number; attributes?: Record<string, unknown> }
+    return { id: dataObj.id, ...(dataObj.attributes || {}) } as unknown as T
   }
   // v5: { id, ...fields }
   return data as T
@@ -424,7 +448,7 @@ export type CmsHonestSignPage = {
   heroBadge?: string
   heroImage?: StrapiMedia
   identityTitle?: string
-  identityContent?: any
+  identityContent?: unknown
   identityImage?: StrapiMedia
   packagingTitle?: string
   packagingIntro?: string

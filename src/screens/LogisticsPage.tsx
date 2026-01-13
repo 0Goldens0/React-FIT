@@ -73,9 +73,9 @@ const LogisticsPage = () => {
   }, [])
 
   const warehouseImageUrl =
-    extractMediaUrl((cms as any)?.warehouseSectionImage) || getAssetPath('img/timeline/placeholder-port.svg')
+    extractMediaUrl(cms?.warehouseSectionImage) || getAssetPath('img/timeline/placeholder-port.svg')
   const distributionImageUrl =
-    extractMediaUrl((cms as any)?.distributionImage) || getAssetPath('img/timeline/placeholder-warehouse-interior.svg')
+    extractMediaUrl(cms?.distributionImage) || getAssetPath('img/timeline/placeholder-warehouse-interior.svg')
 
   const cmsWarehouses =
     (cms?.warehouses || [])
@@ -84,7 +84,7 @@ const LogisticsPage = () => {
         city: w.city,
         address: w.address,
         status: w.status || 'Работает',
-        imageUrl: extractMediaUrl((w as any).image) || getAssetPath('img/timeline/placeholder-warehouse.svg'),
+        imageUrl: extractMediaUrl(w.image) || getAssetPath('img/timeline/placeholder-warehouse.svg'),
       })) || []
 
   const warehousesToRender = cmsWarehouses.length > 0 ? cmsWarehouses : fallbackWarehouses
@@ -141,9 +141,9 @@ const LogisticsPage = () => {
           <div className="section-content">
             <div className="section-text">
               <h2>{cms?.warehouseSectionTitle || 'Складская сеть федерального масштаба'}</h2>
-              {Array.isArray((cms as any)?.warehouseSectionContent) &&
-              ((cms as any).warehouseSectionContent as any[]).length > 0 ? (
-                <CmsBlocks content={(cms as any).warehouseSectionContent} />
+              {Array.isArray(cms?.warehouseSectionContent) &&
+              (cms.warehouseSectionContent as unknown[]).length > 0 ? (
+                <CmsBlocks content={cms.warehouseSectionContent} />
               ) : (
                 <>
                   <p>

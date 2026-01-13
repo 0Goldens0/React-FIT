@@ -23,7 +23,7 @@ export default function NewsDetailPage({ slug }: { slug: string }) {
     fetchCmsCompanyNewsBySlug(slug)
       .then((res) => {
         if (!res) return
-        const coverUrl = extractMediaUrl((res as any).coverImage)
+        const coverUrl = extractMediaUrl(res.coverImage)
         if (!cancelled) {
           setItem({
             title: res.title,

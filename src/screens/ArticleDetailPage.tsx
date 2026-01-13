@@ -34,7 +34,7 @@ const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
     fetchCmsArticleBySlug(id)
       .then((res) => {
         if (!res) return
-        const coverUrl = extractMediaUrl((res as any).coverImage)
+        const coverUrl = extractMediaUrl(res.coverImage)
         if (!cancelled) {
           setCmsArticle({
             title: res.title,
@@ -149,7 +149,7 @@ const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
               <div className="article-meta-info">
                 <span className="article-category-badge">
                   <Tag size={16} />
-                  {formatArticleCategory((article as any).category)}
+                  {formatArticleCategory('category' in article ? article.category : '')}
                 </span>
                 {article.date ? (
                   <span className="article-date-badge">
@@ -170,11 +170,11 @@ const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
               )}
             </header>
 
-            {'coverUrl' in (article as any) && (article as any).coverUrl ? (
+            {'coverUrl' in article && article.coverUrl ? (
               <div className="article-cover-image-container">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={(article as any).coverUrl}
+                  src={article.coverUrl}
                   alt={article.title}
                   className="article-cover-image"
                 />
@@ -183,7 +183,7 @@ const ArticleDetailPage = ({ id }: ArticleDetailPageProps) => {
 
             <div className="article-body">
               {(() => {
-                const content = (article as any).content
+                const content = 'content' in article ? article.content : undefined
                 if (Array.isArray(content)) {
                   return <CmsBlocks content={content} />
                 }

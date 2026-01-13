@@ -1,0 +1,59 @@
+############################
+# Strapi
+############################
+
+.env
+dist
+build
+.strapi-updater.json
+*.db
+*.db-wal
+*.db-shm
+
+############################
+# Logs and databases
+############################
+
+.tmp
+*.log
+*.sqlite
+*.sqlite3
+
+############################
+# Misc.
+############################
+
+.DS_Store
+*#
+.idea
+nbproject
+.vscode
+.sass-cache
+
+############################
+# Node.js
+############################
+
+node_modules
+npm-debug.log
+
+############################
+# Build output
+############################
+
+public/uploads/*
+!public/uploads/.gitkeep
+.cache
+dist
+types
+build
+exports
+
+############################
+# OS
+############################
+
+Thumbs.db
+.Trash-*
+*.swp
+*~

@@ -29,7 +29,7 @@ export async function generateMetadata({
     const cms = await fetchCmsArticleBySlug(id)
     const title = cms?.seoTitle || cms?.title || local?.title || 'Статья'
     const description = cms?.seoDescription || cms?.excerpt || local?.description || undefined
-    const og = extractMediaUrl((cms as any)?.ogImage) || extractMediaUrl((cms as any)?.coverImage)
+    const og = extractMediaUrl(cms?.ogImage) || extractMediaUrl(cms?.coverImage)
     const canonicalUrl = cms?.canonicalUrl || undefined
 
     return {

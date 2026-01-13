@@ -29,13 +29,33 @@ type CatalogCategory = {
   subcategories: CatalogSubcategory[]
 }
 
-function catalogCategoriesToMap(catalogCategories: any): Level1Map {
+// Strapi API response types
+interface StrapiCatalogType {
+  title?: string
+  url?: string | null
+  order?: number
+}
+
+interface StrapiCatalogSubcategory {
+  title?: string
+  url?: string | null
+  order?: number
+  types?: StrapiCatalogType[]
+}
+
+interface StrapiCatalogCategory {
+  title?: string
+  order?: number
+  subcategories?: StrapiCatalogSubcategory[]
+}
+
+function catalogCategoriesToMap(catalogCategories: unknown): Level1Map {
   const out: Level1Map = {}
   if (!Array.isArray(catalogCategories)) return out
 
-  const cats = catalogCategories
+  const cats = (catalogCategories as StrapiCatalogCategory[])
     .slice()
-    .sort((a: any, b: any) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
+    .sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
 
   for (const c of cats) {
     const catTitle = String(c?.title ?? '').trim()
@@ -43,15 +63,15 @@ function catalogCategoriesToMap(catalogCategories: any): Level1Map {
     const subOut: Level2Map = {}
 
     const subs = Array.isArray(c?.subcategories) ? c.subcategories.slice() : []
-    subs.sort((a: any, b: any) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
+    subs.sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
 
     for (const s of subs) {
       const subTitle = String(s?.title ?? '').trim()
       if (!subTitle) continue
       const types = Array.isArray(s?.types) ? s.types.slice() : []
-      types.sort((a: any, b: any) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
+      types.sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
       subOut[subTitle] = types
-        .map((t: any) => String(t?.title ?? '').trim())
+        .map((t) => String(t?.title ?? '').trim())
         .filter((x: string) => x.length > 0)
     }
 
@@ -61,31 +81,31 @@ function catalogCategoriesToMap(catalogCategories: any): Level1Map {
   return out
 }
 
-function catalogCategoriesToStructured(catalogCategories: any): CatalogCategory[] {
+function catalogCategoriesToStructured(catalogCategories: unknown): CatalogCategory[] {
   if (!Array.isArray(catalogCategories)) return []
 
-  const cats = catalogCategories
+  const cats = (catalogCategories as StrapiCatalogCategory[])
     .slice()
-    .sort((a: any, b: any) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
+    .sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
 
   return cats
-    .map((c: any) => {
+    .map((c) => {
       const title = String(c?.title ?? '').trim()
       if (!title) return null
 
       const subs = Array.isArray(c?.subcategories) ? c.subcategories.slice() : []
-      subs.sort((a: any, b: any) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
+      subs.sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
 
       const subcategories: CatalogSubcategory[] = subs
-        .map((s: any) => {
+        .map((s) => {
           const st = String(s?.title ?? '').trim()
           if (!st) return null
           const url = (s?.url == null ? null : String(s.url).trim()) || null
 
           const typesRaw = Array.isArray(s?.types) ? s.types.slice() : []
-          typesRaw.sort((a: any, b: any) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
+          typesRaw.sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0))
           const types: CatalogType[] = typesRaw
-            .map((t: any) => {
+            .map((t) => {
               const title = String(t?.title ?? '').trim()
               const url = (t?.url == null ? null : String(t.url).trim()) || null
               return title ? { title, url } : null
@@ -118,7 +138,7 @@ async function fetchBrandCatalogFromCms(params: {
 
   const res = await fetch(url, { headers, cache: 'no-store' })
   if (!res.ok) return null
-  const json = (await res.json()) as any
+  const json = (await res.json()) as { data?: Array<{ catalogCategories?: unknown }> }
   const item = json?.data?.[0]
   if (!item) return null
 

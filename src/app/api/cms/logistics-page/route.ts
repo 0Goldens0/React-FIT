@@ -6,6 +6,23 @@ const CMS_ORIGIN =
   process.env.CMS_URL?.replace(/\/+$/, '') ||
   'http://localhost:1337'
 
+// Strapi API response types for logistics-page
+interface StrapiLogisticsData {
+  updatedAt?: string
+  updated_at?: string
+  warehouseSectionContent?: unknown[]
+  heroSubtitle?: string
+  distributionDescription?: string
+  heroStats?: unknown[]
+  warehouses?: unknown[]
+  wmsCards?: unknown[]
+  localizations?: StrapiLogisticsData[]
+}
+
+interface StrapiLogisticsResponse {
+  data?: StrapiLogisticsData
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const status = searchParams.get('status') // 'draft' | 'published' | null
@@ -52,13 +69,13 @@ export async function GET(request: Request) {
   // inside `data.localizations`. The frontend expects the "best" version in `data`.
   if (contentType.includes('application/json')) {
     try {
-      const json = JSON.parse(body) as any
+      const json = JSON.parse(body) as StrapiLogisticsResponse
       const data = json?.data
       const locals = Array.isArray(data?.localizations) ? data.localizations : []
       if (data && locals.length > 0) {
         const candidates = [data, ...locals].filter(Boolean)
 
-        const score = (item: any) => {
+        const score = (item: StrapiLogisticsData) => {
           const updatedAt = Date.parse(item?.updatedAt || item?.updated_at || '') || 0
           const hasContent =
             (Array.isArray(item?.warehouseSectionContent) && item.warehouseSectionContent.length > 0) ||
@@ -76,7 +93,7 @@ export async function GET(request: Request) {
         const chosen =
           candidates
             .slice()
-            .sort((a: any, b: any) => score(b) - score(a))[0] || data
+            .sort((a, b) => score(b) - score(a))[0] || data
 
         // Put the chosen version in data and keep others for debugging if needed.
         json.data = chosen

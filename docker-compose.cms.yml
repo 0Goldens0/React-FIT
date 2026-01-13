@@ -27,13 +27,19 @@ services:
       cms-db:
         condition: service_healthy
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 1337
       CLIENT_URL: http://localhost:3000
       PREVIEW_SECRET: dev-preview-secret-change-me
 
-      # Strapi secrets (dev defaults are also present in config files)
+      # Disable auto-reload to prevent page refresh issues
+      AUTO_RELOAD: "false"
+      # Disable HMR (Hot Module Replacement) - fixes reload issues in Docker
+      STRAPI_DISABLE_UPDATE_NOTIFICATION: "true"
+      FAST_REFRESH: "false"
+
+      # Strapi secrets (keep dev values for local development)
       APP_KEYS: dev-app-key-1,dev-app-key-2,dev-app-key-3,dev-app-key-4
       API_TOKEN_SALT: dev-api-token-salt
       ADMIN_JWT_SECRET: dev-admin-jwt-secret
@@ -72,8 +78,10 @@ services:
                 rm -rf /var/lib/apt/lists/* &&
                 touch ./.deps_ready;
               fi &&
-              npm install --no-audit --no-fund --no-package-lock &&
-              npm run develop"
+              rm -rf .cache build dist .strapi &&
+              npm ci --no-audit --no-fund &&
+              npm run build &&
+              npm run start"
 
 volumes:
   fit_cms_pgdata:
