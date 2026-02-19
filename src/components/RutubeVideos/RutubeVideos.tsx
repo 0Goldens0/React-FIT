@@ -39,9 +39,7 @@ const RutubeVideos = ({ location }: RutubeVideosProps) => {
 
   // Определяем какие видео показывать
   const videos = useMemo(() => {
-    // IMPORTANT: if CMS request succeeded but returned an empty list,
-    // we should NOT silently fall back to hardcoded videos (it hides publishing/filter issues).
-    const source = cmsLoaded ? cmsVideos : fallbackVideos
+    const source = cmsLoaded && cmsVideos.length > 0 ? cmsVideos : fallbackVideos
     return source.map(v => ({
       id: v.videoId,
       title: v.title

@@ -107,9 +107,9 @@ const LogisticsPage = () => {
           playsInline
           preload="auto"
         >
-          <source src="/video/fin1.av1.webm" type='video/webm; codecs="av01.0.08M.08"' />
-          <source src="/video/fin1.vp9.webm" type='video/webm; codecs="vp9"' />
-          <source src="/video/fin1.h264.mp4" type="video/mp4" />
+          <source src={getAssetPath('/video/fin1.av1.webm')} type='video/webm; codecs="av01.0.08M.08"' />
+          <source src={getAssetPath('/video/fin1.vp9.webm')} type='video/webm; codecs="vp9"' />
+          <source src={getAssetPath('/video/fin1.h264.mp4')} type="video/mp4" />
         </video>
         <div className="hero-video-overlay"></div>
       </div>
