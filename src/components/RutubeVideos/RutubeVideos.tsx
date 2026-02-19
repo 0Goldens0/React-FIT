@@ -10,7 +10,7 @@ type RutubeVideosProps = {
 
 const RutubeVideos = ({ location }: RutubeVideosProps) => {
   const [cmsVideos, setCmsVideos] = useState<CmsRutubeVideo[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [, setIsLoading] = useState(true)
   const [cmsLoaded, setCmsLoaded] = useState(false)
 
   // Fallback видео на случай, если CMS не отдает данные

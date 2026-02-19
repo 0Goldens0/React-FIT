@@ -152,7 +152,7 @@ const Header = () => {
                 if (pathname === '/') {
                   e.preventDefault()
                   // Используем scrollController для согласованности с обычным скроллом
-                  const aboutIndex = scrollController.getCurrentSectionIndex()
+                  scrollController.getCurrentSectionIndex()
                   const sections = ['home', 'about', 'brands', 'timeline']
                   const targetIndex = sections.indexOf('about')
                   if (targetIndex >= 0) {
