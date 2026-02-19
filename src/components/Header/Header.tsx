@@ -145,15 +145,18 @@ const Header = () => {
               Главная
             </Link>
 
-            <Link 
-              href="/#about" 
+            <Link
+              href="/#about"
               className="nav-link"
               onClick={(e) => {
                 if (pathname === '/') {
                   e.preventDefault()
-                  const aboutSection = document.getElementById('about')
-                  if (aboutSection) {
-                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                  // Используем scrollController для согласованности с обычным скроллом
+                  const aboutIndex = scrollController.getCurrentSectionIndex()
+                  const sections = ['home', 'about', 'brands', 'timeline']
+                  const targetIndex = sections.indexOf('about')
+                  if (targetIndex >= 0) {
+                    scrollController.scrollToSection(targetIndex, true)
                   }
                 }
               }}
@@ -162,20 +165,23 @@ const Header = () => {
             </Link>
 
             {/* Бренды с мега-меню */}
-            <div 
+            <div
               className="nav-item-dropdown"
               onMouseEnter={() => setOpenDropdown('brands')}
               onMouseLeave={() => setOpenDropdown(null)}
+              onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === 'brands' ? null : 'brands') }}
             >
-              <Link 
+              <Link
                 href="/#brands"
                 className={`nav-link has-dropdown ${isActive('/brands') ? 'active' : ''}`}
                 onClick={(e) => {
                   if (pathname === '/') {
                     e.preventDefault()
-                    const brandsSection = document.getElementById('brands')
-                    if (brandsSection) {
-                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    // Используем scrollController для согласованности с обычным скроллом
+                    const sections = ['home', 'about', 'brands', 'timeline']
+                    const targetIndex = sections.indexOf('brands')
+                    if (targetIndex >= 0) {
+                      scrollController.scrollToSection(targetIndex, true)
                     }
                   }
                 }}
@@ -207,10 +213,11 @@ const Header = () => {
             </div>
 
             {/* Услуги с dropdown */}
-            <div 
+            <div
               className="nav-item-dropdown"
               onMouseEnter={() => setOpenDropdown('services')}
               onMouseLeave={() => setOpenDropdown(null)}
+              onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === 'services' ? null : 'services') }}
             >
               <Link 
                 href="/#services"
@@ -246,10 +253,11 @@ const Header = () => {
             </Link>
 
             {/* Информация с mega-menu */}
-            <div 
+            <div
               className="nav-item-dropdown"
               onMouseEnter={() => setOpenDropdown('info')}
               onMouseLeave={() => setOpenDropdown(null)}
+              onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === 'info' ? null : 'info') }}
             >
               <span className={`nav-link has-dropdown ${isActive('/info') || isActive('/news') || isActive('/articles') || isActive('/faq') || isActive('/privacy') || isActive('/terms') || isActive('/certificates') || isActive('/marketing-activity') ? 'active' : ''}`}>
                 Информация
@@ -353,15 +361,17 @@ const Header = () => {
               Главная
             </Link>
 
-            <Link 
-              href="/#about" 
+            <Link
+              href="/#about"
               className="nav-link-mobile"
               onClick={(e) => {
                 if (pathname === '/') {
                   e.preventDefault()
-                  const aboutSection = document.getElementById('about')
-                  if (aboutSection) {
-                    aboutSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                  // Используем scrollController для согласованности с обычным скроллом
+                  const sections = ['home', 'about', 'brands', 'timeline']
+                  const targetIndex = sections.indexOf('about')
+                  if (targetIndex >= 0) {
+                    scrollController.scrollToSection(targetIndex, true)
                   }
                 }
                 setIsMenuOpen(false)
@@ -371,15 +381,17 @@ const Header = () => {
             </Link>
             
             <div className="mobile-submenu-section">
-              <Link 
-                href="/#brands" 
+              <Link
+                href="/#brands"
                 className="mobile-submenu-title clickable"
                 onClick={(e) => {
                   if (pathname === '/') {
                     e.preventDefault()
-                    const brandsSection = document.getElementById('brands')
-                    if (brandsSection) {
-                      brandsSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    // Используем scrollController для согласованности с обычным скроллом
+                    const sections = ['home', 'about', 'brands', 'timeline']
+                    const targetIndex = sections.indexOf('brands')
+                    if (targetIndex >= 0) {
+                      scrollController.scrollToSection(targetIndex, true)
                     }
                   }
                   setIsMenuOpen(false)

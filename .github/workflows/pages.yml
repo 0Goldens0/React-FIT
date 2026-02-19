@@ -46,6 +46,8 @@ jobs:
 
       - name: Build (static export)
         run: npm run build
+        env:
+          NEXT_PUBLIC_STATIC_CATALOG: 'true'
 
       - name: Restore API routes from git (for next build)
         if: always()

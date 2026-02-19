@@ -13,6 +13,7 @@ export default {
         'Honest Sign Page': 'Честный знак',
         'Logistics Page': 'Логистика',
         'Partner Logo': 'Логотип партнёра',
+        'Rutube Video': 'Видео Rutube',
 
         // Field labels (Content Manager)
         title: 'Заголовок',
@@ -28,6 +29,12 @@ export default {
         coverImage: 'Обложка',
         gallery: 'Галерея',
         publishedDate: 'Дата публикации',
+
+        // Video fields (VK/Rutube)
+        videoUrl: 'Ссылка на видео (VK)',
+        description: 'Описание',
+        showOnHomePage: 'Показывать на главной',
+        showOnMarketingPage: 'Показывать в маркетинге',
 
         // Logistics page fields (structured)
         heroBadge: 'Бейдж (Hero)',

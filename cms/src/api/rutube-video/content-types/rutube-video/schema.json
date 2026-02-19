@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rutube_videos",
+  "info": {
+    "singularName": "rutube-video",
+    "pluralName": "rutube-videos",
+    "displayName": "Видео Rutube",
+    "description": "Управление видео с Rutube для главной страницы и маркетинговой активности"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "videoUrl": {
+      "type": "text",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "showOnHomePage": {
+      "type": "boolean",
+      "default": true
+    },
+    "showOnMarketingPage": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

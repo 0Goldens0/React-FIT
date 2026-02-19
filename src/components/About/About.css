@@ -149,10 +149,10 @@
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     border-radius: 32px;
-    padding: 35px 70px;
+    padding: 55px 70px;
     max-width: 1450px;
     width: 100%;
-    margin: 50px 0 0 0;
+    margin: 30px 0;
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.3),
         0 20px 60px rgba(0, 0, 0, 0.08),
@@ -248,12 +248,13 @@
     height: 350px;
     animation: levitate 4s ease-in-out infinite;
     margin: 0 auto;
-    will-change: transform;
+    transform-style: preserve-3d;
+    perspective: 2000px;
 }
 
 @keyframes levitate {
-    0%, 100% { transform: translateY(0px) rotateY(0deg); }
-    50% { transform: translateY(-20px) rotateY(15deg); }
+    0%, 100% { transform: rotateZ(15deg) translateY(0px); }
+    50% { transform: rotateZ(15deg) translateY(-20px); }
 }
 
 .about .hexagon-3d {
@@ -262,14 +263,12 @@
     max-width: 350px;
     max-height: 350px;
     position: relative;
-    transform-style: preserve-3d;
     animation: rotate-3d 20s linear infinite;
-    will-change: transform;
 }
 
 @keyframes rotate-3d {
-    from { transform: rotateY(0deg) rotateZ(30deg); }
-    to { transform: rotateY(360deg) rotateZ(30deg); }
+    from { transform: rotateY(0deg); }
+    to   { transform: rotateY(360deg); }
 }
 
 .about .hexagon-face {
@@ -302,7 +301,6 @@
     align-items: center;
     gap: 10px;
     animation: logo-float 4s ease-in-out infinite;
-    will-change: transform;
 }
 
 @keyframes logo-float {
@@ -386,7 +384,6 @@
     border-radius: 50%;
     transform: translate(-50%, -50%);
     animation: ring-expand 3s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 .about .energy-ring:nth-child(1) {
@@ -552,7 +549,7 @@
     .about { padding: 50px 25px; }
 
     .about .content-container {
-        padding: 20px 30px;
+        padding: 35px 30px;
         max-width: 1050px;
     }
 
@@ -807,13 +804,102 @@
     .about .particles { opacity: 0.7 !important; }
 }
 
-/* Уважение к людям, которых укачивает */
+/* ========== SHORT VIEWPORT (ноутбуки ~810px высоты) ========== */
+@media (max-height: 850px) and (min-width: 993px) {
+    .about {
+        padding: 30px 25px;
+    }
+
+    .about .content-container {
+        padding: 75px 45px;
+        margin: 12px 0;
+        border-radius: 20px;
+    }
+
+    .about .section-header {
+        margin-bottom: 8px;
+    }
+
+    .about .section-title {
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+    }
+
+    .about .section-subtitle {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+
+    .about .content-grid {
+        gap: 20px;
+    }
+
+    .about .holographic-container {
+        width: 200px;
+        height: 200px;
+    }
+
+    .about .hexagon-3d {
+        max-width: 200px;
+        max-height: 200px;
+    }
+
+    .about .company-description {
+        font-size: 0.82rem;
+        line-height: 1.45;
+        margin-bottom: 8px;
+    }
+
+    .about .mission-block {
+        padding: 10px 14px;
+        margin-bottom: 8px;
+    }
+
+    .about .mission-title {
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+    }
+
+    .about .mission-text {
+        font-size: 0.78rem;
+    }
+
+    .about .cta-button {
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        margin-top: 4px;
+    }
+}
+
+@media (max-height: 780px) and (min-width: 993px) {
+    .about {
+        padding: 20px 25px;
+    }
+
+    .about .content-container {
+        padding: 12px 24px;
+        margin: 10px 0 0 0;
+    }
+
+    .about .holographic-container {
+        width: 160px;
+        height: 160px;
+    }
+
+    .about .hexagon-3d {
+        max-width: 160px;
+        max-height: 160px;
+    }
+
+    .about .section-title {
+        font-size: 1.4rem;
+    }
+}
+
+/* Только фоновые частицы отключаем при reduced-motion,
+   основные анимации гексагона/колец оставляем */
 @media (prefers-reduced-motion: reduce) {
     .about .hexagon-particle,
-    .about .hexagon-3d,
-    .about .holographic-container,
-    .about .fit-logo-svg,
-    .about .energy-ring,
     .about .content-container::before,
     .about .mission-block::before {
         animation: none !important;

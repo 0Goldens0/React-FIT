@@ -1297,7 +1297,7 @@ section#brands.brands {
 }
 
 .section-nav-arrow.arrow-up {
-    top: 100px;
+    top: calc(var(--header-height, 80px) + 8px);
 }
 
 .section-nav-arrow.arrow-up:hover svg {

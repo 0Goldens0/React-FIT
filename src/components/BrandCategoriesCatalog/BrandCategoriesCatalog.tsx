@@ -1,4 +1,9 @@
+'use client'
+
 import { useEffect, useMemo, useState } from 'react'
+import { getBrandCatalogData } from './brandsCategories'
+
+const USE_STATIC = process.env.NEXT_PUBLIC_STATIC_CATALOG === 'true'
 
 type BrandCategoriesApiResponse = {
   brandId: string
@@ -21,7 +26,7 @@ export type BrandCategoriesCatalogProps = {
   compact?: boolean
 }
 
-function hexToRgbTriplet(hex: string): string | null {
+function hexToRgb(hex: string): [number, number, number] | null {
   const raw = hex.trim().replace(/^#/, '')
   const full =
     raw.length === 3 ? raw.split('').map((c) => c + c).join('') : raw.length === 6 ? raw : null
@@ -30,13 +35,42 @@ function hexToRgbTriplet(hex: string): string | null {
   const g = parseInt(full.slice(2, 4), 16)
   const b = parseInt(full.slice(4, 6), 16)
   if ([r, g, b].some((n) => Number.isNaN(n))) return null
-  return `${r} ${g} ${b}`
+  return [r, g, b]
+}
+
+function hexToRgbTriplet(hex: string): string | null {
+  const rgb = hexToRgb(hex)
+  return rgb ? `${rgb[0]} ${rgb[1]} ${rgb[2]}` : null
+}
+
+/** Цвета слишком тёмные для использования как акцент на тёмном фоне → заменяем на белый */
+function resolveAccent(hex: string): string {
+  const rgb = hexToRgb(hex)
+  if (!rgb) return '#FFFFFF'
+  const luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255
+  return luminance < 0.35 ? '#FFFFFF' : hex
 }
 
 function pluralRu(n: number, one: string, few: string, many: string) {
   if (n % 10 === 1 && n % 100 !== 11) return one
   if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) return few
   return many
+}
+
+const CATEGORY_ICONS: Record<string, string> = {
+  'Слесарный инструмент': '🔧',
+  'Буры, сверла, коронки, фрезы': '🔩',
+  'Электро-Пневмо-Бензоинструмент': '⚡',
+  'Садовый инструмент': '🌿',
+  'Отделочный инструмент': '🎨',
+  'Абразивно-шлифовальный инструмент': '✨',
+  'Измерительный инструмент': '📐',
+  'Хозтовары и скобяные изделия': '🏠',
+  'Крепеж и крепежный инструмент': '📌',
+  'Торговое оборудование': '🏪',
+  'Сантехнический инструмент': '💧',
+  'Столярный инструмент': '🪚',
+  'Инструмент автомобильный': '🚗',
 }
 
 export function BrandCategoriesCatalog({
@@ -47,26 +81,43 @@ export function BrandCategoriesCatalog({
 }: BrandCategoriesCatalogProps) {
   const [data, setData] = useState<BrandCategoriesApiResponse | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState<string | null>(null)
+  const [openSub, setOpenSub] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
+    setExpanded(null)
+    setOpenSub(null)
+    setSearch('')
+
+    if (USE_STATIC) {
+      const raw = getBrandCatalogData(brandId)
+      if (!raw) { setData({ brandId, brandKey: null, catalogCategories: [] }); return }
+      const catalogCategories = Object.entries(raw.categories ?? {}).map(([catTitle, level2]) => ({
+        title: catTitle,
+        subcategories: Object.entries(level2 ?? {}).map(([subTitle, types]) => ({
+          title: subTitle,
+          url: null as string | null,
+          types: (types ?? []).map((t) => ({ title: String(t), url: null as string | null })),
+        })),
+      }))
+      setData({ brandId, brandKey: brandId, catalogCategories })
+      setStatus('idle')
+      return
+    }
+
     let cancelled = false
     setStatus('loading')
     setData(null)
-    setSelectedCategory(null)
-    setSelectedSubcategory(null)
 
-    // Next app routes redirect to trailing slash (308). Avoid extra hop.
     const previewQs = (() => {
       if (typeof window === 'undefined') return ''
       const sp = new URLSearchParams(window.location.search)
-      const status = sp.get('status')
+      const statusParam = sp.get('status')
       const preview = sp.get('preview')
       const documentId = sp.get('documentId')
       const qs = new URLSearchParams()
-      if (status) qs.set('status', status)
+      if (statusParam) qs.set('status', statusParam)
       if (preview) qs.set('preview', preview)
       if (documentId) qs.set('documentId', documentId)
       return qs.toString()
@@ -88,298 +139,285 @@ export function BrandCategoriesCatalog({
         setStatus('error')
       })
 
-    return () => {
-      cancelled = true
-    }
+    return () => { cancelled = true }
   }, [brandId])
 
   const categories = useMemo(() => data?.catalogCategories ?? [], [data?.catalogCategories])
 
-  const selectedCategoryObj = useMemo(() => {
-    if (!selectedCategory) return null
-    return categories.find((c) => c.title === selectedCategory) ?? null
-  }, [categories, selectedCategory])
+  const totalTypes = useMemo(
+    () =>
+      categories.reduce(
+        (s, c) => s + c.subcategories.reduce((s2, sub) => s2 + sub.types.length, 0),
+        0,
+      ),
+    [categories],
+  )
 
-  const subcategories = useMemo(() => selectedCategoryObj?.subcategories ?? [], [selectedCategoryObj])
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    if (!q) return categories
+    return categories.filter(
+      (c) =>
+        c.title.toLowerCase().includes(q) ||
+        c.subcategories.some(
+          (s) =>
+            s.title.toLowerCase().includes(q) ||
+            s.types.some((t) => t.title.toLowerCase().includes(q)),
+        ),
+    )
+  }, [categories, search])
 
-  const selectedSubcategoryObj = useMemo(() => {
-    if (!selectedSubcategory) return null
-    return subcategories.find((s) => s.title === selectedSubcategory) ?? null
-  }, [subcategories, selectedSubcategory])
+  const accent = resolveAccent(brandPrimaryColor)
+  const accentRgb = hexToRgbTriplet(accent) ?? '255 255 255'
 
-  const types = useMemo(() => selectedSubcategoryObj?.types ?? [], [selectedSubcategoryObj])
-
-  const accentRgb = hexToRgbTriplet(brandPrimaryColor) ?? '255 255 255'
+  const toggle = (title: string) => {
+    if (expanded === title) {
+      setExpanded(null)
+      setOpenSub(null)
+    } else {
+      setExpanded(title)
+      setOpenSub(null)
+    }
+  }
 
   return (
     <section
-      className={`brand-catalog3 ${compact ? 'is-compact' : ''}`}
+      className={`bc3 ${compact ? 'bc3--compact' : ''}`}
       style={
         {
-          ['--brand-catalog-accent' as string]: brandPrimaryColor,
-          ['--brand-catalog-accent-rgb' as string]: accentRgb,
+          ['--bc3-accent' as string]: accent,
+          ['--bc3-accent-rgb' as string]: accentRgb,
         } as React.CSSProperties
       }
     >
-      {!compact && (
-        <div className="brand-catalog3__title">
-          <h2>Каталог товаров {brandDisplayName}</h2>
-          <p>Выберите категорию, чтобы быстро перейти к нужной группе товаров</p>
+      {/* ── Top bar ── */}
+      <div className="bc3__topbar">
+        {!compact && (
+          <div className="bc3__topbar-text">
+            <h2 className="bc3__heading">Каталог товаров {brandDisplayName}</h2>
+            <p className="bc3__subheading">
+              Выберите категорию, чтобы быстро перейти к нужной группе товаров
+            </p>
+          </div>
+        )}
+        <div className="bc3__topbar-controls">
+          <span className="bc3__stats">
+            {categories.length}{' '}
+            {pluralRu(categories.length, 'категория', 'категории', 'категорий')} · {totalTypes}{' '}
+            наименований
+          </span>
+          <div className="bc3__search-wrap">
+            <svg
+              className="bc3__search-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              className="bc3__search"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value)
+                setExpanded(null)
+                setOpenSub(null)
+              }}
+              placeholder="Найти категорию или товар…"
+            />
+          </div>
         </div>
-      )}
+      </div>
 
-      {status === 'loading' && (
-        <div className="brand-catalog3__loading">Загрузка каталога…</div>
-      )}
-
-      {status === 'error' && (
-        <div className="brand-catalog3__loading">Не удалось загрузить каталог</div>
-      )}
-
+      {/* ── Status messages ── */}
+      {status === 'loading' && <div className="bc3__message">Загрузка каталога…</div>}
+      {status === 'error' && <div className="bc3__message">Не удалось загрузить каталог</div>}
       {status === 'idle' && data && categories.length === 0 && (
-        <div className="brand-catalog3__loading">Для этого бренда каталог пока не заполнен</div>
+        <div className="bc3__message">Для этого бренда каталог пока не заполнен</div>
       )}
 
+      {/* ── Accordion list ── */}
       {status === 'idle' && data && categories.length > 0 && (
-        <div className="brand-catalog3__grid">
-          <div className="brand-catalog3__col">
-            <div className="brand-catalog3__colHeader">
-              <span className="brand-catalog3__colIcon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M4 6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M14 6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V6Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M4 16a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M14 16a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-2Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-              <h3>Основные категории</h3>
-              <span className="brand-catalog3__badge">{categories.length}</span>
-            </div>
+        <div className="bc3__list">
+          {filtered.map((cat, i) => {
+            const isOpen = expanded === cat.title
+            const typesCount = cat.subcategories.reduce((s, sub) => s + sub.types.length, 0)
+            const icon = CATEGORY_ICONS[cat.title] ?? '🔧'
 
-            <div className="brand-catalog3__list" role="list">
-              {categories.map((c) => {
-                const isActive = selectedCategory === c.title
-                const subcategoryCount = (c.subcategories ?? []).length
-                return (
-                  <button
-                    key={c.title}
-                    type="button"
-                    className={`brand-catalog3__item ${isActive ? 'is-active' : ''}`}
-                    onClick={() => {
-                      setSelectedCategory(c.title)
-                      setSelectedSubcategory(null)
-                    }}
-                  >
-                    <span className="brand-catalog3__itemIcon" aria-hidden="true" />
-                    <span className="brand-catalog3__itemMain">
-                      <span className="brand-catalog3__itemName">{c.title}</span>
-                      <span className="brand-catalog3__itemMeta">
-                        {subcategoryCount} {pluralRu(subcategoryCount, 'подкатегория', 'подкатегории', 'подкатегорий')}
-                      </span>
-                    </span>
-                    <span className="brand-catalog3__itemArrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path
-                          d="M9 5l7 7-7 7"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+            return (
+              <div
+                key={cat.title}
+                className={`bc3__cat ${isOpen ? 'is-open' : ''}`}
+                style={{ animationDelay: `${i * 35}ms` } as React.CSSProperties}
+              >
+                {/* Category header */}
+                <button
+                  type="button"
+                  className="bc3__cat-header"
+                  onClick={() => toggle(cat.title)}
+                >
+                  {/* Left gradient accent strip */}
+                  <div className="bc3__accent-strip" />
 
-          <div className="brand-catalog3__col">
-            <div className="brand-catalog3__colHeader">
-              <span className="brand-catalog3__colIcon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-              <h3>Подкатегории</h3>
-              <span className="brand-catalog3__badge">
-                {selectedCategoryObj ? subcategories.length : 0}
-              </span>
-            </div>
+                  {/* Icon area */}
+                  <div className="bc3__cat-icon-wrap">
+                    <span className="bc3__cat-icon">{icon}</span>
+                  </div>
 
-            {!selectedCategoryObj && (
-              <div className="brand-catalog3__empty">
-                <p>Выберите категорию</p>
-              </div>
-            )}
-
-            {selectedCategoryObj && (
-              <div className="brand-catalog3__list" role="list">
-                {subcategories.map((s) => {
-                  const isActive = selectedSubcategory === s.title
-                  const count = (s.types ?? []).length
-                  const isLink = count === 0 && Boolean((s.url ?? '').trim())
-                  const href = (s.url ?? '').trim()
-                  return (
-                    isLink ? (
-                      <a
-                        key={s.title}
-                        className={`brand-catalog3__item ${isActive ? 'is-active' : ''}`}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => {
-                          // keep selection for highlight, but allow navigation
-                          setSelectedSubcategory(s.title)
-                        }}
-                      >
-                        <span className="brand-catalog3__itemIcon" aria-hidden="true" />
-                        <span className="brand-catalog3__itemMain">
-                          <span className="brand-catalog3__itemName">{s.title}</span>
-                          <span className="brand-catalog3__itemMeta">
-                            {count} {pluralRu(count, 'тип', 'типа', 'типов')}
-                            {href ? ' • ссылка' : ''}
-                          </span>
+                  {/* Text content */}
+                  <div className="bc3__cat-content">
+                    <div className="bc3__cat-inner">
+                      <span className="bc3__cat-name">{cat.title}</span>
+                      <div className="bc3__cat-meta">
+                        <div className="bc3__progress-bar">
+                          <div
+                            className="bc3__progress-fill"
+                            style={{ width: `${Math.min(100, (typesCount / 60) * 100)}%` }}
+                          />
+                        </div>
+                        <span className="bc3__cat-meta-text">
+                          {cat.subcategories.length} подкат. · {typesCount} типов
                         </span>
-                        <span className="brand-catalog3__itemArrow" aria-hidden="true">
-                          <svg viewBox="0 0 24 24" fill="none">
-                            <path
-                              d="M9 5l7 7-7 7"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </span>
-                      </a>
-                    ) : (
-                      <button
-                        key={s.title}
-                        type="button"
-                        className={`brand-catalog3__item ${isActive ? 'is-active' : ''}`}
-                        onClick={() => setSelectedSubcategory(s.title)}
-                      >
-                        <span className="brand-catalog3__itemIcon" aria-hidden="true" />
-                        <span className="brand-catalog3__itemMain">
-                          <span className="brand-catalog3__itemName">{s.title}</span>
-                          <span className="brand-catalog3__itemMeta">
-                            {count} {pluralRu(count, 'тип', 'типа', 'типов')}
-                          </span>
-                        </span>
-                        <span className="brand-catalog3__itemArrow" aria-hidden="true">
-                          <svg viewBox="0 0 24 24" fill="none">
-                            <path
-                              d="M9 5l7 7-7 7"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </span>
-                      </button>
-                    )
-                  )
-                })}
-              </div>
-            )}
-          </div>
-
-          <div className="brand-catalog3__col">
-            <div className="brand-catalog3__colHeader">
-              <span className="brand-catalog3__colIcon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-              <h3>Типы товаров</h3>
-              <span className="brand-catalog3__badge">{types.length}</span>
-            </div>
-
-            {!selectedCategoryObj || !selectedSubcategoryObj ? (
-              <div className="brand-catalog3__empty">
-                <p>Выберите подкатегорию</p>
-              </div>
-            ) : (
-              <div className="brand-catalog3__list" role="list">
-                {types.map((t) => {
-                  const href = (t.url ?? '').trim()
-                  return href ? (
-                    <a
-                      key={t.title}
-                      className="brand-catalog3__leaf brand-catalog3__leafLink"
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <span className="brand-catalog3__leafIcon" aria-hidden="true" />
-                      <span className="brand-catalog3__leafName">{t.title}</span>
-                    </a>
-                  ) : (
-                    <div key={t.title} className="brand-catalog3__leaf">
-                      <span className="brand-catalog3__leafIcon" aria-hidden="true" />
-                      <span className="brand-catalog3__leafName">{t.title}</span>
+                      </div>
                     </div>
-                  )
-                })}
+                  </div>
+
+                  {/* Chevron */}
+                  <svg
+                    className="bc3__chevron"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  >
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+
+                {/* Expanded body */}
+                <div className="bc3__expanded">
+                  {/* Subcategory chips */}
+                  <div className="bc3__chips">
+                    {cat.subcategories.map((sub, j) => {
+                      const subOpen = openSub === sub.title
+                      const isLink =
+                        sub.types.length === 0 && Boolean((sub.url ?? '').trim())
+                      const href = (sub.url ?? '').trim()
+
+                      const chipProps = {
+                        className: `bc3__chip ${subOpen ? 'is-open' : ''}`,
+                        style: { '--chip-delay': `${j * 25}ms` } as React.CSSProperties,
+                      }
+
+                      if (isLink) {
+                        return (
+                          <a
+                            key={sub.title}
+                            {...chipProps}
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <div className="bc3__chip-dot" />
+                            {sub.title}
+                            <span className="bc3__chip-count">{sub.types.length}</span>
+                          </a>
+                        )
+                      }
+
+                      return (
+                        <button
+                          key={sub.title}
+                          type="button"
+                          {...chipProps}
+                          onClick={() => setOpenSub(subOpen ? null : sub.title)}
+                        >
+                          <div className="bc3__chip-dot" />
+                          {sub.title}
+                          <span className="bc3__chip-count">{sub.types.length}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {/* Types panel */}
+                  {openSub &&
+                    (() => {
+                      const sub = cat.subcategories.find((s) => s.title === openSub)
+                      if (!sub) return null
+                      return (
+                        <div className="bc3__types-panel">
+                          <div className="bc3__types-header">
+                            <div className="bc3__types-dot" />
+                            <span className="bc3__types-title">{sub.title}</span>
+                            <span className="bc3__types-count">
+                              {sub.types.length}{' '}
+                              {pluralRu(sub.types.length, 'тип', 'типа', 'типов')}
+                            </span>
+                          </div>
+                          <div className="bc3__types-grid">
+                            {sub.types.map((t, k) => {
+                              const href = (t.url ?? '').trim()
+                              return href ? (
+                                <a
+                                  key={t.title}
+                                  className="bc3__type-card bc3__type-link"
+                                  href={href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={
+                                    { '--type-delay': `${k * 30}ms` } as React.CSSProperties
+                                  }
+                                >
+                                  <div className="bc3__type-accent-line" />
+                                  <div className="bc3__type-diamond" />
+                                  <span className="bc3__type-name">{t.title}</span>
+                                  <svg
+                                    className="bc3__type-arrow"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  >
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                  </svg>
+                                </a>
+                              ) : (
+                                <div
+                                  key={t.title}
+                                  className="bc3__type-card"
+                                  style={
+                                    { '--type-delay': `${k * 30}ms` } as React.CSSProperties
+                                  }
+                                >
+                                  <div className="bc3__type-accent-line" />
+                                  <div className="bc3__type-diamond" />
+                                  <span className="bc3__type-name">{t.title}</span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )
+                    })()}
+                </div>
               </div>
-            )}
-          </div>
+            )
+          })}
+
+          {filtered.length === 0 && (
+            <div className="bc3__empty">
+              <div className="bc3__empty-icon">🔍</div>
+              <p>По запросу «{search}» ничего не найдено</p>
+            </div>
+          )}
         </div>
       )}
     </section>
   )
 }
-
-

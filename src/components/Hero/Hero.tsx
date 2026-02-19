@@ -187,7 +187,7 @@ const Hero = () => {
               href="https://fit24.ru/catalog/"
               target="_blank"
               rel="noopener noreferrer"
-              className="stat-item animate fadeInUp delay-1"
+              className="stat-item"
             >
               <div className="stat-number" data-count="12000">
                 0
@@ -195,21 +195,21 @@ const Hero = () => {
               <div className="stat-label">позиций в каталоге</div>
             </a>
 
-            <a href="#map" className="stat-item animate fadeInUp delay-2">
+            <a href="#map" className="stat-item">
               <div className="stat-number" data-count="10">
                 0
               </div>
               <div className="stat-label">филиалов по всей России</div>
             </a>
 
-            <div className="stat-item animate fadeInUp delay-3">
+            <div className="stat-item">
               <div className="stat-number" data-count="1000" data-suffix="+">
                 0
               </div>
               <div className="stat-label">сотрудников в штате</div>
             </div>
 
-            <div className="stat-item animate fadeInUp delay-4">
+            <div className="stat-item">
               <div className="stat-number" data-count="60" data-suffix="+">
                 0
               </div>

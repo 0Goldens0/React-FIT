@@ -8,6 +8,7 @@ import Brands from '../components/Brands/Brands'
 import Timeline from '../components/Timeline/Timeline'
 import Services from '../components/Services/Services'
 import Contact from '../components/Contact/Contact'
+import RutubeVideos from '../components/RutubeVideos/RutubeVideos'
 import Footer from '../components/Footer/Footer'
 import { scrollController } from '../utils/scrollController'
 
@@ -89,6 +90,7 @@ const HomePage = () => {
       <Timeline />
       <Services />
       <Contact />
+      <RutubeVideos location="home" />
       <Footer />
     </div>
   )

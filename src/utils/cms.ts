@@ -595,4 +595,44 @@ export async function fetchCmsHomePage(): Promise<CmsHomePage | null> {
   return normalizeSingle<CmsHomePage>(json)
 }
 
+export type CmsRutubeVideo = {
+  id: number
+  videoId: string
+  videoUrl: string
+  title: string
+  description?: string | null
+  order: number
+  showOnHomePage: boolean
+  showOnMarketingPage: boolean
+}
+
+/**
+ * Получение видео Rutube из CMS
+ * @param location - 'home' для главной страницы, 'marketing' для маркетинговой активности, или undefined для всех
+ */
+export async function fetchCmsRutubeVideos(location?: 'home' | 'marketing'): Promise<CmsRutubeVideo[]> {
+  try {
+    const qs = new URLSearchParams()
+    if (location) {
+      qs.set('location', location)
+    }
+    const status = getPreviewStatusFromLocation()
+    const locale = getPreviewLocaleFromLocation()
+    const preview = getPreviewEnabledFromLocation()
+    if (status) qs.set('status', status)
+    if (locale) qs.set('locale', locale)
+    if (preview) qs.set('preview', '1')
+
+    const url = `/api/cms/rutube-videos${qs.toString() ? `?${qs.toString()}` : ''}`
+    const res = await fetch(url, { cache: 'no-store' })
+    if (!res.ok) return []
+
+    const json = await res.json()
+    return json.videos || []
+  } catch (error) {
+    console.error('Error fetching Rutube videos:', error)
+    return []
+  }
+}
+
 

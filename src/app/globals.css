@@ -29,6 +29,7 @@
 @import "../components/Services/Services.css";
 @import "../components/RussiaMap/RussiaMap.css";
 @import "../components/Contact/Contact.css";
+@import "../components/RutubeVideos/RutubeVideos.css";
 @import "../components/Footer/Footer.css";
 
 /* Header offset (fixes content under fixed header + anchors) */

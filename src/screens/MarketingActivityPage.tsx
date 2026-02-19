@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
+import RutubeVideos from '../components/RutubeVideos/RutubeVideos'
 import { CmsBlocks } from '../components/CmsBlocks/CmsBlocks'
 import { extractMediaUrl, fetchCmsMarketingActivityPage, type CmsMarketingActivityPage } from '../utils/cms'
 
@@ -230,6 +231,7 @@ export default function MarketingActivityPage() {
           </section>
         )}
       </main>
+      <RutubeVideos location="marketing" />
       <Footer />
     </div>
   )

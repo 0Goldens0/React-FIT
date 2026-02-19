@@ -97,12 +97,30 @@ const LogisticsPage = () => {
 
   return (
     <div className="logistics-page">
+      {/* Background Video */}
+      <div className="hero-video-container">
+        <video
+          className="hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="/video/fin1.av1.webm" type='video/webm; codecs="av01.0.08M.08"' />
+          <source src="/video/fin1.vp9.webm" type='video/webm; codecs="vp9"' />
+          <source src="/video/fin1.h264.mp4" type="video/mp4" />
+        </video>
+        <div className="hero-video-overlay"></div>
+      </div>
+
       <Header />
-      
+
       <main className="logistics-content">
-        {/* Hero Section */}
         <section className="logistics-hero">
-          <div className="logistics-badge">{cms?.heroBadge || 'ЛОГИСТИКА FIT'}</div>
+          {/* Content */}
+          <div className="hero-content">
+            <div className="logistics-badge">{cms?.heroBadge || 'ЛОГИСТИКА FIT'}</div>
           <h1 className="logistics-title">
             {cms?.heroTitle || 'Система, которая'}
             <br />
@@ -113,26 +131,27 @@ const LogisticsPage = () => {
               'Логистика FIT — это отлаженная система поставок, которую мы совершенствуем много лет. Мы доставляем инструмент быстро, надежно и предсказуемо, обеспечивая партнёрам бесперебойную работу.'}
           </p>
 
-          <div className="stats-grid">
-            {(cms?.heroStats && cms.heroStats.length > 0
-              ? cms.heroStats
-              : [
-                  { value: '2', label: 'Распределительных центра', variant: 'default' },
-                  { value: '7', label: 'Складов класса А', variant: 'highlight' },
-                  { value: '12k+', label: 'SKU в наличии', variant: 'highlightAlt' },
-                  { value: '60+', label: 'Единиц транспорта', variant: 'default' },
-                ]
-            ).map((s, idx) => (
-              <div
-                key={idx}
-                className={`stat-card ${
-                  s.variant === 'highlight' ? 'highlight' : s.variant === 'highlightAlt' ? 'highlight-alt' : ''
-                }`}
-              >
-                <div className="stat-number">{s.value}</div>
-                <div className="stat-label">{s.label}</div>
-              </div>
-            ))}
+            <div className="stats-grid">
+              {(cms?.heroStats && cms.heroStats.length > 0
+                ? cms.heroStats
+                : [
+                    { value: '2', label: 'Распределительных центра', variant: 'default' },
+                    { value: '7', label: 'Складов класса А', variant: 'highlight' },
+                    { value: '12k+', label: 'SKU в наличии', variant: 'highlightAlt' },
+                    { value: '60+', label: 'Единиц транспорта', variant: 'default' },
+                  ]
+              ).map((s, idx) => (
+                <div
+                  key={idx}
+                  className={`stat-card ${
+                    s.variant === 'highlight' ? 'highlight' : s.variant === 'highlightAlt' ? 'highlight-alt' : ''
+                  }`}
+                >
+                  <div className="stat-number">{s.value}</div>
+                  <div className="stat-label">{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

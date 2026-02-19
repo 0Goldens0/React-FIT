@@ -126,7 +126,7 @@ function PdfCanvas(props: {
         // ignore
       }
     }
-  }, [props.pdf, props.pdfjs, props.page, props.cssWidth, props.zoom])
+  }, [props.pdf, props.pdfjs, props.page, props.cssWidth, props.zoom, props.renderBoost])
 
   return (
     <div className={`pdf-mag__canvasWrap ${props.className ?? ''}`}>
@@ -344,6 +344,10 @@ export function PdfMagazine({ src, title = 'Журнал новинок', initia
     const sy = clamp(srcY - srcH / 2, 0, Math.max(0, srcCanvas.height - srcH))
 
     ctx.imageSmoothingEnabled = true
+    // Best available quality when scaling the sampled area into the lens.
+    // (Has effect in most Chromium-based browsers.)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ctx as any).imageSmoothingQuality = 'high'
     ctx.drawImage(
       srcCanvas,
       sx,
