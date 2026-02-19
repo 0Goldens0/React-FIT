@@ -17,8 +17,8 @@ const RutubeVideos = ({ location }: RutubeVideosProps) => {
   const fallbackVideos = useMemo(() => [
     {
       id: 1,
-      videoId: 'https://vk.com/video_ext.php?oid=-74008963&id=456239392',
-      videoUrl: 'https://vk.com/video-74008963_456239392',
+      videoId: 'https://vk.com/video_ext.php?oid=-74008963&id=456239391&hd=3',
+      videoUrl: 'https://vk.com/video-74008963_456239391',
       title: 'Видео о компании FIT',
       description: null,
       order: 0,
@@ -27,8 +27,8 @@ const RutubeVideos = ({ location }: RutubeVideosProps) => {
     },
     {
       id: 2,
-      videoId: 'https://vk.com/video_ext.php?oid=-74008963&id=456239391',
-      videoUrl: 'https://vk.com/video-74008963_456239391',
+      videoId: 'https://vk.com/video_ext.php?oid=-74008963&id=456239392&hd=3',
+      videoUrl: 'https://vk.com/video-74008963_456239392',
       title: 'Наши технологии',
       description: null,
       order: 1,
